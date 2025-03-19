@@ -2,9 +2,7 @@
 ## Team fold
 Oliver Birringer, Felix Fidler, Dominik Rzecki, Luka Milenkovic
 
-## Case 1 - Kanton St Gallen
-Revolutionize industry projects
-AI powered innovation coach
+Möglichkeiten: 
 
 ## Case 2 - UN
 Land degredation, desertification - huge economic impact
@@ -17,14 +15,6 @@ Actionable recommendations data driven decision making
 
 We get: Data set, identify desertification trends -> Dashboard can be used for communities, Farmers etc
 
-## Case 3 - Belimo
-Optimize Buildings
-They have Small impact devices
-We get access to building data
-
-## Case 4 - 
-Digital assistant thats truely personalized
-AI and RT data processing
 
 ## Case 5 - Syngenta
 Nature helping nature
@@ -34,15 +24,6 @@ More people want to eat - make farming more efficient
 soil environemnt tech data
 How do we increase yield/efficiency and decrease stress
 
-## Case 6 - SIX
-Ai that listens and visualizes
-Financial industry vast amount of data
-AI driven interaction revolutionize
-Finacial data insights
-Can you deliver Voice visuals expieriences
-Visualie trends, key insights
-What is Profitability of Company XX
-Create a solution understand complex finacial bla
 
 ## Case 7 - Virgin
 Central platform to show sustainability work
@@ -62,4 +43,29 @@ Help students, managers, startups
 Link Wiki like docu
 Tools connected
 Make it practical
+
+Nicht zu verfolgen:
+
+## Case 1 - Kanton St Gallen
+Revolutionize industry projects
+AI powered innovation coach
+
+## Case 3 - Belimo
+Optimize Buildings
+They have Small impact devices
+We get access to building data
+
+## Case 4 - 
+Digital assistant thats truely personalized
+AI and RT data processing
+
+## Case 6 - SIX
+Ai that listens and visualizes
+Financial industry vast amount of data
+AI driven interaction revolutionize
+Finacial data insights
+Can you deliver Voice visuals expieriences
+Visualie trends, key insights
+What is Profitability of Company XX
+Create a solution understand complex finacial bla
 
