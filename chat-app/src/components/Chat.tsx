@@ -31,7 +31,7 @@ const Chat: FC<ChatProps> = ({ storageKey = 'chat-messages' }) => {
     } catch (error) {
       console.error('Error loading messages from localStorage:', error);
     }
-  }, []);
+  }, [storageKey]);
 
   // Save messages to localStorage whenever they change
   useEffect(() => {
