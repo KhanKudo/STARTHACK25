@@ -4,16 +4,28 @@ import {Project} from "../models/project";
 
 //type MemberROrganizations = [number, number];
 
-let organizations: Organization[];
-let projects: Project[];
-let users: User[];
+let organizations: Organization[] = [];
+let projects: Project[] = [];
+let users: User[] = [];
 
-let MemberROrganizations: ([number, number])[];
-let MemberRProject: ([number, number])[];
-let OrganizationRProject: ([number, number])[];
+let MemberROrganizations: ([number, number])[] = [];
+let MemberRProject: ([number, number])[] = [];
+let OrganizationRProject: ([number, number])[] = [];
 
-function addMember(name: string): void {
+function addUser(name: string, type: User["type"]): void {
     let candidate = Math.random()%1000000;
+    // @ts-ignore
+    if (!users.find((x: User) => x.userId === candidate)) {
+        users.push({userId: candidate, type, userName: name})
+    }
 }
 
-export {organizations, projects, users, MemberROrganizations, MemberRProject, OrganizationRProject};
+function addProject(name: string, description: string): void {
+    let candidate = Math.random()%1000000;
+    // @ts-ignore
+    if (!projects.find((x: Project) => x.projectId === candidate)) {
+        projects.push({projectId: candidate, projectName: name, projectDescription: description})
+    }
+}
+
+export {organizations, projects, users, MemberROrganizations, MemberRProject, OrganizationRProject, addUser, addProject};

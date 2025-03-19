@@ -1,7 +1,7 @@
 interface Project {
     projectId: number;
     projectName: string;
-    description: string;
+    projectDescription: string;
 }
 
 export { Project };
