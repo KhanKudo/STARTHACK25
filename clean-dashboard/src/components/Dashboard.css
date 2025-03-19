@@ -1,0 +1,114 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.top-bar-container {
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 40px 0 60px;
+  background-color: white;
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 650px;
+  margin: 80px auto 60px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.search-container:focus-within {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 18px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  background-color: #f2f2f2;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.search-input::placeholder {
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.search-input:focus {
+  background-color: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.search-input:focus::placeholder {
+  color: #bbb;
+}
+
+.ai-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.load-more-button {
+  background-color: white;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.load-more-button:hover {
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-content {
+  margin-top: 100px;
+  text-align: center;
+  color: #333;
+}
+
+.placeholder-content h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: var(--primary-red);
+} 

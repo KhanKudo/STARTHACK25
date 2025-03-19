@@ -1,0 +1,95 @@
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 20px;
+  background-color: white;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+}
+
+.top-bar-content {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar-title-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.virgin-logo {
+  height: 30px;
+  width: auto;
+}
+
+.top-bar-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary-red);
+}
+
+.top-bar-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-item:hover {
+  color: var(--primary-red);
+}
+
+.add-project-btn {
+  background-color: var(--primary-red);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plus-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.profile-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #eaeaea;
+}
+
+.profile-icon-container:hover {
+  background-color: #e0e0e0;
+}
+
+.profile-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary-red);
+} 
