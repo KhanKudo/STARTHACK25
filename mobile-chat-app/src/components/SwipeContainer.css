@@ -1,0 +1,77 @@
+.swipe-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.swipe-completed, .swipe-loading, .results-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.results-container h2 {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.results-container p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.results-list {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.reset-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.swipe-completed h2 {
+  margin-bottom: 16px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.swipe-completed p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.swipe-loading {
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.swipe-progress {
+  position: absolute;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  z-index: 5;
+} 
