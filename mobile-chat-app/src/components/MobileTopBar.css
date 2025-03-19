@@ -1,0 +1,35 @@
+.mobile-top-bar {
+  width: 100%;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 5;
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  color: #333;
+  background-color: transparent;
+  margin-top: 30px; /* Space for the notch */
+}
+
+.status-bar-icons {
+  display: flex;
+  gap: 8px;
+}
+
+.mobile-top-bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+}
+
+.mobile-top-bar-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+} 

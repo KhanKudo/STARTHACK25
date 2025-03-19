@@ -1,0 +1,58 @@
+.results-card {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.rank-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  z-index: 2;
+}
+
+.results-card-image {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+}
+
+.results-card-content {
+  padding: 16px;
+}
+
+.results-card-company {
+  color: #666;
+  margin: 0 0 6px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.results-card-title {
+  margin: 0 0 12px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.results-card-description {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+  line-height: 1.4;
+} 
