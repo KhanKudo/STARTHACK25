@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CardData } from './SwipeCard';
 import './ResultsCard.css';
 
@@ -8,6 +9,7 @@ interface ResultsCardProps {
   onChatClick?: (projectId: string) => void;
   matchedInterests?: string[];
   sustainabilityPoints?: number;
+  index?: number; // Added index for navigation
 }
 
 interface PointsBreakdown {
@@ -24,45 +26,61 @@ const ResultsCard: React.FC<ResultsCardProps> = ({
   rank, 
   onChatClick,
   matchedInterests = [],
-  sustainabilityPoints = Math.floor(Math.random() * 50) + 25 // Default random points between 25-75
+  sustainabilityPoints = Math.floor(Math.random() * 50) + 25, // Default random points between 25-75
+  index = 0 // Default index
 }) => {
+  const navigate = useNavigate();
   const [showPointsBreakdown, setShowPointsBreakdown] = useState(false);
+  const [pointsBreakdown, setPointsBreakdown] = useState<PointsBreakdown | null>(null);
   
-  // Calculate random points breakdown
-  const getPointsBreakdown = (): PointsBreakdown => {
+  // Calculate points breakdown only once on mount
+  useEffect(() => {
+    // Calculate points breakdown with fixed values based on project id
     const initialEngagement = 25;
-    const taskCompletion = Math.floor(Math.random() * 30) + 10;
-    const communityFeedback = Math.floor(Math.random() * 20);
-    const educationalBonus = Math.floor(Math.random() * 10);
+    // Use project id as seed for deterministic "random" values
+    const seed = parseInt(project.id) || index;
+    const taskCompletion = 10 + (seed % 30);
+    const communityFeedback = (seed * 2) % 20;
+    const educationalBonus = (seed * 3) % 10;
     const total = initialEngagement + taskCompletion + communityFeedback + educationalBonus;
     const userContribution = Math.floor(total * 0.6); // User has contributed about 60% of the potential
 
-    return {
+    setPointsBreakdown({
       initialEngagement,
       taskCompletion,
       communityFeedback,
       educationalBonus,
       total,
       userContribution
-    };
-  };
-
-  const pointsBreakdown = getPointsBreakdown();
+    });
+  }, [project.id, index]);
 
   const handleChatClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent card click from triggering
     if (onChatClick) {
       onChatClick(project.id);
     }
   };
 
   const togglePointsBreakdown = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent card click from triggering
     setShowPointsBreakdown(!showPointsBreakdown);
   };
 
+  const handleCardClick = () => {
+    // Navigate to project details page using the project name as identifier
+    // Encode to make it URL-safe
+    const projectName = encodeURIComponent(project.name);
+    navigate(`/project/${projectName}`);
+  };
+
+  // Ensure we have the points breakdown before rendering
+  if (!pointsBreakdown) {
+    return <div className="results-card loading">Loading...</div>;
+  }
+
   return (
-    <div className="results-card">
+    <div className="results-card" onClick={handleCardClick}>
       <div className="rank-badge">{rank}</div>
       <div 
         className="results-card-image" 
