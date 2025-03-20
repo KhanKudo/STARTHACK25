@@ -275,8 +275,8 @@ const getRandomTopicCards = (): CardData[] => {
   // Shuffle the topics array
   const shuffledTopics = [...interestTopics].sort(() => 0.5 - Math.random());
   
-  // Take only 10 random topics
-  const selectedTopics = shuffledTopics.slice(0, 10);
+  // Take only 6 random topics (changed from 10)
+  const selectedTopics = shuffledTopics.slice(0, 6);
   
   // Create cards for the selected topics
   return selectedTopics.map((topic, index) => ({
