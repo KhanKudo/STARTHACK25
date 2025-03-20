@@ -104,4 +104,4 @@ export const COMPANY_DATA: Company[] = [
       ]
     }
   }
-]; 
+];
