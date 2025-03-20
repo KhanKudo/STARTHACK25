@@ -317,6 +317,7 @@ const SwipeContainer: React.FC = () => {
   const [topMatches, setTopMatches] = useState<any[]>([]);
   const [likedTopics, setLikedTopics] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeNav, setActiveNav] = useState('projects');
 
   // Load viewed cards from localStorage
   useEffect(() => {
@@ -567,64 +568,258 @@ const SwipeContainer: React.FC = () => {
             />
           </div>
           
-          {likedTopics && likedTopics.length === 0 ? (
-            <>
-              <h2>Discover Virgin Initiatives</h2>
-              <p>Here are some initiatives that might interest you:</p>
-            </>
-          ) : (
-            <>
-              <h2>Your Top Initiative Matches</h2>
-              <p>Based on your interests, these Virgin initiatives align with your values:</p>
-            </>
-          )}
-          
-          <div className="results-grid">
-            {filteredCards.map((match, index) => (
-              <div key={match.initiative} className="match-result">
-                <ResultsCard 
-                  project={{
-                    id: index.toString(),
-                    name: match.initiative,
-                    imageUrl: match.details.imageUrl,
-                    details: {
-                      company: match.details.company,
-                      challenge: match.details.challenge,
-                      description: match.details.description
-                    }
-                  }} 
-                  rank={index + 1} 
-                  onChatClick={handleChatClick}
-                />
-                {match.matchedTopics.length > 0 && (
-                  <div className="matched-topics">
-                    <h4>Matched Interests:</h4>
-                    <ul>
-                      {match.matchedTopics.map((topic: string) => (
-                        <li key={topic}>{topic}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ))}
+          <div className="results-nav">
+            <button 
+              className={`nav-button ${activeNav === 'projects' ? 'active' : ''}`}
+              onClick={() => setActiveNav('projects')}
+            >
+              Projects
+            </button>
+            <button 
+              className={`nav-button ${activeNav === 'badges' ? 'active' : ''}`}
+              onClick={() => setActiveNav('badges')}
+            >
+              My Badges
+            </button>
+            <button 
+              className={`nav-button ${activeNav === 'leaderboard' ? 'active' : ''}`}
+              onClick={() => setActiveNav('leaderboard')}
+            >
+              Leaderboard
+            </button>
           </div>
           
-          {filteredCards.length === 0 && (
-            <div className="no-results">
-              No initiatives found matching your search.
-            </div>
-          )}
-          
-          {likedTopics && likedTopics.length === 0 && (
-            <div className="discovery-hint">
-              Try again to find initiatives that match your specific interests!
-            </div>
-          )}
-          
-          <button className="reset-button" onClick={resetChoices}>
+          {activeNav === 'projects' && (
+            <>
+              {likedTopics && likedTopics.length === 0 ? (
+                <>
+                  <h2>Discover Virgin Initiatives</h2>
+                  <p>Here are some initiatives that might interest you:</p>
+                </>
+              ) : (
+                <>
+                  <h2>Your Top Initiative Matches</h2>
+                  <p>Based on your interests, these Virgin initiatives align with your values:</p>
+                </>
+              )}
+              
+              <div className="results-grid">
+                {filteredCards.map((match, index) => (
+                  <div key={match.initiative} className="swipe-match-result">
+                    <ResultsCard 
+                      project={{
+                        id: index.toString(),
+                        name: match.initiative,
+                        imageUrl: match.details.imageUrl,
+                        details: {
+                          company: match.details.company,
+                          challenge: match.details.challenge,
+                          description: match.details.description
+                        }
+                      }} 
+                      rank={index + 1} 
+                      onChatClick={handleChatClick}
+                      matchedInterests={match.matchedTopics}
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              {filteredCards.length === 0 && (
+                <div className="no-results">
+                  No initiatives found matching your search.
+                </div>
+              )}
+              
+              {likedTopics && likedTopics.length === 0 && (
+                <div className="discovery-hint">
+                  Try again to find initiatives that match your specific interests!
+
+                  <button className="reset-button" onClick={resetChoices}>
             Start Over
           </button>
+                </div>
+                
+              )}
+            </>
+          )}
+          
+          {activeNav === 'badges' && (
+            <div className="badges-container">
+              <h2>My Sustainability Badges</h2>
+              <p>Track your achievements and impact on sustainability initiatives.</p>
+              
+              <div className="stats-container">
+                <div className="stat-card">
+                  <div className="stat-value">3</div>
+                  <div className="stat-label">Projects Joined</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-value">12</div>
+                  <div className="stat-label">Interests Matched</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-value">2</div>
+                  <div className="stat-label">Badges Earned</div>
+                </div>
+              </div>
+
+              <div className="badges-section">
+                <h3>Earned Badges</h3>
+                <div className="badges-grid">
+                  <div className="badge-item">
+                    <div className="badge-icon earned">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z"></path>
+                        <path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"></path>
+                      </svg>
+                    </div>
+                    <div className="badge-name">Early Adopter</div>
+                    <div className="badge-description">Joined the sustainability initiative</div>
+                  </div>
+                  
+                  <div className="badge-item">
+                    <div className="badge-icon earned">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10"></path>
+                      </svg>
+                    </div>
+                    <div className="badge-name">Climate Defender</div>
+                    <div className="badge-description">Supported climate initiatives</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="badges-section">
+                <h3>Locked Badges</h3>
+                <div className="badges-grid">
+                  <div className="badge-item">
+                    <div className="badge-icon locked">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M8 17.2a6 6 0 0 0 8 0"></path>
+                        <circle cx="12" cy="12" r="10"></circle>
+                      </svg>
+                    </div>
+                    <div className="badge-name">Community Champion</div>
+                    <div className="badge-description">Engage with 5 community projects</div>
+                  </div>
+                  
+                  <div className="badge-item">
+                    <div className="badge-icon locked">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2 12h6"></path>
+                        <path d="M22 12h-6"></path>
+                        <path d="M12 2v6"></path>
+                        <path d="M12 22v-6"></path>
+                        <path d="m17 3-5 5-5-5"></path>
+                        <path d="m17 21-5-5-5 5"></path>
+                        <path d="m3 17 5-5-5-5"></path>
+                        <path d="m21 17-5-5 5-5"></path>
+                      </svg>
+                    </div>
+                    <div className="badge-name">Ocean Guardian</div>
+                    <div className="badge-description">Support marine conservation</div>
+                  </div>
+                  
+                  <div className="badge-item">
+                    <div className="badge-icon locked">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 11V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v5"></path>
+                        <path d="M9 12h6"></path>
+                        <path d="M12 22v-6"></path>
+                        <path d="M8 22h8"></path>
+                      </svg>
+                    </div>
+                    <div className="badge-name">Eco Innovator</div>
+                    <div className="badge-description">Engage with technology initiatives</div>
+                  </div>
+                  
+                  <div className="badge-item">
+                    <div className="badge-icon locked">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                      </svg>
+                    </div>
+                    <div className="badge-name">Consistency Master</div>
+                    <div className="badge-description">Join for 30 consecutive days</div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          )}
+          
+          {activeNav === 'leaderboard' && (
+            <div className="leaderboard-container">
+              <h2>Sustainability Leaderboard</h2>
+              <p>See how your sustainability efforts compare to others.</p>
+              
+              <div className="leaderboard-list">
+                <div className="leaderboard-item">
+                  <div className="leaderboard-rank">1</div>
+                  <div className="leaderboard-user">
+                    <div className="user-avatar">JD</div>
+                    <div className="user-info">
+                      <div className="user-name">Jane Doe</div>
+                      <div className="user-badges">8 badges • 5 projects</div>
+                    </div>
+                  </div>
+                  <div className="leaderboard-points">1240</div>
+                </div>
+                
+                <div className="leaderboard-item">
+                  <div className="leaderboard-rank">2</div>
+                  <div className="leaderboard-user">
+                    <div className="user-avatar">MS</div>
+                    <div className="user-info">
+                      <div className="user-name">Mike Smith</div>
+                      <div className="user-badges">6 badges • 4 projects</div>
+                    </div>
+                  </div>
+                  <div className="leaderboard-points">980</div>
+                </div>
+                
+                <div className="leaderboard-item current-user">
+                  <div className="leaderboard-rank">3</div>
+                  <div className="leaderboard-user">
+                    <div className="user-avatar">ME</div>
+                    <div className="user-info">
+                      <div className="user-name">You</div>
+                      <div className="user-badges">2 badges • 3 projects</div>
+                    </div>
+                  </div>
+                  <div className="leaderboard-points">750</div>
+                </div>
+                
+                <div className="leaderboard-item">
+                  <div className="leaderboard-rank">4</div>
+                  <div className="leaderboard-user">
+                    <div className="user-avatar">TK</div>
+                    <div className="user-info">
+                      <div className="user-name">Taylor Kim</div>
+                      <div className="user-badges">3 badges • 2 projects</div>
+                    </div>
+                  </div>
+                  <div className="leaderboard-points">620</div>
+                </div>
+                
+                <div className="leaderboard-item">
+                  <div className="leaderboard-rank">5</div>
+                  <div className="leaderboard-user">
+                    <div className="user-avatar">RJ</div>
+                    <div className="user-info">
+                      <div className="user-name">Robin Jones</div>
+                      <div className="user-badges">2 badges • 1 project</div>
+                    </div>
+                  </div>
+                  <div className="leaderboard-points">450</div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+        
         </div>
       </div>
     );

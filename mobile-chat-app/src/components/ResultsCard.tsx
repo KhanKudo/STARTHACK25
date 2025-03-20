@@ -6,9 +6,10 @@ interface ResultsCardProps {
   project: CardData;
   rank: number;
   onChatClick?: (projectId: string) => void;
+  matchedInterests?: string[];
 }
 
-const ResultsCard: React.FC<ResultsCardProps> = ({ project, rank, onChatClick }) => {
+const ResultsCard: React.FC<ResultsCardProps> = ({ project, rank, onChatClick, matchedInterests = [] }) => {
   const handleChatClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onChatClick) {
@@ -31,12 +32,27 @@ const ResultsCard: React.FC<ResultsCardProps> = ({ project, rank, onChatClick })
             ? project.details.description.substring(0, 150) + '...'
             : project.details?.description}
         </p>
+        
         <button className="chat-button" onClick={handleChatClick}>
           <svg className="chat-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
           </svg>
           Chat
         </button>
+
+        {matchedInterests.length > 0 && (
+          <div className="matched-topics">
+            <div className="interests-container">
+              {matchedInterests.map((interest, index) => (
+                <div key={index} className="interest-card">
+                  {interest}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        
       </div>
     </div>
   );
