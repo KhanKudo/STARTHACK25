@@ -4,6 +4,12 @@ import SwipeCard, { CardData } from './SwipeCard';
 import './SwipeContainer.css';
 import ResultsCard from './ResultsCard';
 
+// Extend the CardData interface to include matchedTopics
+interface ExtendedCardData extends CardData {
+  matchedTopics?: string[];
+  liked?: boolean;
+}
+
 // Define types for initiative mapping
 type InitiativeTopicsMap = {
   [initiative: string]: string[];
@@ -318,12 +324,25 @@ const SwipeContainer: React.FC = () => {
   const [likedTopics, setLikedTopics] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeNav, setActiveNav] = useState('projects');
+  const [userPoints, setUserPoints] = useState(750); // Total sustainability points for the user
+  const [nextBadge, setNextBadge] = useState({ name: 'Eco Champion', progress: 70, remaining: 250 });
+  const [viewedCards, setViewedCards] = useState<ExtendedCardData[]>([]);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   // Load viewed cards from localStorage
   useEffect(() => {
     try {
       const savedChoices = localStorage.getItem('topic-swipe-choices');
       const savedSkipped = localStorage.getItem('topic-swipe-skipped');
+      const completedSwipe = localStorage.getItem('swipe-completed');
+      
+      // Check if user has already completed swiping
+      if (savedSkipped === 'true' || completedSwipe === 'true') {
+        setCompleted(true);
+        // Ensure matches are loaded
+        findTopMatches();
+        return;
+      }
       
       let viewedCardIds: string[] = [];
       
@@ -333,12 +352,6 @@ const SwipeContainer: React.FC = () => {
           setChoices(parsedChoices);
           viewedCardIds = parsedChoices.map(choice => choice.cardId);
         }
-      }
-      
-      if (savedSkipped === 'true') {
-        // If user previously skipped, don't show cards
-        setCompleted(true);
-        return;
       }
       
       // Generate fresh random topic cards for this session
@@ -364,37 +377,41 @@ const SwipeContainer: React.FC = () => {
   }, []);
 
   const handleLike = () => {
-    if (currentCardIndex >= cards.length) return;
+    // No points awarded during preference swiping phase
+    // This is just to determine user interests
     
-    const currentCard = cards[currentCardIndex];
-    const newChoice: Choice = {
-      cardId: currentCard.id,
-      liked: true,
-      timestamp: Date.now()
-    };
+    // Original functionality
+    const extendedCard = currentCard as ExtendedCardData;
+    const currentTopics = extendedCard.matchedTopics || [];
+    setLikedTopics([...likedTopics, ...currentTopics]);
+    setViewedCards([...viewedCards, { ...extendedCard, liked: true }]);
     
-    const newChoices = [...choices, newChoice];
-    setChoices(newChoices);
-    localStorage.setItem('topic-swipe-choices', JSON.stringify(newChoices));
-    
-    goToNextCard();
+    // If there are more cards, go to the next one
+    if (currentCardIndex < cards.length - 1) {
+      setCurrentCardIndex(currentCardIndex + 1);
+    } else {
+      setCompleted(true);
+      localStorage.setItem('swipe-completed', 'true');
+      findTopMatches(); // Ensure matches are calculated
+    }
   };
 
   const handleDislike = () => {
-    if (currentCardIndex >= cards.length) return;
+    // No points awarded during preference swiping phase
+    // This is just to determine user interests
     
-    const currentCard = cards[currentCardIndex];
-    const newChoice: Choice = {
-      cardId: currentCard.id,
-      liked: false,
-      timestamp: Date.now()
-    };
+    // Original functionality
+    const extendedCard = currentCard as ExtendedCardData;
+    setViewedCards([...viewedCards, { ...extendedCard, liked: false }]);
     
-    const newChoices = [...choices, newChoice];
-    setChoices(newChoices);
-    localStorage.setItem('topic-swipe-choices', JSON.stringify(newChoices));
-    
-    goToNextCard();
+    // If there are more cards, go to the next one
+    if (currentCardIndex < cards.length - 1) {
+      setCurrentCardIndex(currentCardIndex + 1);
+    } else {
+      setCompleted(true);
+      localStorage.setItem('swipe-completed', 'true');
+      findTopMatches(); // Ensure matches are calculated
+    }
   };
 
   const handleSkip = () => {
@@ -531,7 +548,33 @@ const SwipeContainer: React.FC = () => {
   };
 
   const handleChatClick = (projectId: string) => {
+    // Make sure we save the completed state to localStorage before navigating
+    localStorage.setItem('swipe-completed', 'true');
+    
+    // Add points for engaging with chat - this is a meaningful interaction
+    setUserPoints(prevPoints => prevPoints + 15);
+    updateNextBadgeProgress();
+    
+    // Navigate to the chat page
     navigate(`/chat/${projectId}`);
+  };
+
+  const updateNextBadgeProgress = () => {
+    // Update progress towards next badge
+    const newRemaining = Math.max(0, nextBadge.remaining - 10);
+    const newProgress = Math.min(100, nextBadge.progress + (10 * 100) / (nextBadge.remaining + nextBadge.progress * 10));
+    
+    setNextBadge(prev => ({
+      ...prev,
+      remaining: newRemaining,
+      progress: newProgress
+    }));
+    
+    // If reached 100%, could trigger badge award notification
+    if (newProgress >= 100) {
+      alert(`Congratulations! You've earned the ${nextBadge.name} badge!`);
+      // Here you would normally update the user's badge collection and set a new next badge
+    }
   };
 
   if (completed) {
@@ -558,16 +601,6 @@ const SwipeContainer: React.FC = () => {
     return (
       <div className="swipe-container">
         <div className="results-container">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search initiatives..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-          </div>
-          
           <div className="results-nav">
             <button 
               className={`nav-button ${activeNav === 'projects' ? 'active' : ''}`}
@@ -587,6 +620,16 @@ const SwipeContainer: React.FC = () => {
             >
               Leaderboard
             </button>
+          </div>
+          
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search initiatives..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
           </div>
           
           {activeNav === 'projects' && (
@@ -634,13 +677,12 @@ const SwipeContainer: React.FC = () => {
               {likedTopics && likedTopics.length === 0 && (
                 <div className="discovery-hint">
                   Try again to find initiatives that match your specific interests!
-
-                  <button className="reset-button" onClick={resetChoices}>
-            Start Over
-          </button>
                 </div>
-                
               )}
+              
+              <button className="reset-button" onClick={resetChoices}>
+                Start Over
+              </button>
             </>
           )}
           
@@ -648,6 +690,11 @@ const SwipeContainer: React.FC = () => {
             <div className="badges-container">
               <h2>My Sustainability Badges</h2>
               <p>Track your achievements and impact on sustainability initiatives.</p>
+              
+              <div className="user-total-points">
+                <div className="total-points-value">{userPoints}</div>
+                <div className="total-points-label">Total Sustainability Points</div>
+              </div>
               
               <div className="stats-container">
                 <div className="stat-card">
@@ -662,6 +709,14 @@ const SwipeContainer: React.FC = () => {
                   <div className="stat-value">2</div>
                   <div className="stat-label">Badges Earned</div>
                 </div>
+              </div>
+
+              <div className="next-milestone">
+                <div className="next-milestone-title">Next Badge: {nextBadge.name}</div>
+                <div className="milestone-progress-bar">
+                  <div className="milestone-progress-fill" style={{ width: `${nextBadge.progress}%` }}></div>
+                </div>
+                <div className="milestone-remaining">{nextBadge.remaining} more points needed</div>
               </div>
 
               <div className="badges-section">
