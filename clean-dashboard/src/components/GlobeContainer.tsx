@@ -115,8 +115,8 @@ const GlobeContainer: React.FC = () => {
   };
 
   return (
-    <div className="globe-container">
-      <div className="globe-wrapper">
+    <div className="globe-container" style={{ pointerEvents: 'all' }}>
+      <div className="globe-wrapper" style={{ pointerEvents: 'all' }}>
         <World
           globeConfig={globeConfig}
           data={arcData}
