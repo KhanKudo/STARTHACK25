@@ -7,7 +7,8 @@ import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "../data/globe.json";
 import GlobeLocationPopup from "./GlobeLocationPopup";
-import { virginLocations } from "../utils/projectData";
+import { projectData, virginLocations } from "../utils/projectData";
+import { useNavigate } from "react-router-dom";
 
 // Type definition for ThreeGlobe (expanded when needed)
 declare class ThreeGlobeType {
@@ -322,6 +323,7 @@ export function WebGLRendererConfig() {
 (window as any).globeRotation = { x: 0, y: 0 }
 
 export function World(props: WorldProps) {
+  const navigate = useNavigate();
   const { globeConfig } = props;
   const scene = new Scene();
   // @ts-ignore
@@ -422,16 +424,24 @@ export function World(props: WorldProps) {
 
               const tolerance = (Math.abs(x - y) < 10) ? 20 : 10;
 
-              const location = virginLocations.find(l => Math.abs(l.location[0] - lat) < tolerance && Math.abs(l.location[1] - lon) < tolerance)
+              let locationId = -1;
+              let minDist = 1000;
+              let index = 0
+              for (const l of virginLocations) {
+                const dist = Math.sqrt(Math.pow(l.location[0] - lat, 2) + Math.pow(l.location[1] - lon, 2))
+                if (dist < minDist) {
+                  locationId = index;
+                  minDist = dist;
+                }
+                index++;
+              }
 
-              console.log('Globe Click Position:', {
-                lat: lat.toFixed(3),
-                lon: lon.toFixed(3),
-                azimuth: finalAzimuth.toFixed(3),
-                polar: finalPolar.toFixed(3),
-                distance: distance.toFixed(3),
-                location
-              });
+              if (minDist > tolerance)
+                locationId = -1;
+
+              if (locationId !== -1) {
+                navigate(`/project/${projectData[locationId].id}`);
+              }
             }}
           >
             <WebGLRendererConfig />
