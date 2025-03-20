@@ -6,6 +6,7 @@ import MobileTopBar from './components/MobileTopBar';
 import SwipeContainer from './components/SwipeContainer';
 import ChatPage from './components/ChatPage';
 import ProjectDetailsPage from './components/ProjectDetailsPage';
+import ChatRoom from './components/ChatRoom';
 
 function App() {
   return (
@@ -20,6 +21,11 @@ function App() {
           <Route path="/project/:projectId" element={
             <MobileContainer>
               <ProjectDetailsPage />
+            </MobileContainer>
+          } />
+          <Route path="/discussion/:discussionId" element={
+            <MobileContainer>
+              <ChatRoom />
             </MobileContainer>
           } />
           <Route path="/" element={
