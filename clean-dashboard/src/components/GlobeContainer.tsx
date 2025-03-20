@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Position, World } from './Globe';
 import './Globe.css';
+import { virginLocations } from '../utils/projectData';
 
 const GlobeContainer: React.FC = () => {
   const navigate = useNavigate();
@@ -64,40 +65,6 @@ const GlobeContainer: React.FC = () => {
       navigate(`/project/${projectId}`);
     }
   };
-
-  // Virgin locations data - Define before using
-  const virginLocations = [
-    {
-      location: [51.4700, -0.4543] as [number, number],
-      size: 1.5,
-      company: "Virgin Atlantic",
-      initiative: "Fleet Improvements"
-    },
-    {
-      location: [25.7617, -80.1918] as [number, number],
-      size: 1.5,
-      company: "Virgin Voyages",
-      initiative: "Ocean Conservation"
-    },
-    {
-      location: [51.5074, -0.1278] as [number, number],
-      size: 1.5,
-      company: "Virgin Media O2",
-      initiative: "E-waste Reduction"
-    },
-    {
-      location: [36.1699, -115.1398] as [number, number],
-      size: 1.5,
-      company: "Virgin Hotels",
-      initiative: "Energy Efficiency"
-    },
-    {
-      location: [34.0522, -118.2437] as [number, number],
-      size: 1.5,
-      company: "Virgin Records",
-      initiative: "Sustainable Materials"
-    }
-  ];
 
   // Arc data for globe connections
   const arcData: Position[] = [

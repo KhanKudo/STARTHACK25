@@ -11,14 +11,14 @@ export const api = {
       setTimeout(() => resolve(projectData), 800);
     });
   },
-  
+
   getProjectById: async (id: string): Promise<Project | undefined> => {
     // Simulating API call with a delay
     return new Promise((resolve) => {
       setTimeout(() => resolve(getProjectById(id)), 500);
     });
   },
-  
+
   addProject: async (project: Omit<Project, 'id'>): Promise<Project> => {
     // Simulating API call with a delay
     return new Promise((resolve) => {
@@ -253,25 +253,59 @@ export const addProject = (project: Omit<Project, 'id'>): Project => {
     .replace(/[^\w\s]/gi, '')
     .replace(/\s+/g, '-')
     .substring(0, 10);
-  
+
   const initiative = project.initiative
     .toLowerCase()
     .replace(/[^\w\s]/gi, '')
     .replace(/\s+/g, '-')
     .substring(0, 10);
-  
+
   // Generate a unique ID
   const timestamp = Date.now().toString(36);
   const id = `${slug}-${initiative}-${timestamp}`;
-  
+
   // Create the new project with the ID
   const newProject: Project = {
     id,
     ...project
   };
-  
+
   // Add to the beginning of the array
   projectData.unshift(newProject);
-  
+
   return newProject;
-}; 
+};
+
+// Virgin locations data - Define before using
+export const virginLocations = [
+  {
+    location: [51.4700, -0.4543] as [number, number],
+    size: 1.5,
+    company: "Virgin Atlantic",
+    initiative: "Fleet Improvements"
+  },
+  {
+    location: [25.7617, -80.1918] as [number, number],
+    size: 1.5,
+    company: "Virgin Voyages",
+    initiative: "Ocean Conservation"
+  },
+  {
+    location: [51.5074, -0.1278] as [number, number],
+    size: 1.5,
+    company: "Virgin Media O2",
+    initiative: "E-waste Reduction"
+  },
+  {
+    location: [36.1699, -115.1398] as [number, number],
+    size: 1.5,
+    company: "Virgin Hotels",
+    initiative: "Energy Efficiency"
+  },
+  {
+    location: [34.0522, -118.2437] as [number, number],
+    size: 1.5,
+    company: "Virgin Records",
+    initiative: "Sustainable Materials"
+  }
+];

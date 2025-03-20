@@ -7,6 +7,7 @@ import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "../data/globe.json";
 import GlobeLocationPopup from "./GlobeLocationPopup";
+import { virginLocations } from "../utils/projectData";
 
 // Type definition for ThreeGlobe (expanded when needed)
 declare class ThreeGlobeType {
@@ -383,7 +384,53 @@ export function World(props: WorldProps) {
               far: 1800,
               position: [0, 0, cameraZ]
             }}
-            onClick={e=>console.log((window as any).globeRotation)}
+            onClick={e => {
+              const rotation = (window as any).globeRotation;
+              const rect = e.currentTarget.getBoundingClientRect();
+              
+              // Get click coordinates relative to canvas center
+              const x = e.nativeEvent.offsetX - rect.width / 2;
+              const y = e.nativeEvent.offsetY - rect.height / 2;
+              
+              // Calculate the radius of the globe (90% of canvas height)
+              // const globeRadius = (window as any).my_globe.getGlobeRadius();
+              const globeRadius = rect.height * 0.45;
+              
+              // Calculate the distance from center to click point
+              const distance = Math.sqrt(x * x + y * y);
+              
+              // If click is outside the globe, return
+              if (distance > globeRadius) {
+                console.log('Click outside globe');
+                return;
+              }
+              
+              // Calculate the z-coordinate on the sphere surface
+              const z = Math.sqrt(globeRadius * globeRadius - distance * distance);
+              
+              // Convert to spherical coordinates
+              const azimuth = Math.atan2(x, z);
+              const polar = Math.atan2(y, Math.sqrt(x * x + z * z));
+              
+              // Add the current globe rotation
+              const finalAzimuth = azimuth + rotation.x;
+              const finalPolar = polar + rotation.y;
+              
+              // Convert to lat/lon
+              const lat = (finalPolar * 180 / Math.PI) - 90;
+              const lon = (finalAzimuth * 180 / Math.PI);
+
+              const location = virginLocations.find(l=>Math.abs(l.location[0] - lat) < 1 && Math.abs(l.location[1] - lon) < 1)
+              
+              console.log('Globe Click Position:', {
+                lat: lat.toFixed(3),
+                lon: lon.toFixed(3),
+                azimuth: finalAzimuth.toFixed(3),
+                polar: finalPolar.toFixed(3),
+                distance: distance.toFixed(3),
+                location
+              });
+            }}
           >
             <WebGLRendererConfig />
             {/* Increased ambient light for more even base lighting */}
