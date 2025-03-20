@@ -18,7 +18,6 @@ const Dashboard: React.FC = () => {
   const [searching, setSearching] = useState(false);
   const [searchExplanation, setSearchExplanation] = useState<string | null>(null);
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
-  const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const abortControllerRef = useRef<AbortController | null>(null);
   
   // Fetch projects
@@ -100,27 +99,13 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Debounced search
+  // Handle empty query
   useEffect(() => {
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-
-    if (searchQuery.trim()) {
-      searchTimeoutRef.current = setTimeout(() => {
-        handleSearch(searchQuery);
-      }, 500);
-    } else {
+    if (!searchQuery.trim()) {
       setFilteredProjects(projects);
       setSearchExplanation(null);
       setError(null);
     }
-
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
   }, [searchQuery, projects]);
 
   // Initial fetch
@@ -157,7 +142,7 @@ const Dashboard: React.FC = () => {
         <div className="top-bar-container">
           <TopBar title="Dashboard" />
         </div>
-        <Loader fullScreen message="Loading projects..." />
+        <Loader fullScreen />
       </div>
     );
   }
@@ -172,14 +157,21 @@ const Dashboard: React.FC = () => {
       
       <div className="dashboard-content">
         <div className="hero-section">
-          <div className="search-container">
+          {searchExplanation && (
+            <div 
+              className={`search-explanation ${isExplanationExpanded ? 'expanded' : 'collapsed'}`}
+              onClick={() => setIsExplanationExpanded(!isExplanationExpanded)}
+            >
+              {isExplanationExpanded ? searchExplanation : getExplanationSummary(searchExplanation)}
+            </div>
+          )}
+          <div className={`search-container ${searchExplanation ? 'with-explanation' : ''}`}>
             <img 
               src="/assets/ai.svg" 
               alt="AI" 
               className="ai-icon"
               style={{ 
                 opacity: searchFocused ? 1 : 0.7,
-                color: searchFocused ? 'var(--primary-red)' : '#888',
               }}
             />
             <input 
@@ -196,7 +188,7 @@ const Dashboard: React.FC = () => {
             />
             {searching && (
               <div className="search-status">
-                <Loader message="Searching..." />
+                <Loader />
                 <button 
                   className="cancel-search"
                   onClick={() => {
@@ -212,24 +204,23 @@ const Dashboard: React.FC = () => {
                 </button>
               </div>
             )}
-          </div>
-          {searchExplanation && (
-            <div 
-              className={`search-explanation ${isExplanationExpanded ? 'expanded' : 'collapsed'}`}
-              onClick={() => setIsExplanationExpanded(!isExplanationExpanded)}
-            >
-              {isExplanationExpanded ? searchExplanation : getExplanationSummary(searchExplanation)}
-              <svg 
-                className="expand-icon" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
+            {searchExplanation && !searching && (
+              <div 
+                className={`search-arrow-container ${isExplanationExpanded ? 'expanded' : 'collapsed'}`}
+                onClick={() => setIsExplanationExpanded(!isExplanationExpanded)}
               >
-                <path d="M7 10l5 5 5-5" />
-              </svg>
-            </div>
-          )}
+                <svg 
+                  className="search-arrow-icon" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                >
+                  <path d="M7 10l5 5 5-5" />
+                </svg>
+              </div>
+            )}
+          </div>
         </div>
         
         <ProjectsGrid projects={filteredProjects} />

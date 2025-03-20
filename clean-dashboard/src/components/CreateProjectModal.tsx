@@ -242,7 +242,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
           </div>
         </form>
       </div>
-      {isSubmitting && <Loader fullScreen message="Creating your project..." />}
+      {isSubmitting && <Loader fullScreen />}
     </div>
   );
 };
