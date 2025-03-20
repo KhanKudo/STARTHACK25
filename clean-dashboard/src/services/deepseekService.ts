@@ -1,4 +1,6 @@
 import { Project } from '../utils/projectData';
+import { Company } from '../utils/companyData';
+import { Proposal } from '../utils/proposalData';
 
 const DEEPSEEK_API_KEY = process.env.REACT_APP_DEEPSEEK_API_KEY || 'sk-108d8076bfe54f9ab5695d8f3f2576d6';
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
@@ -253,4 +255,69 @@ export const testDeepSeekAPI = async (): Promise<TestResponse> => {
     console.error('API test failed:', error);
     throw error;
   }
-}; 
+};
+
+interface ProposalGenerationInput {
+  company: Company;
+  projects?: Project[];
+  project?: Project;
+  type: 'company' | 'project';
+}
+
+export async function generateProposal(input: ProposalGenerationInput): Promise<Omit<Proposal, 'id' | 'votes' | 'status' | 'createdAt'>> {
+  const { company, projects, project, type } = input;
+
+  // Create a prompt based on the input type
+  let prompt = '';
+  if (type === 'company') {
+    prompt = `Generate a sustainability proposal for ${company.name}. 
+    Company description: ${company.description}
+    Location: ${company.location.latitude}, ${company.location.longitude}
+    ${projects ? `Related projects: ${projects.map(p => p.description).join(', ')}` : ''}
+    
+    Please provide a proposal in the following format:
+    {
+      "title": "Proposal title",
+      "company": "${company.name}",
+      "category": "one of: carbon, water, biodiversity, social, circular",
+      "description": "Detailed description",
+      "impact": [
+        { "metric": "Impact metric name", "value": "Measurable value" }
+      ],
+      "tags": ["tag1", "tag2", "tag3"]
+    }`;
+  } else {
+    prompt = `Generate a sustainability proposal based on this project for ${company.name}.
+    Project description: ${project?.description}
+    Company description: ${company.description}
+    Location: ${company.location.latitude}, ${company.location.longitude}
+    
+    Please provide a proposal in the following format:
+    {
+      "title": "Proposal title",
+      "company": "${company.name}",
+      "category": "one of: carbon, water, biodiversity, social, circular",
+      "description": "Detailed description",
+      "impact": [
+        { "metric": "Impact metric name", "value": "Measurable value" }
+      ],
+      "tags": ["tag1", "tag2", "tag3"]
+    }`;
+  }
+
+  // TODO: Replace with actual API call to DeepSeek
+  // For now, return a mock proposal
+  return {
+    title: `AI Generated Proposal for ${company.name}`,
+    company: company.name,
+    category: 'carbon',
+    description: `An AI-generated sustainability proposal for ${company.name} based on their current initiatives and location.`,
+    impact: [
+      { metric: 'Carbon Reduction', value: '25%' },
+      { metric: 'Cost Savings', value: '$1M/year' }
+    ],
+    tags: ['AI Generated', 'Sustainability', company.name],
+    source: 'ai',
+    isRecommended: false
+  };
+} 
