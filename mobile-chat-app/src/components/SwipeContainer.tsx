@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SwipeCard, { CardData } from './SwipeCard';
 import './SwipeContainer.css';
-import ResultsCard from './ResultsCard';
+import MatchedProjectsGrid from './MatchedProjectsGrid';
+import { ProjectData } from '../types/projectTypes';
 
 // Sample project data from Virgin StartHack CSV
 const projectCards: CardData[] = [
@@ -57,6 +58,18 @@ const projectCards: CardData[] = [
   },
 ];
 
+// Convert CardData to ProjectData for the matched projects grid
+const convertToProjectData = (card: CardData): ProjectData => {
+  return {
+    id: card.id,
+    company: card.details?.company || '',
+    initiative: card.name,
+    challenge: card.details?.challenge || '',
+    description: card.details?.description,
+    imageUrl: card.imageUrl
+  };
+};
+
 interface Choice {
   cardId: string;
   liked: boolean;
@@ -68,7 +81,7 @@ const SwipeContainer: React.FC = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [choices, setChoices] = useState<Choice[]>([]);
   const [completed, setCompleted] = useState(false);
-  const [topMatches, setTopMatches] = useState<CardData[]>([]);
+  const [matchedProjects, setMatchedProjects] = useState<ProjectData[]>([]);
 
   // Load viewed cards from localStorage
   useEffect(() => {
@@ -97,8 +110,8 @@ const SwipeContainer: React.FC = () => {
       
       if (remainingCards.length === 0) {
         setCompleted(true);
-        // Calculate top matches
-        findTopMatches();
+        // Calculate matched projects
+        findMatchedProjects();
       } else {
         setCards(remainingCards);
       }
@@ -153,11 +166,11 @@ const SwipeContainer: React.FC = () => {
     
     if (nextIndex >= cards.length) {
       setCompleted(true);
-      findTopMatches();
+      findMatchedProjects();
     }
   };
 
-  const findTopMatches = () => {
+  const findMatchedProjects = () => {
     // Find all liked projects
     const likedChoices = choices.filter(choice => choice.liked);
     
@@ -166,40 +179,10 @@ const SwipeContainer: React.FC = () => {
       return projectCards.find(card => card.id === choice.cardId);
     }).filter(card => card !== undefined) as CardData[];
     
-    // If we have fewer than 3 liked projects, add most recent disliked to reach 3
-    let topMatchesList = [...likedProjects];
+    // Convert to ProjectData format for the matched projects grid
+    const matchedProjectsData = likedProjects.map(card => convertToProjectData(card));
     
-    if (topMatchesList.length < 3) {
-      const dislikedChoices = choices.filter(choice => !choice.liked)
-        .sort((a, b) => b.timestamp - a.timestamp); // Sort by most recent
-      
-      // Add most recent disliked projects until we have 3
-      for (const choice of dislikedChoices) {
-        if (topMatchesList.length >= 3) break;
-        
-        const project = projectCards.find(card => card.id === choice.cardId);
-        if (project && !topMatchesList.some(m => m.id === project.id)) {
-          topMatchesList.push(project);
-        }
-      }
-    }
-    
-    // If we still have fewer than 3, add random projects
-    if (topMatchesList.length < 3) {
-      const remainingProjects = projectCards.filter(
-        card => !topMatchesList.some(m => m.id === card.id)
-      );
-      
-      while (topMatchesList.length < 3 && remainingProjects.length > 0) {
-        const randomIndex = Math.floor(Math.random() * remainingProjects.length);
-        topMatchesList.push(remainingProjects[randomIndex]);
-        remainingProjects.splice(randomIndex, 1);
-      }
-    }
-    
-    // Limit to top 3
-    topMatchesList = topMatchesList.slice(0, 3);
-    setTopMatches(topMatchesList);
+    setMatchedProjects(matchedProjectsData);
   };
 
   const resetChoices = () => {
@@ -208,6 +191,7 @@ const SwipeContainer: React.FC = () => {
     setChoices([]);
     setCurrentCardIndex(0);
     setCompleted(false);
+    setMatchedProjects([]);
     setCards(projectCards);
   };
 
@@ -215,14 +199,14 @@ const SwipeContainer: React.FC = () => {
     return (
       <div className="swipe-container">
         <div className="results-container">
-          <h2>Your Top Matches</h2>
-          <p>Based on your preferences, these projects might interest you:</p>
+          <h2>Your Matched Projects</h2>
+          <p>Based on your preferences, here are the projects that might interest you:</p>
           
-          <div className="results-list">
-            {topMatches.map((project, index) => (
-              <ResultsCard key={project.id} project={project} rank={index + 1} />
-            ))}
-          </div>
+          {matchedProjects.length > 0 ? (
+            <MatchedProjectsGrid projects={matchedProjects} />
+          ) : (
+            <p className="no-matches">No matched projects found. Try again with different preferences.</p>
+          )}
           
           <button className="reset-button" onClick={resetChoices}>
             Start Over
@@ -248,10 +232,17 @@ const SwipeContainer: React.FC = () => {
         card={currentCard} 
         onLike={handleLike} 
         onDislike={handleDislike}
-        onSkip={handleSkip}
       />
-      <div className="swipe-progress">
-        {currentCardIndex + 1} of {cards.length}
+      <div className="swipe-actions">
+        <button className="action-button dislike-button" onClick={handleDislike}>
+          <span className="action-icon">✕</span>
+        </button>
+        <button className="action-button skip-button" onClick={handleSkip}>
+          Skip
+        </button>
+        <button className="action-button like-button" onClick={handleLike}>
+          <span className="action-icon">♥</span>
+        </button>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ interface SwipeCardProps {
   card: CardData;
   onLike: () => void;
   onDislike: () => void;
-  onSkip: () => void;
+  onSkip?: () => void;
 }
 
 const SwipeCard: React.FC<SwipeCardProps> = ({ card, onLike, onDislike, onSkip }) => {
@@ -174,7 +174,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ card, onLike, onDislike, onSkip }
 
   return (
     <div className="swipe-card-container">
-      <div className="skip-button" onClick={onSkip}>Skip</div>
+      {onSkip && <div className="skip-button" onClick={onSkip}>Skip</div>}
       <div 
         ref={cardRef}
         className="swipe-card" 
