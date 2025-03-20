@@ -1,20 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Project } from '../utils/projectData';
 import { api } from '../utils/projectData';
 import CreateProjectModal from './CreateProjectModal';
+import EmployeePopup from './EmployeePopup';
 import './TopBar.css';
 
 interface TopBarProps {
   title?: string;
 }
 
+// Mock employee data
+const employees = [
+  { id: 1, name: 'John Smith' },
+  { id: 2, name: 'Sarah Johnson' },
+  { id: 3, name: 'Michael Brown' },
+  { id: 4, name: 'Emily Davis' },
+  { id: 5, name: 'David Wilson' },
+  { id: 6, name: 'Jessica Taylor' },
+  { id: 7, name: 'James Anderson' },
+  { id: 8, name: 'Amanda Martinez' },
+];
+
 const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
   const navigate = useNavigate();
   const [showProjectModal, setShowProjectModal] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showEmployeePopup, setShowEmployeePopup] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   
   const handleProfileClick = () => {
+    setShowProfileDropdown(!showProfileDropdown);
+  };
+
+  const handleEmployeeClick = () => {
+    setShowEmployeePopup(true);
+    setShowProfileDropdown(false);
+  };
+
+  const handleEmployeeChat = (employeeId: number, name: string, company: string) => {
+    // Create a URL-friendly version of the name and company
+    const nameSlug = name.toLowerCase().replace(/\s+/g, '-');
+    const companySlug = company.toLowerCase().replace(/\s+/g, '-');
+    
+    // Navigate to a more descriptive chat URL that includes the employee name and company
+    navigate(`/chat/${employeeId}/${nameSlug}/${companySlug}`);
+    setShowEmployeePopup(false);
+  };
+
+  const handleAccountClick = () => {
     navigate('/profile');
+    setShowProfileDropdown(false);
   };
 
   const handleCollaborationsClick = () => {
@@ -28,6 +64,20 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
   const closeProjectModal = () => {
     setShowProjectModal(false);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSaveProject = async (projectData: Omit<Project, 'id'>) => {
     try {
@@ -76,12 +126,24 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
               /> 
               Project
             </button>
-            <div className="profile-icon-container" onClick={handleProfileClick}>
-              <img 
-                src="/assets/profile.svg" 
-                alt="Profile" 
-                className="profile-icon"
-              />
+            <div className="profile-dropdown-container" ref={dropdownRef}>
+              <div className="profile-icon-container" onClick={handleProfileClick}>
+                <img 
+                  src="/assets/user-circle.svg" 
+                  alt="Profile" 
+                  className="profile-icon"
+                />
+              </div>
+              {showProfileDropdown && (
+                <div className="profile-dropdown-menu">
+                  <div className="dropdown-item" onClick={handleEmployeeClick}>
+                    Employees
+                  </div>
+                  <div className="dropdown-item" onClick={handleAccountClick}>
+                    Account
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -91,6 +153,12 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
         isOpen={showProjectModal}
         onClose={closeProjectModal}
         onSave={handleSaveProject}
+      />
+
+      <EmployeePopup
+        isOpen={showEmployeePopup}
+        onClose={() => setShowEmployeePopup(false)}
+        onChatClick={handleEmployeeChat}
       />
     </>
   );
