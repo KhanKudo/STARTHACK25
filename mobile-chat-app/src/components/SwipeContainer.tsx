@@ -412,6 +412,19 @@ const SwipeContainer: React.FC = () => {
   };
 
   const findTopMatches = () => {
+    // First check if we have saved matches in localStorage
+    const savedMatches = localStorage.getItem('matched-projects');
+    if (savedMatches) {
+      try {
+        const parsedMatches = JSON.parse(savedMatches);
+        setTopMatches(parsedMatches);
+        return;
+      } catch (error) {
+        console.error('Error loading saved matches:', error);
+      }
+    }
+
+    // If no saved matches or error loading them, proceed with calculation
     // Find all liked topics
     const likedChoices = choices.filter(choice => choice.liked);
     
@@ -446,6 +459,7 @@ const SwipeContainer: React.FC = () => {
       }));
       
       setTopMatches(defaultMatches);
+      localStorage.setItem('matched-projects', JSON.stringify(defaultMatches));
       return;
     }
     
@@ -497,14 +511,18 @@ const SwipeContainer: React.FC = () => {
     }
     
     setTopMatches(finalMatches);
+    localStorage.setItem('matched-projects', JSON.stringify(finalMatches));
   };
 
   const resetChoices = () => {
     localStorage.removeItem('topic-swipe-choices');
     localStorage.removeItem('topic-swipe-skipped');
+    localStorage.removeItem('matched-projects'); // Clear saved matches
     setChoices([]);
     setCurrentCardIndex(0);
     setCompleted(false);
+    setTopMatches([]);
+    setLikedTopics([]);
     
     // Generate a new set of random topic cards
     const newRandomTopics = getRandomTopicCards();
