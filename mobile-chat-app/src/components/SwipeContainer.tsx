@@ -696,6 +696,12 @@ const SwipeContainer: React.FC = () => {
             >
               Community
             </button>
+            <button 
+              className={`nav-button ${activeNav === 'news' ? 'active' : ''}`}
+              onClick={() => setActiveNav('news')}
+            >
+              News
+            </button>
         </div>
         {activeNav === 'projects' && (
           <GlobeContainer />
@@ -1056,6 +1062,71 @@ const SwipeContainer: React.FC = () => {
                 Start New Discussion
               </button>
               
+            </div>
+          )}
+          
+          {activeNav === 'news' && (
+            <div className="news-container">
+              <h2>Sustainability News</h2>
+              <p>Stay updated with the latest news and developments in sustainability initiatives.</p>
+              
+              <div className="news-featured">
+                <div className="featured-news-card">
+                  <div className="featured-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1664575198308-3959904fa430?q=80&w=2070&auto=format&fit=crop')"}}></div>
+                  <div className="featured-content">
+                    <div className="news-tag">Featured</div>
+                    <h3 className="featured-title">Virgin Atlantic Completes World's First 100% SAF Transatlantic Flight</h3>
+                    <p className="featured-excerpt">The historic flight from London to New York marks a significant milestone in sustainable aviation.</p>
+                    <div className="news-meta">April 24, 2024 • 5 min read</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="news-list">
+                <div className="news-item">
+                  <div className="news-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?q=80&w=1170&auto=format&fit=crop')"}}></div>
+                  <div className="news-content">
+                    <div className="news-tag">Innovation</div>
+                    <h3 className="news-title">Virgin Unite Expands Ocean Conservation Efforts</h3>
+                    <p className="news-excerpt">New partnerships aim to protect marine ecosystems and promote sustainable ocean management.</p>
+                    <div className="news-meta">April 20, 2024 • 3 min read</div>
+                  </div>
+                </div>
+                
+                <div className="news-item">
+                  <div className="news-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=1073&auto=format&fit=crop')"}}></div>
+                  <div className="news-content">
+                    <div className="news-tag">Community</div>
+                    <h3 className="news-title">Virgin Media O2 Digital Inclusion Program Reaches 50,000 People</h3>
+                    <p className="news-excerpt">The initiative has provided access to technology and digital skills training to underserved communities.</p>
+                    <div className="news-meta">April 18, 2024 • 4 min read</div>
+                  </div>
+                </div>
+                
+                <div className="news-item">
+                  <div className="news-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1637164011965-635d3e762a2e?q=80&w=1170&auto=format&fit=crop')"}}></div>
+                  <div className="news-content">
+                    <div className="news-tag">Climate Action</div>
+                    <h3 className="news-title">Virgin Limited Edition Properties Achieve Carbon Neutral Status</h3>
+                    <p className="news-excerpt">Luxury resorts implement comprehensive sustainability measures to minimize environmental impact.</p>
+                    <div className="news-meta">April 15, 2024 • 3 min read</div>
+                  </div>
+                </div>
+                
+                <div className="news-item">
+                  <div className="news-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1516937941344-00b4e0337589?q=80&w=1170&auto=format&fit=crop')"}}></div>
+                  <div className="news-content">
+                    <div className="news-tag">Research</div>
+                    <h3 className="news-title">Project CETI Makes Breakthrough in Whale Communication Study</h3>
+                    <p className="news-excerpt">Scientists identify patterns in sperm whale vocalizations that could lead to better understanding of cetacean intelligence.</p>
+                    <div className="news-meta">April 12, 2024 • 5 min read</div>
+                  </div>
+                </div>
+              </div>
+              
+              <button className="view-more-button">
+                View More Articles
+              </button>
             </div>
           )}
           

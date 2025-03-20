@@ -151,7 +151,7 @@ const EmployeePopup: React.FC<EmployeePopupProps> = ({ isOpen, onClose, onChatCl
     <div className="employee-popup-backdrop" onClick={handleBackdropClick}>
       <div className="employee-popup-container">
         <div className="employee-popup-header">
-          <h2>Virgin Employees</h2>
+          <h2>Virgin Group Employees</h2>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         
