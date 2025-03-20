@@ -18,15 +18,15 @@
 }
 
 .results-container h2 {
-  margin-bottom: 8px;
-  font-size: 1.5rem;
-  color: #333;
+  color: #e50051;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
 }
 
 .results-container p {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 1rem;
 }
 
 .results-list {
@@ -64,14 +64,18 @@
 }
 
 .swipe-progress {
-  position: absolute;
-  bottom: 90px;
-  left: 0;
-  right: 0;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.discovery-hint {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 20px;
   text-align: center;
   font-size: 0.9rem;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  padding: 8px;
-  z-index: 5;
+  color: #666;
 } 

@@ -69,3 +69,58 @@ Visualie trends, key insights
 What is Profitability of Company XX
 Create a solution understand complex finacial bla
 
+# Virgin Interest Finder
+
+This repository contains two versions of the Virgin Interest Finder application:
+
+1. **Mobile Version** - A Tinder-like swiping interface for mobile devices
+2. **Desktop Version** - A grid-based, clickable interface optimized for desktop use
+
+Both apps help users discover Virgin initiatives that match their sustainability interests.
+
+## Mobile Version
+
+Located in the `mobile-chat-app` directory, this version features:
+
+- Mobile-optimized UI with Tinder-like swipe gestures
+- Single interest selection per card (swipe right to like, left to dislike)
+- Responsive design that simulates a mobile device
+- Swipe animations and visual feedback
+
+To run the mobile version:
+
+```bash
+cd mobile-chat-app
+npm install
+npm start
+```
+
+## Desktop Version
+
+Located in the `desktop-interest-finder` directory, this version features:
+
+- Desktop-optimized UI with a grid layout
+- Multi-select functionality (click to select multiple interests)
+- Larger screen space utilization
+- More detailed results display
+
+To run the desktop version:
+
+```bash
+cd desktop-interest-finder
+npm install
+npm start
+```
+
+## How Both Apps Work
+
+Both apps share the same core functionality:
+
+1. Present users with a selection of sustainability topics
+2. Allow users to indicate their interests
+3. Match those interests with relevant Virgin initiatives
+4. Show the top matching initiatives
+5. Provide details about why each initiative matched
+
+The main differences are in the user interface and interaction patterns, optimized for different device types.
+

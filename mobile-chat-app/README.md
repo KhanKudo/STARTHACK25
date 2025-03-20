@@ -1,16 +1,17 @@
-# Mobile Animal Finder App
+# Virgin Interest Finder
 
-A mobile-targeted React application that simulates a Tinder-like swiping experience for animal photos. The app maintains a mobile device aspect ratio regardless of viewport size, making it perfect for demonstrations on larger screens while preserving the mobile look and feel.
+A mobile-targeted React application that helps users discover Virgin initiatives matching their sustainability interests through a Tinder-like swiping experience. The app maintains a mobile device aspect ratio regardless of viewport size, making it perfect for demonstrations on larger screens while preserving the mobile look and feel.
 
 ## Features
 
 - Mobile device simulation with accurate dimensions (iPhone X form factor)
-- Authentic Tinder-like swiping interface with touch/mouse drag gestures
+- Tinder-like swiping interface with touch/mouse drag gestures
 - Visual feedback during swipes with rotation and "LIKE"/"NOPE" indicators
 - Traditional Like/Dislike buttons for those who prefer tapping
 - Skip option to bypass all choices
 - Persistence of choices in localStorage
-- Previously viewed animals are not shown again on subsequent visits
+- Matches sustainability interests with relevant Virgin initiatives
+- Randomized selection of 10 interests each time the app runs
 - Responsive scaling based on viewport height
 
 ## Getting Started
