@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SwipeCard, { CardData } from './SwipeCard';
 import './SwipeContainer.css';
 import ResultsCard from './ResultsCard';
@@ -308,6 +309,7 @@ interface Choice {
 }
 
 const SwipeContainer: React.FC = () => {
+  const navigate = useNavigate();
   const [cards, setCards] = useState<CardData[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [choices, setChoices] = useState<Choice[]>([]);
@@ -509,6 +511,10 @@ const SwipeContainer: React.FC = () => {
     setCards(newRandomTopics);
   };
 
+  const handleChatClick = (projectId: string) => {
+    navigate(`/chat/${projectId}`);
+  };
+
   if (completed) {
     const displayCards = localStorage.getItem('topic-swipe-skipped') === 'true' 
       ? Object.keys(initiativeMap).map((initiative, index) => ({
@@ -570,6 +576,7 @@ const SwipeContainer: React.FC = () => {
                     }
                   }} 
                   rank={index + 1} 
+                  onChatClick={handleChatClick}
                 />
                 {match.matchedTopics.length > 0 && (
                   <div className="matched-topics">

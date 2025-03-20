@@ -35,6 +35,8 @@
 
 .results-card-content {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .results-card-company {
@@ -53,8 +55,35 @@
 .results-card-description {
   font-size: 0.9rem;
   color: #555;
-  margin: 0;
+  margin: 0 0 16px 0;
   line-height: 1.4;
+}
+
+.chat-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: white;
+  color: #e50051;
+  border: 1px solid #e50051;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.chat-button:hover {
+  background-color: #e50051;
+  color: white;
+}
+
+.chat-icon {
+  transition: all 0.2s ease;
 }
 
 .matched-topics {
