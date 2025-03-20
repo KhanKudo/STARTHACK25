@@ -3,6 +3,8 @@
   flex-direction: column;
   min-height: 100vh;
   background-color: #f8f9fa;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .top-bar-container {
@@ -20,6 +22,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 0;
+  overflow-y: auto;
+  height: calc(100vh - 64px); /* Assuming top bar height is 64px */
 }
 
 .collaborate-header {
@@ -38,6 +42,31 @@
   color: #555;
   max-width: 700px;
   margin: 0 auto;
+}
+
+.tab-navigation {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  color: var(--primary-red);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-red);
+  margin-bottom: -12px;
 }
 
 .filters-container {
@@ -319,32 +348,416 @@
   color: white;
 }
 
-@media (max-width: 768px) {
-  .collaborate-content {
-    width: 90%;
-    padding: 30px 0;
-  }
-  
-  .collaborate-header h1 {
-    font-size: 2rem;
-  }
-  
-  .collaborate-header p {
-    font-size: 1rem;
-  }
-  
-  .incentives-grid {
+/* Proposals Section Styles */
+.proposals-section {
+  width: 100%;
+}
+
+.recommended-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.recommended-section {
+  width: 100%;
+  position: relative;
+}
+
+.recommended-section .proposals-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 8px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.recommended-section .proposals-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.recommended-section .proposals-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recommended-section .proposals-grid::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.recommended-section .proposal-card {
+  flex: 0 0 calc(50% - 8px);
+  min-width: 300px;
+  padding: 16px;
+  height: auto;
+}
+
+.recommended-section .proposal-header {
+  margin-bottom: 6px;
+}
+
+.recommended-section .proposal-title {
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recommended-section .proposal-company {
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.recommended-section .proposal-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recommended-section .proposal-preview {
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.recommended-section .proposal-impact {
+  display: block;
+}
+
+.recommended-section .proposal-footer {
+  margin-top: 6px;
+}
+
+.recommended-section .proposal-tags {
+  display: flex;
+}
+
+.recommended-section .vote-button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.all-proposals-container {
+  width: 100%;
+}
+
+.all-proposals-section {
+  width: 100%;
+}
+
+.all-proposals-section .proposals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.proposal-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.proposal-category {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #f0f0f0;
+}
+
+.proposal-source {
+  font-size: 11px;
+  color: #666;
+}
+
+.proposal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  color: #333;
+  line-height: 1.3;
+}
+
+.proposal-company {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.proposal-description {
+  margin-bottom: 12px;
+  color: #555;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.proposal-preview {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.proposal-impact {
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.proposal-impact ul {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+}
+
+.proposal-impact li {
+  margin-bottom: 3px;
+  color: #666;
+}
+
+.proposal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.vote-button {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.proposal-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #f0f0f0;
+  padding: 3px 6px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* Idea Tab Styles */
+.idea-tab {
+  background-color: white;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 84px;
+  height: fit-content;
+  max-height: calc(100vh - 104px);
+  overflow-y: auto;
+  width: 100%;
+}
+
+.idea-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.lightbulb-icon {
+  font-size: 2rem;
+}
+
+.idea-header h2 {
+  color: var(--primary-red);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.idea-content {
+  margin-bottom: 24px;
+}
+
+.idea-intro {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.idea-blocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.idea-block {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.idea-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.idea-block-icon {
+  font-size: 1.5rem;
+}
+
+.idea-block-content h3 {
+  color: var(--primary-red);
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.idea-block-content p {
+  color: #555;
+  margin: 0;
+  line-height: 1.3;
+  font-size: 0.85rem;
+}
+
+/* Expanded state for proposal cards */
+.proposal-card.expanded {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.proposal-card.expanded .proposal-description {
+  -webkit-line-clamp: unset;
+}
+
+.proposal-card.expanded .proposal-impact ul {
+  display: block;
+}
+
+.proposal-card.expanded .proposal-tags {
+  display: flex;
+}
+
+.proposal-card.expanded .proposal-tags span {
+  display: inline-block;
+}
+
+@media (max-width: 1200px) {
+  .recommended-container {
     grid-template-columns: 1fr;
   }
-  
-  .category-filters {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
+
+  .recommended-section .proposals-grid {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .recommended-section .proposal-card {
+    flex: 0 0 100%;
+  }
+
+  .idea-tab {
+    position: static;
+    margin-bottom: 30px;
+    max-height: none;
+  }
+
+  .idea-blocks {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .tab-navigation {
+    flex-direction: column;
+    gap: 10px;
   }
   
-  .category-btn {
-    flex: 0 0 auto;
+  .tab-btn.active {
+    margin-bottom: 0;
+    border-bottom: none;
+    border-left: 2px solid var(--primary-red);
+    padding-left: 15px;
+  }
+  
+  .recommended-section .proposals-grid,
+  .all-proposals-section .proposals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .idea-tab {
+    padding: 20px;
+  }
+
+  .idea-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .idea-intro {
+    font-size: 1.1rem;
+  }
+
+  .idea-blocks {
+    grid-template-columns: 1fr;
+  }
+
+  .idea-block {
+    padding: 20px;
+  }
+
+  .proposal-card.expanded {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
   }
 } 
