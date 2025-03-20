@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import SwipeCard, { CardData } from './SwipeCard';
 import './SwipeContainer.css';
 import ResultsCard from './ResultsCard';
+import GlobeContainer from './GlobeContainer';
 
 // Extend the CardData interface to include matchedTopics
 interface ExtendedCardData extends CardData {
@@ -665,39 +666,39 @@ const SwipeContainer: React.FC = () => {
 
     return (
       <div className="swipe-container">
-        <div className="results-container">
-          <div className="results-nav"
+        <div className="results-nav"
                ref={navRef}
                onMouseDown={handleMouseDown}
                onMouseMove={handleMouseMove}
                onMouseUp={handleMouseUp}
                onMouseLeave={handleMouseLeave}>
-            <button 
-              className={`nav-button ${activeNav === 'projects' ? 'active' : ''}`}
-              onClick={() => setActiveNav('projects')}
-            >
-              Projects
-            </button>
-            <button 
-              className={`nav-button ${activeNav === 'badges' ? 'active' : ''}`}
-              onClick={() => setActiveNav('badges')}
-            >
-              My Badges
-            </button>
-            <button 
-              className={`nav-button ${activeNav === 'leaderboard' ? 'active' : ''}`}
-              onClick={() => setActiveNav('leaderboard')}
-            >
-              Leaderboard
-            </button>
+          <button 
+            className={`nav-button ${activeNav === 'projects' ? 'active' : ''}`}
+            onClick={() => setActiveNav('projects')}
+          >
+            Projects
+          </button>
+          <button 
+            className={`nav-button ${activeNav === 'badges' ? 'active' : ''}`}
+            onClick={() => setActiveNav('badges')}
+          >
+            My Badges
+          </button>
+          <button 
+            className={`nav-button ${activeNav === 'leaderboard' ? 'active' : ''}`}
+            onClick={() => setActiveNav('leaderboard')}
+          >
+            Leaderboard
+          </button>
             <button 
               className={`nav-button ${activeNav === 'community' ? 'active' : ''}`}
               onClick={() => setActiveNav('community')}
             >
               Community
             </button>
-          </div>
-          
+        </div>
+        <GlobeContainer />
+        <div className="results-container">
           <div className="search-container">
             <input
               type="text"

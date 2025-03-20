@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .swipe-completed, .swipe-loading, .results-container {
@@ -18,18 +18,19 @@
 }
 
 .results-container {
-  padding-top: 60px;
+  padding-top: 4px;
+  top: 85px;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100%;
+  height: unset !important;
   text-align: center;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 .results-container h2 {
