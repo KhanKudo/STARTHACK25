@@ -6,6 +6,7 @@ Aktuellsten Anforderungen/Feedback 19:19 Thu:
 1. Employee-Employee Chatting
 2. Mobile Project Details Pages missing "Get Involved" Button
 3. 'Near Me' on Mobile, ideally with Globe Visual to capture the lively buzz
+4. Collaboration 'common ground' and 'suggestions' based on AI-insight and connections
 
 Möglichkeiten: 
 
