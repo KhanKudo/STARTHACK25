@@ -17,9 +17,19 @@
   overflow-y: auto;
 }
 
-
 .results-container {
+  padding-top: 4px;
+  top: 85px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   height: unset !important;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
   overflow-y: visible;
 }
 
@@ -210,30 +220,51 @@
 }
 
 .results-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   max-width: 600px;
-  margin: 0 0 20px;
-  padding: 0 16px;
+  margin: 0 auto;
+  padding: 0 16px 10px;
   gap: 10px;
   background-color: #f9f9f9;
   padding-top: 10px;
-  padding-bottom: 10px;
   border-radius: 0 0 12px 12px;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.results-nav:active {
+  cursor: grabbing;
+}
+
+.results-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-button {
-  flex: 1;
+  flex: 0 0 auto;
+  min-width: 100px;
   background-color: white;
   color: black;
   border: none;
   border-radius: 24px;
   padding: 8px;
+  margin-right: 4px;
+  margin-bottom: 8px;
   font-size: 12px;
   font-weight: 600;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .nav-button.active {
@@ -455,7 +486,6 @@
 
 .current-user {
   background-color: #fff9fb;
-  border: 1px solid #e50051;
 }
 
 .next-milestone {
@@ -473,3 +503,182 @@
   margin-bottom: 12px;
   color: #333;
 }
+
+/* Community page styles */
+.community-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.community-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Discussion section styles */
+.discussion-section {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.discussion-section h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: left;
+  color: #333;
+}
+
+.discussion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.discussion-item {
+  display: flex;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.discussion-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.discussion-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e50051;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  font-weight: 600;
+}
+
+.discussion-content {
+  flex: 1;
+}
+
+.discussion-header {
+  margin-bottom: 8px;
+}
+
+.discussion-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.discussion-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.discussion-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Events section styles */
+.events-section {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.events-section h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: left;
+  color: #333;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event-item {
+  display: flex;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  background-color: #e50051;
+  color: white;
+  padding: 12px;
+}
+
+.date-month {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.date-day {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.event-details {
+  flex: 1;
+  padding: 16px;
+}
+
+.event-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.event-description {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.event-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.community-action-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.community-action-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+} 
