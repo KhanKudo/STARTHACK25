@@ -1,15 +1,9 @@
-export interface Project {
-  id: string;
-  company: string;
-  initiative: string;
-  challenge: string;
-  description?: string;
-  callToAction?: string;
-  links?: string[];
-  imageUrl: string;
-}
+import { Project } from '../../../models/project';
 
-// Convert CSV data to structured JSON
+// Export the Project type for use in components
+export type { Project };
+
+// Export the project data array
 export const projectData: Project[] = [
   {
     id: "va-fleet",

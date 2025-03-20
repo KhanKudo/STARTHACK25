@@ -1,31 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TopBar from './TopBar';
-import { getProjectById, Project } from '../utils/projectData';
+import { Project } from '../utils/projectData';
+import { api } from '../services/api';
 import './ProjectDetails.css';
 
 const ProjectDetails: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (projectId) {
-      const projectData = getProjectById(projectId);
-      setProject(projectData);
+    const fetchProject = async () => {
+      if (!projectId) return;
       
-      if (!projectData) {
-        // If project not found, redirect to dashboard
-        navigate('/');
+      try {
+        setLoading(true);
+        const data = await api.getProjectById(projectId);
+        setProject(data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch project details');
+        console.error('Error fetching project:', err);
+      } finally {
+        setLoading(false);
       }
-    }
-  }, [projectId, navigate]);
+    };
+
+    fetchProject();
+  }, [projectId]);
 
   const handleBackClick = () => {
     navigate('/');
   };
 
-  if (!project) {
+  if (loading) {
+    return (
+      <div className="project-details-page">
+        <div className="top-bar-container">
+          <TopBar title="Loading..." />
+        </div>
+        <div className="project-content">
+          <button className="back-button" onClick={handleBackClick}>
+            ← Back to Dashboard
+          </button>
+          <div className="loading">Loading project details...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !project) {
     return (
       <div className="project-details-page">
         <div className="top-bar-container">
@@ -36,7 +63,7 @@ const ProjectDetails: React.FC = () => {
             ← Back to Dashboard
           </button>
           <div className="error-message">
-            Project not found. Please return to the dashboard.
+            {error || 'Project not found. Please return to the dashboard.'}
           </div>
         </div>
       </div>
@@ -84,11 +111,11 @@ const ProjectDetails: React.FC = () => {
           
           {project.links && project.links.length > 0 && (
             <div className="project-section">
-              <h3 className="section-title">Relevant Links</h3>
+              <h3 className="section-title">Links</h3>
               <ul className="links-list">
                 {project.links.map((link, index) => (
-                  <li key={index} className="link-item">
-                    <a href={link} target="_blank" rel="noopener noreferrer" className="project-link">
+                  <li key={index}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">
                       {link}
                     </a>
                   </li>

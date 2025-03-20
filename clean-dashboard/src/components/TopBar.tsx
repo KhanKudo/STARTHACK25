@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addProject, Project } from '../utils/projectData';
+import { Project } from '../utils/projectData';
+import { api } from '../services/api';
 import CreateProjectModal from './CreateProjectModal';
 import './TopBar.css';
 
@@ -24,14 +25,19 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
     setShowProjectModal(false);
   };
 
-  const handleSaveProject = (projectData: Omit<Project, 'id'>) => {
-    const newProject = addProject(projectData);
-    
-    // Dispatch an event to notify that a project was added
-    window.dispatchEvent(new CustomEvent('project-added', { detail: newProject }));
-    
-    // Optionally navigate to the new project
-    // navigate(`/project/${newProject.id}`);
+  const handleSaveProject = async (projectData: Omit<Project, 'id'>) => {
+    try {
+      const newProject = await api.addProject(projectData);
+      
+      // Dispatch an event to notify that a project was added
+      window.dispatchEvent(new CustomEvent('project-added', { detail: newProject }));
+      
+      // Optionally navigate to the new project
+      // navigate(`/project/${newProject.id}`);
+    } catch (error) {
+      console.error('Failed to create project:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   return (
