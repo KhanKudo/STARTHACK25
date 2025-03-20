@@ -39,13 +39,17 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
       <div className="top-bar">
         <div className="top-bar-content">
           <div className="top-bar-title-container">
+            <div className="top-bar-title">{title}</div>
+          </div>
+          
+          <div className="logo-container">
             <img 
               src="/assets/Virgin_logo.svg" 
               alt="Virgin Logo" 
               className="virgin-logo"
             />
-            <div className="top-bar-title">{title}</div>
           </div>
+          
           <div className="top-bar-nav">
             <div className="nav-item">Collaborations</div>
             <button className="add-project-btn" onClick={openProjectModal}>

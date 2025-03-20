@@ -21,11 +21,20 @@
 .top-bar-title-container {
   display: flex;
   align-items: center;
-  gap: 12px;
+  flex: 1;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .virgin-logo {
-  height: 30px;
+  height: 40px;
   width: auto;
 }
 
@@ -39,6 +48,8 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .nav-item {
