@@ -88,6 +88,18 @@
   aspect-ratio: 1/1;
   margin: 0 auto;
   position: relative;
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.3s ease-out;
+}
+
+.globe-wrapper:hover {
+  transform: scale(1.02);
+}
+
+.globe-wrapper:active {
+  cursor: grabbing;
+  transform: scale(1.01);
 }
 
 .globe-popup-overlay {
@@ -139,18 +151,18 @@
   }
 }
 
-/* Adjust marker dot style to match reference image */
+/* Adjust marker dot style to Virgin red */
 .marker-dot {
-  width: 6px;
-  height: 6px;
-  background-color: rgba(245, 0, 87, 0.7); /* Slightly faded red */
+  width: 4px;
+  height: 4px;
+  background-color: rgba(245, 0, 87, 0.8); /* Virgin red color */
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(245, 0, 87, 0.4);
-  opacity: 0.85; /* Slightly more transparent to match image */
+  box-shadow: 0 0 8px rgba(245, 0, 87, 0.5);
+  opacity: 0.9; 
   animation: marker-pulse 3s infinite ease-in-out;
 }
 
-/* Glow effect */
+/* Additional visual feedback when the globe stops rotating */
 .globe-wrapper::before {
   content: '';
   position: absolute;
@@ -170,6 +182,19 @@
   filter: blur(20px);
   z-index: -1;
   pointer-events: none;
+  transition: all 0.3s ease-out;
+}
+
+.globe-wrapper:hover::before {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 15%,
+    rgba(255, 255, 255, 0.7) 35%,
+    rgba(255, 255, 255, 0.3) 65%,
+    rgba(255, 255, 255, 0) 85%
+  );
+  filter: blur(15px);
 }
 
 /* Additional glow for enhanced effect */

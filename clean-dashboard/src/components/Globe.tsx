@@ -195,8 +195,8 @@ export function Globe({ globeConfig, data }: WorldProps) {
     if (globeConfig.markers && globeConfig.markers.length > 0) {
       globeConfig.markers.forEach(marker => {
         points.push({
-          size: marker.size || defaultProps.pointSize * 1.2, // Make points slightly larger
-          color: "rgba(245, 0, 87, 0.85)", // Semi-transparent Virgin red color
+          size: marker.size * 0.8 || defaultProps.pointSize * 0.8, // Standardize size multiplier
+          color: "rgba(245, 0, 87, 0.8)", // Virgin red color
           lat: marker.location[0],
           lng: marker.location[1],
           company: marker.company,
@@ -244,7 +244,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .pointColor((e: any) => e.color)
       .pointsMerge(true)
       .pointAltitude(0.0)
-      .pointRadius(2);
+      .pointRadius(0.8);
 
     globeRef.current
       .ringsData([])
@@ -266,6 +266,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     defaultProps.arcTime,
     defaultProps.rings,
     defaultProps.maxRings,
+    globeConfig.markers
   ]);
 
   // Handle rings animation with cleanup
@@ -324,15 +325,31 @@ export function World(props: WorldProps) {
     link?: string;
     position: { x: number, y: number };
   } | null>(null);
+  
+  // Add state to track mouse hover
+  const [isHovering, setIsHovering] = useState(false);
 
   // Handle closing the popup
   const handleClosePopup = () => {
     setSelectedLocation(null);
   };
   
+  // Mouse event handlers
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
+  
   return (
     <>
-      <div className="globe-wrapper">
+      <div 
+        className="globe-wrapper" 
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <Canvas 
           scene={scene} 
           camera={{ 
@@ -406,7 +423,7 @@ export function World(props: WorldProps) {
             minDistance={cameraZ}
             maxDistance={cameraZ}
             autoRotateSpeed={1}
-            autoRotate={true}
+            autoRotate={!isHovering && globeConfig.autoRotate} // Stop rotation on hover
             minPolarAngle={Math.PI / 3.5}
             maxPolarAngle={Math.PI - Math.PI / 3}
           />
@@ -461,198 +478,9 @@ interface GlobeWithClickHandlerProps extends WorldProps {
 
 // This component extends the Globe component with click handling
 function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandlerProps) {
-  const globeRef = useRef<ThreeGlobeType | null>(null);
   const groupRef = useRef<any>(null);
   const pointsDataRef = useRef<any[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
-  const { globeConfig, data } = props;
-
-  const defaultProps = {
-    pointSize: 1,
-    atmosphereColor: "#ffffff",
-    showAtmosphere: true,
-    atmosphereAltitude: 0.1,
-    polygonColor: "rgba(255,255,255,1)",
-    globeColor: "#FFF",
-    emissive: "#000000",
-    emissiveIntensity: 0.1,
-    shininess: 0.9,
-    arcTime: 2000,
-    arcLength: 0.9,
-    rings: 1,
-    maxRings: 3,
-    ...globeConfig,
-  };
-
-  // Initialize globe only once
-  useEffect(() => {
-    if (!globeRef.current && groupRef.current) {
-      // @ts-ignore - ThreeGlobe exists at runtime
-      globeRef.current = new ThreeGlobe();
-      (groupRef.current as any).add(globeRef.current);
-      setIsInitialized(true);
-    }
-  }, []);
-
-  // Build material when globe is initialized or when relevant props change
-  useEffect(() => {
-    if (!globeRef.current || !isInitialized) return;
-
-    const globeMaterial = globeRef.current.globeMaterial() as unknown as {
-      color: Color;
-      emissive: Color;
-      emissiveIntensity: number;
-      shininess: number;
-    };
-    globeMaterial.color = new Color(globeConfig.globeColor);
-    globeMaterial.emissive = new Color(globeConfig.emissive);
-    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
-    globeMaterial.shininess = globeConfig.shininess || 0.9;
-  }, [
-    isInitialized,
-    globeConfig.globeColor,
-    globeConfig.emissive,
-    globeConfig.emissiveIntensity,
-    globeConfig.shininess,
-  ]);
-
-  // Build data when globe is initialized or when data changes
-  useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data) return;
-
-    const arcs = data;
-    let points = [];
-
-    // Add points from data arcs
-    for (let i = 0; i < arcs.length; i++) {
-      const arc = arcs[i];
-      const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: arc.color,
-        lat: arc.startLat,
-        lng: arc.startLng,
-      });
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: arc.color,
-        lat: arc.endLat,
-        lng: arc.endLng,
-      });
-    }
-
-    // Add points from markers if present
-    if (globeConfig.markers && globeConfig.markers.length > 0) {
-      globeConfig.markers.forEach(marker => {
-        points.push({
-          size: marker.size || defaultProps.pointSize * 1.2, // Make points slightly larger
-          color: "rgba(245, 0, 87, 0.85)", // Semi-transparent Virgin red color
-          lat: marker.location[0],
-          lng: marker.location[1],
-          company: marker.company,
-          initiative: marker.initiative,
-          link: marker.link
-        });
-      });
-    }
-
-    // remove duplicates for same lat and lng
-    const filteredPoints = points.filter(
-      (v, i, a) =>
-        a.findIndex((v2) =>
-          ["lat", "lng"].every(
-            (k) => v2[k as keyof typeof v2] === v[k as keyof typeof v],
-          ),
-        ) === i,
-    );
-
-    globeRef.current
-      .hexPolygonsData(countries.features)
-      .hexPolygonResolution(3)
-      .hexPolygonMargin(0.7)
-      .showAtmosphere(defaultProps.showAtmosphere)
-      .atmosphereColor("#ffffff")
-      .atmosphereAltitude(0.2) // Increased atmosphere size for better illumination
-      .hexPolygonColor(() => defaultProps.polygonColor);
-
-    globeRef.current
-      .arcsData(data)
-      .arcStartLat((d: Position) => d.startLat)
-      .arcStartLng((d: Position) => d.startLng)
-      .arcEndLat((d: Position) => d.endLat)
-      .arcEndLng((d: Position) => d.endLng)
-      .arcColor((e: Position) => e.color)
-      .arcAltitude((e: Position) => e.arcAlt)
-      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
-      .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((e: Position) => e.order)
-      .arcDashGap(15)
-      .arcDashAnimateTime(() => defaultProps.arcTime);
-
-    globeRef.current
-      .pointsData(filteredPoints)
-      .pointColor((e: any) => e.color)
-      .pointsMerge(true)
-      .pointAltitude(0.0)
-      .pointRadius(2);
-      
-    // Instead of using .onPointClick, use a manual click event handler
-    // Store the points data in a ref for later use
-    pointsDataRef.current = filteredPoints;
-
-    globeRef.current
-      .ringsData([])
-      .ringColor(() => defaultProps.polygonColor)
-      .ringMaxRadius(defaultProps.maxRings)
-      .ringPropagationSpeed(RING_PROPAGATION_SPEED)
-      .ringRepeatPeriod(
-        (defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings,
-      );
-  }, [
-    isInitialized,
-    data,
-    defaultProps.pointSize,
-    defaultProps.showAtmosphere,
-    defaultProps.atmosphereColor,
-    defaultProps.atmosphereAltitude,
-    defaultProps.polygonColor,
-    defaultProps.arcLength,
-    defaultProps.arcTime,
-    defaultProps.rings,
-    defaultProps.maxRings,
-    globeConfig.markers
-  ]);
-
-  // Handle rings animation with cleanup
-  useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data) return;
-
-    const interval = setInterval(() => {
-      if (!globeRef.current) return;
-
-      const newNumbersOfRings = genRandomNumbers(
-        0,
-        data.length,
-        Math.floor((data.length * 4) / 5),
-      );
-
-      const ringsData = data
-        .filter((d, i) => newNumbersOfRings.includes(i))
-        .map((d) => ({
-          lat: d.startLat,
-          lng: d.startLng,
-          color: d.color,
-        }));
-
-      globeRef.current.ringsData(ringsData);
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isInitialized, data]);
 
   // Create a click event handler for the canvas
   useEffect(() => {
@@ -757,5 +585,46 @@ function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandler
     };
   }, [isInitialized, onPointClick]);
 
-  return <group ref={groupRef} />;
+  // Update pointsDataRef when markers change
+  useEffect(() => {
+    if (!isInitialized) return;
+    
+    // Extract points from markers for click detection
+    const points: Array<{
+      size: number;
+      color: string;
+      lat: number;
+      lng: number;
+      company?: string;
+      initiative?: string;
+      link?: string;
+      _screenX?: number;
+      _screenY?: number;
+      _distance?: number;
+    }> = [];
+    
+    if (props.globeConfig.markers && props.globeConfig.markers.length > 0) {
+      props.globeConfig.markers.forEach(marker => {
+        points.push({
+          size: marker.size * 0.8 || 0.8, // Match the size in the main Globe component
+          color: "rgba(245, 0, 87, 0.8)", // Virgin red color
+          lat: marker.location[0],
+          lng: marker.location[1],
+          company: marker.company,
+          initiative: marker.initiative,
+          link: marker.link
+        });
+      });
+    }
+    
+    pointsDataRef.current = points;
+    setIsInitialized(true);
+  }, [props.globeConfig.markers, isInitialized]);
+
+  return (
+    <>
+      <Globe {...props} />
+      <group ref={groupRef} />
+    </>
+  );
 } 
