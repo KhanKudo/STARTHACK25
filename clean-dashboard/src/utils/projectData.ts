@@ -37,6 +37,7 @@ export const projectData: Project[] = [
     challenge: 'The time for action against climate change is now. Virgin Atlantic are on a mission to achieve net-zero by 2050.',
     description: 'Virgin Atlantic is working to accelerate the development of sustainable fuels. On November 28th, we made history with Flight100 becoming the first commercial airline to fly across the Atlantic on 100% SAF - marking a key milestone on the path to decarbonising aviation.',
     callToAction: 'Stay informed, Sign up for updates on ways you can get involved in making a difference',
+    location: [51.13584503426305, -0.17707394248102706],
     links: [
       'https://corporate.virginatlantic.com/gb/en/business-for-good/planet.html',
       'https://corporate.virginatlantic.com/gb/en/business-for-good/planet/fuel/flight100.html',
@@ -64,6 +65,7 @@ export const projectData: Project[] = [
     challenge: 'Wildlife havens, carbon stores, storm defences, ocean purifiers – mangrove swamps are one of the hardest-working habitats on Earth, but theyre disappearing fast.',
     description: 'Virgin Voyages have teamed up with Virgins Foundation, Virgin Unite, to support mangrove forest projects in the Caribbean. The aim is to accelerate nature-based solutions to climate change, and create a scalable model for other regions in the world.',
     callToAction: 'Get involved in a Beach Clean onboard, Donate to Sea Change For All Fund (not currently available)',
+    location: [22.232087447550416, -79.76739750725085],
     links: [
       'https://www.virginvoyages.com/sustainability'
     ],
@@ -76,6 +78,7 @@ export const projectData: Project[] = [
     challenge: 'Old IT equipment can lead to electronic waste, or e-waste, polluting the environment. Recycling old IT equipment plays a vital role in preventing this.',
     description: 'O2 Recycle is a service launched in October 2009, which allows anyone in the UK whether an O2 customer or not, to trade in their devices and gadgets responsibly, in return for cash. The vast majority of phones we receive will be reused, repaired or recycled for parts. Since launch, the scheme has paid out more than £320 million, and sustainably recycled 3.8 million devices – with zero going to landfill.',
     callToAction: 'Sell your old device with O2 Recycle',
+    location:[51.50801650097682, -0.1270130330384771],
     links: [
       'https://www.virgin.com/about-virgin/latest/virgin-media-o2-launches-better-connections-plan',
       'https://www.o2recycle.co.uk/'
@@ -127,6 +130,7 @@ export const projectData: Project[] = [
     challenge: 'Many communities surrounding Ulusaba lack basic needs such as access to clean drinking water, basic healthcare, food, childcare, and job opportunities.',
     description: 'Pride \'n Purpose is a non-for-profit organisation, committed to helping disadvantaged communities living adjacent to the Sabi Sand Reserve. The Pride n Purpose philosophy is that people are most effectively helped if they are empowered to help themselves, with this in mind the organisation\'s work focuses primarily on sustainable initiatives and it is estimated that Pride \'n Purpose benefits over 35,000 people across six communities.',
     callToAction: 'Volunteer during your visit to Ulusaba, Pack for a Purpose: Donate clothing and household supplies, Make a donation',
+    location: [-24.796101327077594, 31.34661389882899],
     links: [
       'https://www.virginlimitededition.com/ulusaba/the-reserve/our-commitment/',
       'https://www.packforapurpose.org/destinations/africa/south-africa/ulusaba-private-game-reserve/'
@@ -140,6 +144,7 @@ export const projectData: Project[] = [
     challenge: 'A key conservation goal around Mahali Mzuri is to aid conservation and preserve the under-threat route of the Great Wildebeest Migration. We also aim to support and enhance the standard of living in local communities.',
     description: 'Inua Jamii is Mahali Mzuris charitable arm, committed to working with and supporting the local Maasai communities in the Olare Motorogi Conservancy to improve their standards of living. The name "Inua Jamii" means "uplifting the local community" in Swahili. Our philosophy is that people are most effectively helped if they are empowered to help themselves. Our aim is to nurture communities that thrive through our involvement, simultaneously fostering selfreliance and establishing sustainable resources for generations to come.',
     callToAction: 'Volunteer during your visit to Mahali Mzuri, Visit the community or the Maa Trust, Pack for a Purpose: Donate clothing and household supplies, Make a donation',
+    location: [-1.2734950011866397, 35.22282608689205],
     links: [
       'https://www.virginlimitededition.com/mahali-mzuri/the-camp/our-commitment/',
       'https://www.virginlimitededition.com/media/dvvi4c4q/mahali-mzuri-inua-jamii-brochure-oct-24.pdf'
@@ -180,6 +185,7 @@ export const projectData: Project[] = [
     challenge: 'The dual crises of climate change and mass wildlife extinctions threaten to forever change our world. By 2050, over 570 low-lying coastal cities will face threats from sea level rise and an estimated 800 million people will be at risk.',
     description: 'In October 2016, Ocean Unite / ORRAA in collaboration with the Marine Conservation Institute and Oceans 5, brought together 30 of the largest NGOs from around the world, stimulating joint efforts towards the goal of strongly protecting at least 30% of the Ocean by 2030. A current campaign is to secure the largest act of Ocean Protection in history by protecting Antarctica\'s waters.',
     callToAction: 'Add your name to the petition urging leaders from CCAMLR member countries to act now to protect Antarctica\'s waters #CallOnCCAMLR',
+    location:[-70.89611291456852, 20.981957200717403],
     links: [
       'https://only.one/act/antarctica',
       'https://www.virgin.com/virgin-unite/latest/securing-the-largest-act-of-ocean-protection-in-history'
@@ -219,6 +225,7 @@ export const projectData: Project[] = [
     challenge: 'The aim of the Eve Branson Foundation is to support local people and communities around the Atlas Mountains. On 8th September 2023, Morocco was hit hard by a strong earthquake measuring magnitude 6.8.',
     description: 'The Eve Branson Foundation is a small non-profit based in Morocco. Their mission is to create opportunities for local people in the High Atlas Mountains which can make a meaningful difference to their families and community. They have developed initiatives in four key areas: artisanal training, environment, healthcare and education.',
     callToAction: 'Donate, Visit, Pack for a Purpose, Buy EBF products through Virgin Red',
+    location: [32.18403934774269, -6.597446622994912],
     links: [
       'https://evebransonfoundation.org.uk/',
       'https://evebransonfoundation.org.uk/pack-for-a-purpose/',

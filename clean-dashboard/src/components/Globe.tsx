@@ -97,11 +97,11 @@ export type GlobeConfig = {
   autoRotate?: boolean;
   autoRotateSpeed?: number;
   markers?: Array<{
+    id: string
     location: [number, number];
-    size: number;
+    size?: number;
     company?: string;
     initiative?: string;
-    link?: string;
   }>;
 };
 
@@ -202,13 +202,13 @@ export function Globe({ globeConfig, data }: WorldProps) {
     if (globeConfig.markers && globeConfig.markers.length > 0) {
       globeConfig.markers.forEach(marker => {
         points.push({
-          size: marker.size * 0.8 || defaultProps.pointSize * 0.8, // Standardize size multiplier
+          size: 1.5 * 0.8 || defaultProps.pointSize * 0.8, // Standardize size multiplier
           color: "rgba(245, 0, 87, 0.8)", // Virgin red color
           lat: marker.location[0],
           lng: marker.location[1],
           company: marker.company,
           initiative: marker.initiative,
-          link: marker.link
+          link: '/project/' + marker.id
         });
       });
     }
@@ -424,23 +424,21 @@ export function World(props: WorldProps) {
 
               const tolerance = (Math.abs(x - y) < 10) ? 20 : 10;
 
-              let locationId = -1;
+              let locationId = '';
               let minDist = 1000;
-              let index = 0
-              for (const l of virginLocations) {
+              for (const l of projectData.filter(pro => 'location' in pro) as { location: [number, number], id: string }[]) {
                 const dist = Math.sqrt(Math.pow(l.location[0] - lat, 2) + Math.pow(l.location[1] - lon, 2))
                 if (dist < minDist) {
-                  locationId = index;
+                  locationId = l.id;
                   minDist = dist;
                 }
-                index++;
               }
 
               if (minDist > tolerance)
-                locationId = -1;
+                locationId = '';
 
-              if (locationId !== -1) {
-                navigate(`/project/${projectData[locationId].id}`);
+              if (locationId) {
+                navigate(`/project/${locationId}`);
               }
             }}
           >
@@ -694,13 +692,13 @@ function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandler
     if (props.globeConfig.markers && props.globeConfig.markers.length > 0) {
       props.globeConfig.markers.forEach(marker => {
         points.push({
-          size: marker.size * 0.8 || 0.8, // Match the size in the main Globe component
+          size: 1.5 * 0.8 || 0.8, // Match the size in the main Globe component
           color: "rgba(245, 0, 87, 0.8)", // Virgin red color
           lat: marker.location[0],
           lng: marker.location[1],
           company: marker.company,
           initiative: marker.initiative,
-          link: marker.link
+          link: '/project/' + marker.id
         });
       });
     }
