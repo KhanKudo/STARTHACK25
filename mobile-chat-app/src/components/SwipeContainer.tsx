@@ -164,7 +164,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Limited Edition & Virgin Unite',
     challenge: 'Many communities face socioeconomic challenges that require sustainable development approaches.',
     description: 'Pride \'n Purpose works with communities to develop sustainable livelihoods, addressing social inequities through education, healthcare, and entrepreneurial initiatives that empower local populations and create lasting positive change.',
-    imageUrl: 'https://images.unsplash.com/photo-1531123414780-f74242c2b052?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://www.virginlimitededition.com/media/mblnt4w0/ann_shane_pnp_aug2022-007.jpg?width=700&height=540&quality=70&v=1da31fdab9904b0'
   },
   'Virgin Limited Edition & Virgin Unite - Mahali Mzuri: Inua Jamii': {
     company: 'Virgin Limited Edition & Virgin Unite',
@@ -206,7 +206,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Unite',
     challenge: 'Rural communities often lack access to education, healthcare, and sustainable economic opportunities.',
     description: 'The Eve Branson Foundation supports rural communities by providing education, healthcare, and sustainable livelihood opportunities, empowering local artisans and entrepreneurs while preserving cultural heritage.',
-    imageUrl: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=500&auto=format&fit=crop'
+    imageUrl:'https://images.ctfassets.net/r2st2lg2cc7t/1dusneX7KiolA16b9qLoLZ/095eda3007130eff019e05d366a248b7/eve_crafthouse_balcony.jpg?q=75&w=1500'
   },
   'Virgin Unite - Unite BVI': {
     company: 'Virgin Unite',
@@ -253,14 +253,14 @@ const topicImages: TopicImageMap = {
   'Ecosystem Conservation': 'https://images.unsplash.com/photo-1700934163012-b4ae4459e7a6?q=80&w=1066&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=Iyx-gCMSByZJUFvWAeKyIj2q1Of1GyXtkW0Ba2-Gs7g=?q=80&w=500&auto=format&fit=crop',
   'Community Empowerment': 'https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=985&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=500&auto=format&fit=crop',
   'E-waste Reduction': 'https://images.unsplash.com/photo-1614201756100-1ccde6a6589e?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=q_MmxgGUveX1gaEq75trpiE5ShN-t9QGNt-8wKY_aP0=?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Consumption': 'https://plus.unsplash.com/premium_photo-1713820020903-527120477bcc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c3VzdGFpbmFibGUlMjBjb25zdW1wdGlvbnxlbnwwfHwwfHx8MA%3D%3D?s=612x612&w=0&k=20&c=N4WTVGZ_TL5CCKCkc-k1WsVTbBaEOsSp5_QbDf1DFVQ=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Consumption': 'https://www.thebclog.com/Media/Uploads/surdurulebilirlik_Slider.png?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c3VzdGFpbmFibGUlMjBjb25zdW1wdGlvbnxlbnwwfHwwfHx8MA%3D%3D?s=612x612&w=0&k=20&c=N4WTVGZ_TL5CCKCkc-k1WsVTbBaEOsSp5_QbDf1DFVQ=?q=80&w=500&auto=format&fit=crop',
   'Circular Economy': 'https://plus.unsplash.com/premium_photo-1711987229773-3832fca590cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Y2lyY3VsYXIlMjBlY29ub215fGVufDB8fDB8fHww?s=612x612&w=0&k=20&c=xIKo4MSlR5gft6eucUOhf-F3Mi825HR63KJTR9Khu1Q=?q=80&w=500&auto=format&fit=crop',
-  'Digital Inclusion': 'https://media-hosting.imagekit.io//35335b3e911c4b47/istockphoto-1219569791-612x612.jpg?Expires=1837085115&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=2l6pOL7c9o9hfwB8klVCp9fHK5xI~q63UzKcRZtEHNHq-EVfylSr7K8CPSGLgFerF6jDz9oupddExqTTKKamK18xvyoDK6p3nOn5E2MPXq~wEQ~V2ZJ1b5SVGI5azLvueOlHb4ijlhwRLcEo6zHo9cBNhc76Q~qYpfHRacLhaj87vgRcvAEBYbMdSMSNyDwF9lIOurlN4-BThOAUz5sruD6ALtpBk7Euad6QUa19~5ZmYdrl2J0vvAaqXM29GH3UCGV4PbbEHj7yGGQjNw6-n07fKlbyQtIzIERyx0b7mCuAQklgfiHC1~Zenh7cuHT5u1gR1p-Syo~~gH4GBYkuXw__',
+  'Digital Inclusion': 'https://media.licdn.com/dms/image/v2/D5612AQFZEfGekMgeCw/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1703851895642?e=2147483647&v=beta&t=IEEvSDJlMp7Apox43jWdFtm24GuGK0SQFoD4KskLSsA',
   'Social Equity': 'https://plus.unsplash.com/premium_photo-1723921267251-120560d6ab71?q=80&w=1046&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=KUbSd05rSSgbPNfRoogdaiGYkExurmDUJMpXQ7d5OlM=?q=80&w=500&auto=format&fit=crop',
   'Sustainable Technology': 'https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=XXQ5aui1TdSAegGU0QP-yIeUWFYJtnB1x5RdFW_cs6w=?q=80&w=500&auto=format&fit=crop',
-  'Consumer Awareness': 'https://images.unsplash.com/photo-1629959000608-3ec4fc3194b5?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=qZ-6_ZUia5vMDcYPBaq-ur4YDaTNQS2I2GDwJP-74nM=?q=80&w=500&auto=format&fit=crop',
+  'Consumer Awareness': 'https://media.geeksforgeeks.org/wp-content/uploads/20240312160326/Why-is-there-a-need-for-Consumer-Awareness.png?s=612x612&w=0&k=20&c=qZ-6_ZUia5vMDcYPBaq-ur4YDaTNQS2I2GDwJP-74nM=?q=80&w=500&auto=format&fit=crop',
   'Sustainable Livelihoods': 'https://images.unsplash.com/photo-1592178036182-5400889dfc74?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHN1c3RhaW5hYmxlJTIwbGlmZWx5aG9vZHN8ZW58MHx8MHx8fDA%3D?s=612x612&w=0&k=20&c=3B3oVBUFSygaMILGqRtvJJkSsMY1GqxdjQY6_2zFF08=?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Tourism': 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=vdadQOUizAi28ZkLVgBHqW7woQwqVmn_3D9Wiyfk56Y=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Tourism': 'https://spicetreemunnar.com/wp-content/uploads/2024/04/9387727_4165497-1024x1024.jpg?s=612x612&w=0&k=20&c=vdadQOUizAi28ZkLVgBHqW7woQwqVmn_3D9Wiyfk56Y=?q=80&w=500&auto=format&fit=crop',
   'Global Leadership': 'https://images.unsplash.com/photo-1622675235457-38708d51d6d5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fGdsb2JhbCUyMGxlYWRlcnNoaXB8ZW58MHx8MHx8fDA%3D?s=612x612&w=0&k=20&c=9xRTpsi4QN_0vPQjFQhaQBOnBrr7hTznxWDGoELJrTI=?q=80&w=500&auto=format&fit=crop',
   'Peace and Justice': 'https://images.unsplash.com/photo-1589994965851-a8f479c573a9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=sNQFJsm5b3lDAZnFIrIuqcJ87KAyFvgnRBauQXV-B5U=?q=80&w=500&auto=format&fit=crop',
   'Sustainable Development': 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?s=612x612&w=0&k=20&c=l5I31RBIL5eeEJXVzJld8o9dcUPSOWqBXnTra31Ud4s=?q=80&w=500&auto=format&fit=crop',

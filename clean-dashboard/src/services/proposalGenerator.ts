@@ -12,10 +12,8 @@ export interface GeneratedProposal extends Omit<Proposal, 'id' | 'votes' | 'stat
   source: 'user' | 'ai';
 }
 
-let proposalIndex = 0; // Tracks the current proposal index
-
+/*
 export async function generateAIProposals(context: ProposalGenerationContext): Promise<GeneratedProposal[]> {
-  const proposals: GeneratedProposal[] = [];
   const combinedProposals = [
     ...context.companies.map(company => ({
       type: 'company' as const,
@@ -29,13 +27,13 @@ export async function generateAIProposals(context: ProposalGenerationContext): P
     }))
   ];
 
-  // If all proposals have been activated, start from the beginning
-  const currentProposal = combinedProposals[proposalIndex % combinedProposals.length];
-  proposalIndex++;
+  // If all proposals have been activated, srun node-tstart from the beginning
+  // const currentProposal = combinedProposals[proposalIndex % combinedProposals.length];
+  //proposalIndex++;
 
   // Generate the current proposal
-  const generatedProposal = await generateProposal(currentProposal);
-  proposals.push(generatedProposal);
+  // const generatedProposal = await generateProposal(currentProposal);
+  // proposals.push(generatedProposal);
 
-  return proposals;
-}
+  return await generateProposal(currentProposal);
+} */

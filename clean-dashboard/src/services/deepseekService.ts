@@ -264,7 +264,9 @@ interface ProposalGenerationInput {
   type: 'company' | 'project';
 }
 
-export async function generateProposal(input: ProposalGenerationInput): Promise<Omit<Proposal, 'id' | 'votes' | 'status' | 'createdAt'>> {
+export const generateProposal = async (
+    input: ProposalGenerationInput
+): Promise<Omit<Proposal, 'id' | 'votes' | 'status' | 'createdAt'>> => {
   const { company, projects, project, type } = input;
 
   // Create a prompt based on the input type
@@ -305,8 +307,42 @@ export async function generateProposal(input: ProposalGenerationInput): Promise<
     }`;
   }
 
-  // TODO: Replace with actual API call to DeepSeek
-  // For now, return a mock proposal
+  const response = await fetch(DEEPSEEK_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "deepseek-chat",
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 1000
+    }) });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    console.error('API Error Response:', errorData);
+    throw new Error(`DeepSeek API error: ${errorData.error?.message || response.statusText}`);
+  }
+
+  const data = await response.json();
+  console.log('API Response:', data);
+
+  /*
+  if (!data.choices?.[0]?.message?.content) {
+    console.error('Invalid response format:', data);
+    throw new Error('Invalid response format from DeepSeek API');
+  }
+
+  const content = data.choices[0].message.content;
+  console.log('Raw content from API:', content);*/
+
   return {
     title: `AI Generated Proposal for ${company.name}`,
     company: company.name,

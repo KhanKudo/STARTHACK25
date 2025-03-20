@@ -16,7 +16,33 @@ export interface Proposal {
   status: 'draft' | 'active' | 'completed' | 'archived';
 }
 
-export const EXAMPLE_PROPOSALS: Proposal[] = [
+// Simple API object for working with projects
+export const api = {
+  getAllProposals: async (): Promise<Proposal[]> => {
+    // Simulating API call with a delay
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(proposalData), 800);
+    });
+  },
+
+  getProposalById: async (id: string): Promise<Proposal | undefined> => {
+    // Simulating API call with a delay
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(getProposalById(id)), 500);
+    });
+  },
+
+  addProposal: async (project: Omit<Proposal, 'id'>): Promise<Proposal> => {
+    // Simulating API call with a delay
+    return new Promise((resolve) => {
+      const newProject = addProposal(project);
+      setTimeout(() => resolve(newProject), 500);
+    });
+  }
+};
+
+// Export the proposal array
+export const proposalData: Proposal[] = [
   {
     id: 'carbon-reduction-1',
     title: 'Smart Energy Management System',
@@ -119,4 +145,41 @@ export const EXAMPLE_PROPOSALS: Proposal[] = [
     createdAt: '2024-02-10',
     status: 'active'
   }
-]; 
+];
+
+// Helper function to get project by ID
+export const getProposalById = (id: string): Proposal | undefined => {
+  return proposalData.find(proposal => proposal.id === id);
+};
+
+// Helper function to add a new project
+export const addProposal = (proposal: Omit<Proposal, 'id'>): Proposal => {
+  // Generate ID from company and initiative (simplified slug)
+  const slug = proposal.company
+      .toLowerCase()
+      .replace(/[^\w\s]/gi, '')
+      .replace(/\s+/g, '-')
+      .substring(0, 10);
+
+  const source = proposal.source
+      .toLowerCase()
+      .replace(/[^\w\s]/gi, '')
+      .replace(/\s+/g, '-')
+      .substring(0, 10);
+
+  // Generate a unique ID
+  const timestamp = Date.now().toString(36);
+  const id = `${slug}-${source}-${timestamp}`;
+
+  // Create the new project with the ID
+  const newProposal: Proposal = {
+    id,
+    ...proposal
+  };
+
+  // Add to the beginning of the array
+  proposalData.unshift(newProposal);
+
+  return newProposal;
+};
+
