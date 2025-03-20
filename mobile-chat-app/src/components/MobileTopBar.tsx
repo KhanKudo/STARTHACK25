@@ -39,7 +39,9 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Chat' }) => {
         </div>
       </div>
       <div className="mobile-top-bar-content">
-        <div className="mobile-top-bar-title">{title}</div>
+        <div className="mobile-top-bar-title">
+          {title}
+        </div>
       </div>
     </div>
   );

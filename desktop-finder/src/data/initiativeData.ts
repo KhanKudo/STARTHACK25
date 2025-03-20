@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import SwipeCard, { CardData } from './SwipeCard';
-import './SwipeContainer.css';
-import ResultsCard from './ResultsCard';
+import { CardData } from '../components/types';
 
 // Define types for initiative mapping
-type InitiativeTopicsMap = {
+export type InitiativeTopicsMap = {
   [initiative: string]: string[];
 };
 
 // Define types for initiative details
-interface InitiativeDetail {
+export interface InitiativeDetail {
   company: string;
   challenge: string;
   description: string;
   imageUrl: string;
 }
 
-type InitiativeDetailsMap = {
+export type InitiativeDetailsMap = {
   [initiative: string]: InitiativeDetail;
 };
 
 // Define types for topic images
-type TopicImageMap = {
+export type TopicImageMap = {
   [topic: string]: string;
 };
 
 // Data mapping topics to initiatives
-const initiativeMap: InitiativeTopicsMap = {
+export const initiativeMap: InitiativeTopicsMap = {
   'Virgin Atlantic - Youngest, Cleanest Fleet in the Sky': [
     'Climate Change Mitigation',
     'Sustainable Aviation',
@@ -110,7 +107,7 @@ const initiativeMap: InitiativeTopicsMap = {
 };
 
 // Definition of initiative details
-const initiativeDetails: InitiativeDetailsMap = {
+export const initiativeDetails: InitiativeDetailsMap = {
   'Virgin Atlantic - Youngest, Cleanest Fleet in the Sky': {
     company: 'Virgin Atlantic',
     challenge: 'The time for action against climate change is now. Virgin Atlantic are on a mission to achieve net-zero by 2050.',
@@ -210,7 +207,7 @@ const initiativeDetails: InitiativeDetailsMap = {
 };
 
 // Create interest topic cards
-const interestTopics = [
+export const interestTopics = [
   'Climate Change Mitigation',
   'Sustainable Aviation',
   'Innovation in Renewable Energy',
@@ -244,7 +241,7 @@ const interestTopics = [
 ];
 
 // Map topics to image URLs for visualization
-const topicImages: TopicImageMap = {
+export const topicImages: TopicImageMap = {
   'Climate Change Mitigation': 'https://images.unsplash.com/photo-1557456170-0cf4f4d0d362?q=80&w=500&auto=format&fit=crop',
   'Sustainable Aviation': 'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=500&auto=format&fit=crop',
   'Innovation in Renewable Energy': 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=500&auto=format&fit=crop',
@@ -277,13 +274,13 @@ const topicImages: TopicImageMap = {
   'Education and Healthcare': 'https://images.unsplash.com/photo-1584351583369-6baf55aaf02f?q=80&w=500&auto=format&fit=crop'
 };
 
-// Create topic cards for the swipe interface
-const getRandomTopicCards = (): CardData[] => {
+// Original function - keeping for backward compatibility
+export const getRandomTopicCards = (): CardData[] => {
   // Shuffle the topics array
   const shuffledTopics = [...interestTopics].sort(() => 0.5 - Math.random());
   
-  // Take only 10 random topics
-  const selectedTopics = shuffledTopics.slice(0, 10);
+  // Take only 6 topics for selection
+  const selectedTopics = shuffledTopics.slice(0, 6);
   
   // Create cards for the selected topics
   return selectedTopics.map((topic, index) => ({
@@ -298,299 +295,7 @@ const getRandomTopicCards = (): CardData[] => {
   }));
 };
 
-// Generate random topic cards
-const topicCards: CardData[] = getRandomTopicCards();
-
-interface Choice {
-  cardId: string;
-  liked: boolean;
-  timestamp: number;
-}
-
-const SwipeContainer: React.FC = () => {
-  const [cards, setCards] = useState<CardData[]>([]);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [choices, setChoices] = useState<Choice[]>([]);
-  const [completed, setCompleted] = useState(false);
-  const [topMatches, setTopMatches] = useState<any[]>([]);
-  const [likedTopics, setLikedTopics] = useState<string[]>([]);
-
-  // Load viewed cards from localStorage
-  useEffect(() => {
-    try {
-      const savedChoices = localStorage.getItem('topic-swipe-choices');
-      const savedSkipped = localStorage.getItem('topic-swipe-skipped');
-      
-      let viewedCardIds: string[] = [];
-      
-      if (savedChoices) {
-        const parsedChoices = JSON.parse(savedChoices);
-        if (Array.isArray(parsedChoices)) {
-          setChoices(parsedChoices);
-          viewedCardIds = parsedChoices.map(choice => choice.cardId);
-        }
-      }
-      
-      if (savedSkipped === 'true') {
-        // If user previously skipped, don't show cards
-        setCompleted(true);
-        return;
-      }
-      
-      // Generate fresh random topic cards for this session
-      const currentTopicCards = getRandomTopicCards();
-      
-      // Filter out cards that have already been viewed
-      // Note: since topics are random each time, viewedCardIds may not match exactly
-      // This is intentional - we want new topics each time the app is loaded
-      const remainingCards = currentTopicCards.filter(card => !viewedCardIds.includes(card.id));
-      
-      if (remainingCards.length === 0) {
-        setCompleted(true);
-        // Calculate matched projects
-        findMatchedProjects();
-      } else {
-        setCards(remainingCards);
-      }
-    } catch (error) {
-      console.error('Error loading data from localStorage:', error);
-      // If there's an error, just load a fresh set of random topics
-      setCards(getRandomTopicCards());
-    }
-  }, []);
-
-  const handleLike = () => {
-    if (currentCardIndex >= cards.length) return;
-    
-    const currentCard = cards[currentCardIndex];
-    const newChoice: Choice = {
-      cardId: currentCard.id,
-      liked: true,
-      timestamp: Date.now()
-    };
-    
-    const newChoices = [...choices, newChoice];
-    setChoices(newChoices);
-    localStorage.setItem('topic-swipe-choices', JSON.stringify(newChoices));
-    
-    goToNextCard();
-  };
-
-  const handleDislike = () => {
-    if (currentCardIndex >= cards.length) return;
-    
-    const currentCard = cards[currentCardIndex];
-    const newChoice: Choice = {
-      cardId: currentCard.id,
-      liked: false,
-      timestamp: Date.now()
-    };
-    
-    const newChoices = [...choices, newChoice];
-    setChoices(newChoices);
-    localStorage.setItem('topic-swipe-choices', JSON.stringify(newChoices));
-    
-    goToNextCard();
-  };
-
-  const handleSkip = () => {
-    localStorage.setItem('topic-swipe-skipped', 'true');
-    setCompleted(true);
-  };
-
-  const goToNextCard = () => {
-    const nextIndex = currentCardIndex + 1;
-    setCurrentCardIndex(nextIndex);
-    
-    if (nextIndex >= cards.length) {
-      setCompleted(true);
-      findMatchedProjects();
-    }
-  };
-
-  const findTopMatches = () => {
-    // Find all liked topics
-    const likedChoices = choices.filter(choice => choice.liked);
-    
-    // Map to topic names using the entire interestTopics array
-    // This ensures we can find the names even if the cards have changed
-    const likedTopics = likedChoices.map(choice => {
-      // For each liked choice, find the corresponding topic
-      const cardId = parseInt(choice.cardId);
-      const card = cards.find(c => c.id === choice.cardId);
-      return card ? card.name : null;
-    }).filter(name => name !== null) as string[];
-    
-    // Update the likedTopics state for the results view
-    setLikedTopics(likedTopics);
-    
-    // If no interests were selected, show a default set
-    if (likedTopics.length === 0) {
-      // Get all initiative keys
-      const allInitiatives = Object.keys(initiativeMap);
-      
-      // Shuffle them
-      const shuffledInitiatives = [...allInitiatives].sort(() => 0.5 - Math.random());
-      
-      // Take 3 random initiatives
-      const randomInitiatives = shuffledInitiatives.slice(0, 3);
-      
-      const defaultMatches = randomInitiatives.map(initiative => ({
-        initiative: initiative,
-        matchScore: 0,
-        details: initiativeDetails[initiative],
-        matchedTopics: []
-      }));
-      
-      setTopMatches(defaultMatches);
-      return;
-    }
-    
-    // Calculate matches for each initiative
-    const initiativeMatches = Object.keys(initiativeMap).map(initiative => {
-      const initiativeTopics = initiativeMap[initiative];
-      
-      // Count how many of the user's liked topics match this initiative
-      const matchedTopics = initiativeTopics.filter(topic => likedTopics.includes(topic));
-      const matchScore = matchedTopics.length / initiativeTopics.length; // Score based on % match
-      
-      return {
-        initiative,
-        matchScore,
-        details: initiativeDetails[initiative],
-        matchedTopics
-      };
-    });
-    
-    // Sort by match score (highest first)
-    const sortedMatches = initiativeMatches
-      .sort((a, b) => b.matchScore - a.matchScore)
-      .filter(match => match.matchScore > 0);
-    
-    // Take top 3 matches
-    const top3Matches = sortedMatches.slice(0, 3);
-    
-    // If we have fewer than 3 matches, add random initiatives to reach 3
-    let finalMatches = [...top3Matches];
-    
-    if (finalMatches.length < 3) {
-      const unmatchedInitiatives = Object.keys(initiativeMap)
-        .filter(initiative => !finalMatches.some(match => match.initiative === initiative));
-      
-      // Shuffle unmatched initiatives
-      const shuffled = unmatchedInitiatives.sort(() => 0.5 - Math.random());
-      
-      // Add random initiatives until we have 3
-      for (const initiative of shuffled) {
-        if (finalMatches.length >= 3) break;
-        
-        finalMatches.push({
-          initiative,
-          matchScore: 0,
-          details: initiativeDetails[initiative],
-          matchedTopics: []
-        });
-      }
-    }
-    
-    setTopMatches(finalMatches);
-  };
-
-  const resetChoices = () => {
-    localStorage.removeItem('topic-swipe-choices');
-    localStorage.removeItem('topic-swipe-skipped');
-    setChoices([]);
-    setCurrentCardIndex(0);
-    setCompleted(false);
-    
-    // Generate a new set of random topic cards
-    const newRandomTopics = getRandomTopicCards();
-    setCards(newRandomTopics);
-  };
-
-  if (completed) {
-    return (
-      <div className="swipe-container">
-        <div className="results-container">
-          {likedTopics && likedTopics.length === 0 ? (
-            <>
-              <h2>Discover Virgin Initiatives</h2>
-              <p>Here are some random initiatives that might interest you:</p>
-            </>
-          ) : (
-            <>
-              <h2>Your Top Initiative Matches</h2>
-              <p>Based on your interests, these Virgin initiatives align with your values:</p>
-            </>
-          )}
-          
-          <div className="results-list">
-            {topMatches.map((match, index) => (
-              <div key={match.initiative} className="match-result">
-                <ResultsCard 
-                  project={{
-                    id: index.toString(),
-                    name: match.initiative,
-                    imageUrl: match.details.imageUrl,
-                    details: {
-                      company: match.details.company,
-                      challenge: match.details.challenge,
-                      description: match.details.description
-                    }
-                  }} 
-                  rank={index + 1} 
-                />
-                {match.matchedTopics.length > 0 && (
-                  <div className="matched-topics">
-                    <h4>Matched Interests:</h4>
-                    <ul>
-                      {match.matchedTopics.map((topic: string) => (
-                        <li key={topic}>{topic}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          
-          {likedTopics && likedTopics.length === 0 && (
-            <div className="discovery-hint">
-              Try again to find initiatives that match your specific interests!
-            </div>
-          )}
-          
-          <button className="reset-button" onClick={resetChoices}>
-            Start Over
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (cards.length === 0) {
-    return (
-      <div className="swipe-container">
-        <div className="swipe-loading">Loading...</div>
-      </div>
-    );
-  }
-
-  const currentCard = cards[currentCardIndex];
-
-  return (
-    <div className="swipe-container">
-      <SwipeCard 
-        card={currentCard} 
-        onLike={handleLike} 
-        onDislike={handleDislike}
-        onSkip={handleSkip}
-      />
-      <div className="swipe-progress">
-        Card {currentCardIndex + 1} of {cards.length}
-      </div>
-    </div>
-  );
-};
-
-export default SwipeContainer; 
+// Function to get topic cards for user selection
+export const getTopicCardsForSelection = (): CardData[] => {
+  return getRandomTopicCards();
+}; 

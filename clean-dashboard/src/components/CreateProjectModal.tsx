@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Project } from '../utils/projectData';
 import './CreateProjectModal.css';
 
@@ -20,6 +20,20 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
   });
 
   const [linksInput, setLinksInput] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Reset form when modal opens
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -41,14 +55,51 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
-    onClose();
+    setIsSubmitting(true);
+    
+    try {
+      await onSave(formData);
+      onClose();
+    } catch (error) {
+      console.error('Error saving project:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
+  };
+
+  // Generate sample projects by picking from these options
+  const generateSampleProject = () => {
+    const companies = ['Virgin Atlantic', 'Virgin Media', 'Virgin Galactic', 'Virgin Voyages'];
+    const initiatives = ['Carbon Reduction', 'Renewable Energy', 'Ocean Cleanup', 'Sustainable Tech'];
+    const challenges = [
+      'Reducing carbon emissions in the travel industry requires innovative solutions.',
+      'Finding sustainable alternatives to traditional fuels is a pressing challenge.',
+      'Ocean pollution threatens marine ecosystems and requires immediate action.',
+      'Developing technology that minimizes environmental impact while maximizing efficiency.'
+    ];
+    
+    const randomCompany = companies[Math.floor(Math.random() * companies.length)];
+    const randomInitiative = initiatives[Math.floor(Math.random() * initiatives.length)];
+    const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+    
+    const newFormData = {
+      ...formData,
+      company: randomCompany,
+      initiative: randomInitiative,
+      challenge: randomChallenge,
+      description: `This is a sample project by ${randomCompany} focused on ${randomInitiative.toLowerCase()}.`,
+      callToAction: 'Join us in making a difference!',
+      links: ['https://virgin.com/sustainability']
+    };
+    
+    setFormData(newFormData);
+    setLinksInput('https://virgin.com/sustainability');
   };
 
   return (
@@ -60,7 +111,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="company">Company*</label>
+            <label htmlFor="company" className="required-field">Company</label>
             <input
               type="text"
               id="company"
@@ -68,11 +119,12 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               value={formData.company}
               onChange={handleChange}
               required
+              placeholder="Enter company name"
             />
           </div>
           
           <div className="form-group">
-            <label htmlFor="initiative">Initiative*</label>
+            <label htmlFor="initiative" className="required-field">Initiative</label>
             <input
               type="text"
               id="initiative"
@@ -80,11 +132,13 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               value={formData.initiative}
               onChange={handleChange}
               required
+              placeholder="Enter initiative title"
             />
+            <div className="field-hint">A short, catchy title for your sustainability initiative</div>
           </div>
           
           <div className="form-group">
-            <label htmlFor="challenge">Challenge*</label>
+            <label htmlFor="challenge" className="required-field">Challenge</label>
             <textarea
               id="challenge"
               name="challenge"
@@ -92,7 +146,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               onChange={handleChange}
               rows={3}
               required
+              placeholder="Describe the environmental challenge"
             />
+            <div className="field-hint">A brief description of the environmental challenge being addressed</div>
           </div>
           
           <div className="form-group">
@@ -103,7 +159,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               value={formData.description}
               onChange={handleChange}
               rows={4}
+              placeholder="Provide a detailed description of the project"
             />
+            <div className="field-hint">More detailed information about how your project addresses the challenge</div>
           </div>
           
           <div className="form-group">
@@ -114,7 +172,9 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               value={formData.callToAction}
               onChange={handleChange}
               rows={2}
+              placeholder="How can others get involved?"
             />
+            <div className="field-hint">Specific ways others can participate or support the initiative</div>
           </div>
           
           <div className="form-group">
@@ -127,6 +187,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               rows={3}
               placeholder="https://example.com"
             />
+            <div className="field-hint">Resource links where people can learn more or take action</div>
           </div>
           
           <div className="form-group">
@@ -139,11 +200,37 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               onChange={handleChange}
               placeholder="https://example.com/image.jpg"
             />
+            <div className="field-hint">A URL for an image that represents your project</div>
+            {formData.imageUrl && (
+              <div 
+                className="image-preview" 
+                style={{ backgroundImage: `url(${formData.imageUrl})` }}
+              />
+            )}
           </div>
           
           <div className="form-actions">
-            <button type="button" className="cancel-button" onClick={onClose}>Cancel</button>
-            <button type="submit" className="save-button">Save Project</button>
+            <button 
+              type="button" 
+              className="cancel-button" 
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button 
+              type="button" 
+              className="sample-button" 
+              onClick={generateSampleProject}
+            >
+              Generate Sample
+            </button>
+            <button 
+              type="submit" 
+              className="save-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Saving...' : 'Save Project'}
+            </button>
           </div>
         </form>
       </div>

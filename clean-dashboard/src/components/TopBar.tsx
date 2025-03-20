@@ -17,6 +17,10 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
     navigate('/profile');
   };
 
+  const handleCollaborationsClick = () => {
+    navigate('/collaborate');
+  };
+
   const openProjectModal = () => {
     setShowProjectModal(true);
   };
@@ -57,7 +61,12 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
           </div>
           
           <div className="top-bar-nav">
-            <div className="nav-item">Collaborations</div>
+            <div 
+              className="nav-item" 
+              onClick={handleCollaborationsClick}
+            >
+              Collaborations
+            </div>
             <button className="add-project-btn" onClick={openProjectModal}>
               <img 
                 src="/assets/plus.svg" 

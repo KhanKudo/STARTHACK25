@@ -1,6 +1,7 @@
 {
-  "name": "mobile-chat-app",
+  "name": "virgin-interest-finder",
   "version": "0.1.0",
+  "description": "A Tinder-like app to match users with Virgin initiatives based on their sustainability interests",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",

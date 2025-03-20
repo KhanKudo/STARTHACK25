@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <MobileContainer>
-        <MobileTopBar title="Project Finder" />
+        <MobileTopBar title="Virgin Interest Finder" />
         <SwipeContainer />
       </MobileContainer>
     </div>
