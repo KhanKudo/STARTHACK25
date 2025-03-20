@@ -5,6 +5,7 @@ export interface Project {
     challenge: string;
     description?: string;
     callToAction?: string;
+    location?: [number, number];
     links?: string[];
     imageUrl: string;
     status?: 'not-started' | 'in-progress' | 'completed' | 'on-hold';
