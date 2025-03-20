@@ -29,19 +29,19 @@ type TopicImageMap = {
 // Data mapping topics to initiatives
 const initiativeMap: InitiativeTopicsMap = {
   'Virgin Atlantic - Youngest, Cleanest Fleet in the Sky': [
-    'Climate Change Mitigation',
+    'Climate Action',
     'Sustainable Aviation',
     'Innovation in Renewable Energy'
   ],
   'Virgin Atlantic & Virgin Unite - Protecting our Planet': [
-    'Climate Change Mitigation',
-    'Environmental Conservation',
-    'Collaborative Global Efforts'
+    'Climate Action',
+    'Environmental Protection & Carbon Reduction',
+    'Global Collaboration'
   ],
   'Virgin Voyages - Epic Sea Change For All': [
-    'Marine Conservation',
-    'Climate Change Mitigation',
-    'Community Engagement'
+    'Ecosystem Conservation',
+    'Climate Action',
+    'Community Empowerment'
   ],
   'Virgin Media O2 - Better Connections Plan (Recycling)': [
     'E-waste Reduction',
@@ -51,31 +51,31 @@ const initiativeMap: InitiativeTopicsMap = {
   'Virgin Media O2 - Better Connections Plan (Digital Divide)': [
     'Digital Inclusion',
     'Social Equity',
-    'Community Support'
+    'Community Empowerment'
   ],
   'Virgin Media O2 - Better Connections Plan (Eco Rating)': [
     'Sustainable Technology',
     'Consumer Awareness',
-    'Environmental Impact Reduction'
+    'Environmental Protection & Carbon Reduction'
   ],
   'Virgin Media O2 - Better Connections Plan (Second-hand Devices)': [
     'Sustainable Consumption',
     'E-waste Reduction',
-    'Carbon Footprint Reduction'
+    'Environmental Protection & Carbon Reduction'
   ],
   'Virgin Limited Edition & Virgin Unite - Pride \'n Purpose': [
-    'Community Development',
+    'Community Empowerment',
     'Sustainable Livelihoods',
     'Social Equity'
   ],
   'Virgin Limited Edition & Virgin Unite - Mahali Mzuri: Inua Jamii': [
-    'Wildlife Conservation',
-    'Community Development',
+    'Ecosystem Conservation',
+    'Community Empowerment',
     'Sustainable Tourism'
   ],
   'Virgin Unite - Planetary Guardians': [
-    'Climate Change Mitigation',
-    'Environmental Conservation',
+    'Climate Action',
+    'Environmental Protection & Carbon Reduction',
     'Global Collaboration'
   ],
   'Virgin Unite - The Elders': [
@@ -84,28 +84,28 @@ const initiativeMap: InitiativeTopicsMap = {
     'Sustainable Development'
   ],
   'Virgin Unite - Ocean Unite / ORRAA': [
-    'Marine Conservation',
-    'Climate Change Mitigation',
+    'Ecosystem Conservation',
+    'Climate Action',
     'Global Collaboration'
   ],
   'Virgin Unite - Community Mapathon: Humanitarian OpenStreetMap (HOT)': [
     'Disaster Relief',
-    'Climate Change Adaptation',
-    'Community Support'
+    'Climate Action',
+    'Community Empowerment'
   ],
   'Virgin Unite - Project CETI (Cetacean Translation Initiative)': [
-    'Marine Conservation',
+    'Ecosystem Conservation',
     'Biodiversity Preservation',
     'Technological Innovation'
   ],
   'Virgin Unite - Eve Branson Foundation': [
-    'Community Development',
+    'Community Empowerment',
     'Education and Healthcare',
     'Sustainable Livelihoods'
   ],
   'Virgin Unite - Unite BVI': [
-    'Community Development',
-    'Environmental Conservation',
+    'Community Empowerment',
+    'Environmental Protection & Carbon Reduction',
     'Social Equity'
   ]
 };
@@ -116,7 +116,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Atlantic',
     challenge: 'The time for action against climate change is now. Virgin Atlantic are on a mission to achieve net-zero by 2050.',
     description: 'Virgin Atlantic is working to accelerate the development of sustainable fuels. On November 28th, we made history with Flight100 becoming the first commercial airline to fly across the Atlantic on 100% SAF - marking a key milestone on the path to decarbonising aviation.',
-    imageUrl: 'https://images.unsplash.com/photo-1493246318656-5bfd4cfb29b8?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://images.ctfassets.net/rxqefefl3t5b/3cNPacvs5XOn36kvDhDkXf/a9a46bd03c2e5b9da9c5398ae14eb34b/A350_Air2Air2019_Retouched_DSC4963_EM4.jpg?fl=progressive&q=80'
   },
   'Virgin Atlantic & Virgin Unite - Protecting our Planet': {
     company: 'Virgin Atlantic & Virgin Unite',
@@ -134,25 +134,25 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Media O2',
     challenge: 'Electronic waste is one of the fastest-growing waste streams globally, with significant environmental impacts.',
     description: 'Virgin Media O2\'s recycling initiative is tackling e-waste by implementing comprehensive recycling programs for electronic devices and accessories, reducing landfill waste and promoting circular economy principles.',
-    imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://images.unsplash.com/photo-1590219590780-f8cfab573cc1?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Media O2 - Better Connections Plan (Digital Divide)': {
     company: 'Virgin Media O2',
     challenge: 'The digital divide, or the split between those with and without reliable internet connectivity and related technologies, has profound implications on society.',
     description: 'Community Calling is a pioneering initiative by Virgin Media O2 and environmental charity Hubbub to tackle digital exclusion. It has already rehomed more than 20,000 unused smartphones with people who need them across the country.',
-    imageUrl: 'https://images.unsplash.com/photo-1573375852883-abd12fcc7d07?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://images.unsplash.com/photo-1595392029731-a6a252df1fd1?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Media O2 - Better Connections Plan (Eco Rating)': {
     company: 'Virgin Media O2',
     challenge: 'Consumers often lack transparent information about the environmental impact of their technology choices.',
     description: 'The Eco Rating initiative provides clear information about the environmental impact of mobile devices, helping consumers make more sustainable choices and encouraging manufacturers to improve their practices.',
-    imageUrl: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=500&auto=format&fit=crop'
+    imageUrl: ''
   },
   'Virgin Media O2 - Better Connections Plan (Second-hand Devices)': {
     company: 'Virgin Media O2',
     challenge: 'The continuous cycle of new device purchases contributes significantly to electronic waste and resource depletion.',
     description: 'Virgin Media O2\'s second-hand device program extends the lifecycle of electronic devices, reducing waste and making technology more accessible while significantly reducing the carbon footprint associated with manufacturing new devices.',
-    imageUrl: 'https://images.unsplash.com/photo-1581993192804-90ce8a0f7a7b?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Limited Edition & Virgin Unite - Pride \'n Purpose': {
     company: 'Virgin Limited Edition & Virgin Unite',
@@ -164,7 +164,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Limited Edition & Virgin Unite',
     challenge: 'Wildlife conservation efforts must balance ecological needs with the socioeconomic well-being of local communities.',
     description: 'Mahali Mzuri\'s Inua Jamii initiative promotes sustainable tourism practices while supporting wildlife conservation and community development, creating a model where tourism benefits both nature and local communities.',
-    imageUrl: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://www.virginlimitededition.com/media/yakleqrf/mahali-mzuri-camp-and-guides-1.jpg?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Unite - Planetary Guardians': {
     company: 'Virgin Unite',
@@ -182,19 +182,19 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Unite',
     challenge: 'The dual crises of climate change and mass wildlife extinctions threaten to forever change our world.',
     description: 'Ocean Unite / ORRAA in collaboration with the Marine Conservation Institute and Oceans 5, brought together 30 of the largest NGOs from around the world, stimulating joint efforts towards the goal of strongly protecting at least 30% of the Ocean by 2030.',
-    imageUrl: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://onlyone-cms.imgix.net/v1v8cy5da8fh/6ef2qr8mVLZwMpctd7jlY9/37858fc8bc929522620398e35d016b3f/Alpha-Universe-Photo-by-Sony-Artisan-of-Imagery-Andy-Mann-DSC08557-Edit.880074f1fd6d9422f6c3fded126a54c8.jpg?w=1920&auto=compress,format?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Unite - Community Mapathon: Humanitarian OpenStreetMap (HOT)': {
     company: 'Virgin Unite',
     challenge: 'Effective disaster response and climate change adaptation require accurate, up-to-date geographical information.',
     description: 'The Community Mapathon initiative uses open-source mapping to support humanitarian efforts, disaster relief, and climate change adaptation, building community resilience through improved geographical data and collaborative mapping.',
-    imageUrl: 'https://images.unsplash.com/photo-1498354178607-a79df2916198?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://images.ctfassets.net/rxqefefl3t5b/3K5qvqVy2RDMSapLI2yuaZ/79d2e16132d06d017b20e013ce47d643/Humanitarian_OpenStreetMap_Team_2.jpg?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Unite - Project CETI (Cetacean Translation Initiative)': {
     company: 'Virgin Unite',
     challenge: 'Humanity is facing the collapse of entire ecosystems, and the biodiversity of our planet is being eroded at unprecedented rates.',
     description: 'Project CETI uses machine learning and robotics to translate sperm whale clicks in Dominica. By shedding light on the intricate and intelligent communication of whales, the project not only aims to accelerate conservation efforts, but has the potential to transform the way we understand our relationship with the natural world.',
-    imageUrl: 'https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://cdn.prod.website-files.com/643ddd7ffdf12273933a8cec/66db26d5082b9717e2855981_male-and-female-whale-p-500.png?q=80&w=500&auto=format&fit=crop'
   },
   'Virgin Unite - Eve Branson Foundation': {
     company: 'Virgin Unite',
@@ -206,39 +206,32 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Unite',
     challenge: 'Island communities face unique environmental and social challenges requiring sustainable development approaches.',
     description: 'Unite BVI works to create positive community and environmental impact in the British Virgin Islands through projects that support local entrepreneurs, conserve natural resources, and promote social equity.',
-    imageUrl: 'https://images.unsplash.com/photo-1516091877740-fde016699f2c?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://images.ctfassets.net/zois51yf0qbx/1gd29y9PXUzXMFiUD6KzH6/531bdf4dc2df770b33ad004d3d6e604b/How_supports_us_piture_good_quality_cropped_for_website.jpg?q=80&w=500&auto=format&fit=crop'
   }
 };
 
 // Create interest topic cards
 const interestTopics = [
-  'Climate Change Mitigation',
+  'Climate Action',
   'Sustainable Aviation',
   'Innovation in Renewable Energy',
-  'Environmental Conservation',
-  'Collaborative Global Efforts',
-  'Marine Conservation',
-  'Community Engagement',
+  'Environmental Protection & Carbon Reduction',
+  'Global Collaboration',
+  'Ecosystem Conservation',
+  'Community Empowerment',
   'E-waste Reduction',
   'Sustainable Consumption',
   'Circular Economy',
   'Digital Inclusion',
   'Social Equity',
-  'Community Support',
   'Sustainable Technology',
   'Consumer Awareness',
-  'Environmental Impact Reduction',
-  'Carbon Footprint Reduction',
-  'Community Development',
   'Sustainable Livelihoods',
-  'Wildlife Conservation',
   'Sustainable Tourism',
-  'Global Collaboration',
   'Global Leadership',
   'Peace and Justice',
   'Sustainable Development',
   'Disaster Relief',
-  'Climate Change Adaptation',
   'Biodiversity Preservation',
   'Technological Innovation',
   'Education and Healthcare'
@@ -246,36 +239,29 @@ const interestTopics = [
 
 // Map topics to image URLs for visualization
 const topicImages: TopicImageMap = {
-  'Climate Change Mitigation': 'https://images.unsplash.com/photo-1557456170-0cf4f4d0d362?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Aviation': 'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=500&auto=format&fit=crop',
-  'Innovation in Renewable Energy': 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=500&auto=format&fit=crop',
-  'Environmental Conservation': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=500&auto=format&fit=crop',
-  'Collaborative Global Efforts': 'https://images.unsplash.com/photo-1556484687-30636164638b?q=80&w=500&auto=format&fit=crop',
-  'Marine Conservation': 'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?q=80&w=500&auto=format&fit=crop',
-  'Community Engagement': 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=500&auto=format&fit=crop',
-  'E-waste Reduction': 'https://images.unsplash.com/photo-1605600659873-d808a13e4e2c?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Consumption': 'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?q=80&w=500&auto=format&fit=crop',
-  'Circular Economy': 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?q=80&w=500&auto=format&fit=crop',
-  'Digital Inclusion': 'https://images.unsplash.com/photo-1548092372-0d1bd40894a3?q=80&w=500&auto=format&fit=crop',
-  'Social Equity': 'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?q=80&w=500&auto=format&fit=crop',
-  'Community Support': 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Technology': 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?q=80&w=500&auto=format&fit=crop',
-  'Consumer Awareness': 'https://images.unsplash.com/photo-1464380573004-8ca85a08751a?q=80&w=500&auto=format&fit=crop',
-  'Environmental Impact Reduction': 'https://images.unsplash.com/photo-1516222338250-2ae08b641079?q=80&w=500&auto=format&fit=crop',
-  'Carbon Footprint Reduction': 'https://images.unsplash.com/photo-1545281340-85d885034144?q=80&w=500&auto=format&fit=crop',
-  'Community Development': 'https://images.unsplash.com/photo-1526958097901-5e6d742d3371?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Livelihoods': 'https://images.unsplash.com/photo-1557495235-340eb888a9fb?q=80&w=500&auto=format&fit=crop',
-  'Wildlife Conservation': 'https://images.unsplash.com/photo-1566159266259-c65d47d1f1e6?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Tourism': 'https://images.unsplash.com/photo-1523805009345-7448845a9e53?q=80&w=500&auto=format&fit=crop',
-  'Global Collaboration': 'https://images.unsplash.com/photo-1525013066836-c6090f0ad9d8?q=80&w=500&auto=format&fit=crop',
-  'Global Leadership': 'https://images.unsplash.com/photo-1519834883885-44a2c86f0c2c?q=80&w=500&auto=format&fit=crop',
-  'Peace and Justice': 'https://images.unsplash.com/photo-1447684808650-354ae64db5b8?q=80&w=500&auto=format&fit=crop',
-  'Sustainable Development': 'https://images.unsplash.com/photo-1603921326210-6edd2eb3e8e4?q=80&w=500&auto=format&fit=crop',
-  'Disaster Relief': 'https://images.unsplash.com/photo-1590097610464-a349d019a89c?q=80&w=500&auto=format&fit=crop',
-  'Climate Change Adaptation': 'https://images.unsplash.com/photo-1598975824812-8d19965dad6a?q=80&w=500&auto=format&fit=crop',
-  'Biodiversity Preservation': 'https://images.unsplash.com/photo-1594217090191-0ae8766c38cc?q=80&w=500&auto=format&fit=crop',
-  'Technological Innovation': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=500&auto=format&fit=crop',
-  'Education and Healthcare': 'https://images.unsplash.com/photo-1584351583369-6baf55aaf02f?q=80&w=500&auto=format&fit=crop'
+  'Climate Action': 'https://media.istockphoto.com/id/2155722983/photo/world-environment-day-earth-globe-ball-with-growing-tree-in-woman-hand-save-clean-planet.jpg?s=612x612&w=0&k=20&c=8UNtQLTwL3tsSxrCZ0PPAb9edE2Jl4SPXVXWKVLU_3Y=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Aviation': 'https://media.istockphoto.com/id/2154448697/photo/shadow-airplane-flying-above-green-field-sustainable-fuel-biofuel-in-aviation-sustainable.jpg?s=612x612&w=0&k=20&c=LsdaF_vGaaLzX8P34yqPeAcjs-MaR06GmytHyWMQXac=?q=80&w=500&auto=format&fit=crop',
+  'Innovation in Renewable Energy': 'https://media.istockphoto.com/id/2154448697/photo/shadow-airplane-flying-above-green-field-sustainable-fuel-biofuel-in-aviation-sustainable.jpg?s=612x612&w=0&k=20&c=LsdaF_vGaaLzX8P34yqPeAcjs-MaR06GmytHyWMQXac=?q=80&w=500&auto=format&fit=crop',
+  'Environmental Protection & Carbon Reduction': 'https://media.istockphoto.com/id/2162960974/photo/aerial-view-green-forest-and-asphalt-road-top-view-forest-road-going-through-forest-with-car.jpg?s=612x612&w=0&k=20&c=B92LB96WkFYe2K9KYG8wNhYU3cj1hBa2QezZ9OUfXS8=?q=80&w=500&auto=format&fit=crop',
+  'Global Collaboration': 'https://media.istockphoto.com/id/1972501160/photo/business-people-teamwork-and-fist-of-hands-in-circle-for-collaboration-synergy-and-motivation.jpg?s=612x612&w=0&k=20&c=zWRK-V5jo7eUSsofoHh39HrhB5rcQPdg_9h9KA-gwCo=?q=80&w=500&auto=format&fit=crop',
+  'Ecosystem Conservation': 'https://media.istockphoto.com/id/1301265167/photo/clear-blue-aqua-marine-ocean-with-turtle-and-plastic-bottle-pollution.jpg?s=612x612&w=0&k=20&c=Iyx-gCMSByZJUFvWAeKyIj2q1Of1GyXtkW0Ba2-Gs7g=?q=80&w=500&auto=format&fit=crop',
+  'Community Empowerment': 'https://media.istockphoto.com/id/1496606853/photo/a-group-of-businessmen-holding-hands-together-to-symbolize-unity-and-strength.jpg?s=612x612&w=0&k=20&c=LxM-3vS34a4xXfKd816GgwuipedXirWa8II7FzvGhDw=?q=80&w=500&auto=format&fit=crop',
+  'E-waste Reduction': 'https://media.istockphoto.com/id/1352362769/photo/male-and-female-recycling-coworkers-holding-digital-tablet-and-plastic-box-full-of-mother.jpg?s=612x612&w=0&k=20&c=q_MmxgGUveX1gaEq75trpiE5ShN-t9QGNt-8wKY_aP0=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Consumption': 'https://media.istockphoto.com/id/1135942533/photo/water-bottle-with-the-text-life-without-plastic.jpg?s=612x612&w=0&k=20&c=N4WTVGZ_TL5CCKCkc-k1WsVTbBaEOsSp5_QbDf1DFVQ=?q=80&w=500&auto=format&fit=crop',
+  'Circular Economy': 'https://media.istockphoto.com/id/1969598839/photo/environment-sustainable-circular-economy-for-future-growth-of-business-carbon-neutral-and-net.jpg?s=612x612&w=0&k=20&c=xIKo4MSlR5gft6eucUOhf-F3Mi825HR63KJTR9Khu1Q=?q=80&w=500&auto=format&fit=crop',
+  'Digital Inclusion': 'https://media.gettyimages.com/id/1767420896/video/senior-black-man-working-from-home-on-laptop.jpg?s=640x640&k=20&c=D1gPavVpTnEuTmTaXD-qruz3mo-gFxpAAIz8Yn8orLo=?q=80&w=500&auto=format&fit=crop',
+  'Social Equity': 'https://media.istockphoto.com/id/1062933252/photo/legal-advice-service-concept-with-lawyer-working-for-justice-law-business-legislation-and.jpg?s=612x612&w=0&k=20&c=KUbSd05rSSgbPNfRoogdaiGYkExurmDUJMpXQ7d5OlM=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Technology': 'https://media.istockphoto.com/id/1358638060/photo/green-information-technology-environmentally-sustainable-it-copy-space-green-plant-growing.jpg?s=612x612&w=0&k=20&c=XXQ5aui1TdSAegGU0QP-yIeUWFYJtnB1x5RdFW_cs6w=?q=80&w=500&auto=format&fit=crop',
+  'Consumer Awareness': 'https://media.istockphoto.com/id/1039840384/photo/young-male-hipster-holding-and-carrying-the-save-the-earth-tote-handbag-in-green-nature.jpg?s=612x612&w=0&k=20&c=qZ-6_ZUia5vMDcYPBaq-ur4YDaTNQS2I2GDwJP-74nM=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Livelihoods': 'https://media.istockphoto.com/id/1306308987/photo/pretty-young-woman-with-glasses-sits-in-a-modern-sustainable-office-with-lots-of-green.jpg?s=612x612&w=0&k=20&c=3B3oVBUFSygaMILGqRtvJJkSsMY1GqxdjQY6_2zFF08=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Tourism': 'https://media.istockphoto.com/id/2047664851/photo/family-on-bikes-at-ninh-binh.jpg?s=612x612&w=0&k=20&c=vdadQOUizAi28ZkLVgBHqW7woQwqVmn_3D9Wiyfk56Y=?q=80&w=500&auto=format&fit=crop',
+  'Global Leadership': 'https://media.istockphoto.com/id/1887449067/photo/confident-businessman-in-modern-office.jpg?s=612x612&w=0&k=20&c=9xRTpsi4QN_0vPQjFQhaQBOnBrr7hTznxWDGoELJrTI=?q=80&w=500&auto=format&fit=crop',
+  'Peace and Justice': 'https://media.istockphoto.com/id/1345174155/photo/protest-of-people-against-racism.jpg?s=612x612&w=0&k=20&c=sNQFJsm5b3lDAZnFIrIuqcJ87KAyFvgnRBauQXV-B5U=?q=80&w=500&auto=format&fit=crop',
+  'Sustainable Development': 'https://media.istockphoto.com/id/2140070730/photo/aerial-view-of-wind-turbines.jpg?s=612x612&w=0&k=20&c=l5I31RBIL5eeEJXVzJld8o9dcUPSOWqBXnTra31Ud4s=?q=80&w=500&auto=format&fit=crop',
+  'Disaster Relief': 'https://media.istockphoto.com/id/1360039796/photo/selangor-flash-flood-after-heavy-rain.jpg?s=612x612&w=0&k=20&c=jq15kLlDozQ1Opa2eKY4pp585QCANixpGs4Jhrgjek4=?q=80&w=500&auto=format&fit=crop',
+  'Biodiversity Preservation': 'https://media.istockphoto.com/id/1199901182/photo/working-hard-to-help-her-environment.jpg?s=612x612&w=0&k=20&c=LnwNgiqNZ_EtPzBy09WON5zetoo5mHj6PHF-Mc17chg=?q=80&w=500&auto=format&fit=crop',
+  'Technological Innovation': 'https://media.istockphoto.com/id/2153478836/photo/digital-technology-internet-network-connection-big-data-digital-marketing-iot-internet-of.jpg?s=612x612&w=0&k=20&c=t_CHPyJiIM2-_ZOPKs9Vz9zL-opSBZvEGrTlJzpBIgs=?q=80&w=500&auto=format&fit=crop',
+  'Education and Healthcare': 'https://media.istockphoto.com/id/1903424167/photo/medical-team-meeting.jpg?s=612x612&w=0&k=20&c=KjoTL4oBpc5dokGIeMtGFGjyTw-cku5SQnrMAKK9rCM=?q=80&w=500&auto=format&fit=crop'
 };
 
 // Create topic cards for the swipe interface
@@ -412,19 +398,6 @@ const SwipeContainer: React.FC = () => {
   };
 
   const findTopMatches = () => {
-    // First check if we have saved matches in localStorage
-    const savedMatches = localStorage.getItem('matched-projects');
-    if (savedMatches) {
-      try {
-        const parsedMatches = JSON.parse(savedMatches);
-        setTopMatches(parsedMatches);
-        return;
-      } catch (error) {
-        console.error('Error loading saved matches:', error);
-      }
-    }
-
-    // If no saved matches or error loading them, proceed with calculation
     // Find all liked topics
     const likedChoices = choices.filter(choice => choice.liked);
     
@@ -459,7 +432,6 @@ const SwipeContainer: React.FC = () => {
       }));
       
       setTopMatches(defaultMatches);
-      localStorage.setItem('matched-projects', JSON.stringify(defaultMatches));
       return;
     }
     
@@ -511,18 +483,14 @@ const SwipeContainer: React.FC = () => {
     }
     
     setTopMatches(finalMatches);
-    localStorage.setItem('matched-projects', JSON.stringify(finalMatches));
   };
 
   const resetChoices = () => {
     localStorage.removeItem('topic-swipe-choices');
     localStorage.removeItem('topic-swipe-skipped');
-    localStorage.removeItem('matched-projects'); // Clear saved matches
     setChoices([]);
     setCurrentCardIndex(0);
     setCompleted(false);
-    setTopMatches([]);
-    setLikedTopics([]);
     
     // Generate a new set of random topic cards
     const newRandomTopics = getRandomTopicCards();
