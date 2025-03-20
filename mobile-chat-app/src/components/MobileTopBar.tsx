@@ -5,7 +5,7 @@ interface MobileTopBarProps {
   title?: string;
 }
 
-const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Chat' }) => {
+const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Virgin Interest Finder' }) => {
   return (
     <div className="mobile-top-bar">
       <div className="status-bar">
@@ -19,7 +19,9 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Chat' }) => {
         </div>
       </div>
       <div className="mobile-top-bar-content">
-        <div className="mobile-top-bar-title">{title}</div>
+        <div className="mobile-top-bar-title">
+          {title}
+        </div>
       </div>
     </div>
   );
