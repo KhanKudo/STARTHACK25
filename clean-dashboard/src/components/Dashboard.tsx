@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TopBar from './TopBar';
 import ProjectsGrid from './ProjectsGrid';
 import GlobeContainer from './GlobeContainer';
-import { api } from '../services/api';
+import { api } from '../utils/projectData';
 import { Project } from '../utils/projectData';
 import './Dashboard.css';
 

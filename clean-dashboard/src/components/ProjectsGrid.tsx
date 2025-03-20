@@ -1,5 +1,5 @@
 import React from 'react';
-import { Project } from '../models/project';
+import { Project } from '../utils/projectData';
 import ProjectCard from './ProjectCard';
 import './ProjectsGrid.css';
 

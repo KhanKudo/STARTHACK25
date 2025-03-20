@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TopBar from './TopBar';
 import { Project } from '../utils/projectData';
-import { api } from '../services/api';
+import { api } from '../utils/projectData';
 import './ProjectDetails.css';
 
 const ProjectDetails: React.FC = () => {

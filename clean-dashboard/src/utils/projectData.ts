@@ -3,6 +3,31 @@ import { Project } from '../../../models/project';
 // Export the Project type for use in components
 export type { Project };
 
+// Simple API object for working with projects
+export const api = {
+  getAllProjects: async (): Promise<Project[]> => {
+    // Simulating API call with a delay
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(projectData), 800);
+    });
+  },
+  
+  getProjectById: async (id: string): Promise<Project | undefined> => {
+    // Simulating API call with a delay
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(getProjectById(id)), 500);
+    });
+  },
+  
+  addProject: async (project: Omit<Project, 'id'>): Promise<Project> => {
+    // Simulating API call with a delay
+    return new Promise((resolve) => {
+      const newProject = addProject(project);
+      setTimeout(() => resolve(newProject), 500);
+    });
+  }
+};
+
 // Export the project data array
 export const projectData: Project[] = [
   {

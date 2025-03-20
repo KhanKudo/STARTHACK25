@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Project } from '../utils/projectData';
-import { api } from '../services/api';
+import { api } from '../utils/projectData';
 import CreateProjectModal from './CreateProjectModal';
 import './TopBar.css';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProjectCard.css';
-import { Project } from '../models/project';
+import { Project } from '../utils/projectData';
 
 interface ProjectCardProps {
   project: Project;
