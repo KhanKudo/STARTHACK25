@@ -39,8 +39,12 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Chat' }) => {
         </div>
       </div>
       <div className="mobile-top-bar-content">
-        <div className="mobile-top-bar-title">
-          {title}
+        <div className="mobile-top-bar-logo">
+          <img 
+            src="/assets/Virgin_logo.svg" 
+            alt="Virgin Logo" 
+            className="virgin-logo"
+          />
         </div>
       </div>
     </div>

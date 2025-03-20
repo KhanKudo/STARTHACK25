@@ -2,6 +2,7 @@
   "name": "clean-dashboard",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@react-three/drei": "^10.0.4",
     "@react-three/fiber": "^9.1.0",
@@ -17,6 +18,8 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/three": "^0.174.0",
     "cobe": "^0.6.3",
+    "framer-motion": "^12.5.0",
+    "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",

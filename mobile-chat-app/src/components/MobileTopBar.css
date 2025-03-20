@@ -47,4 +47,15 @@
   font-weight: 600;
   color: #333;
   text-align: center;
+}
+
+.mobile-top-bar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.virgin-logo {
+  height: 30px;
+  width: auto;
 } 

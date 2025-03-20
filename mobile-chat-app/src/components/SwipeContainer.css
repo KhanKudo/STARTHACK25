@@ -20,7 +20,7 @@
 .results-container h2 {
   color: #e50051;
   margin-bottom: 10px;
-  font-size: 1.8rem;
+  font-size: 20px;
 }
 
 .results-container p {
@@ -153,15 +153,14 @@
   margin: 0 auto;
 }
 
-.match-result {
+.swipe-match-result {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.2s ease;
 }
 
-.match-result:hover {
+.swipe-match-result:hover {
   transform: translateY(-2px);
 }
 
@@ -202,4 +201,269 @@
   background: #f7f7f7;
   border-radius: 8px;
   margin: 20px 0;
+}
+
+.results-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 0 20px;
+  padding: 0 16px;
+  gap: 10px;
+  background-color: #f9f9f9;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 0 0 12px 12px;
+}
+
+.nav-button {
+  flex: 1;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 24px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button.active {
+  background-color: #e50051;
+  color: white;
+}
+
+.coming-soon {
+  text-align: center;
+  padding: 40px 20px;
+  margin: 20px 0;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.coming-soon h2 {
+  color: #e50051;
+  margin-bottom: 16px;
+}
+
+.coming-soon p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Badge page styles */
+.badges-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-total-points {
+  background-color: #f5f9f5;
+  border: 1px solid #e0f2e0;
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #2e7d32;
+}
+
+.total-points-value {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.total-points-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 31%;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #e50051;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+}
+
+.badges-section {
+  width: 100%;
+}
+
+.badges-section h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.badge-icon {
+  width: 64px;
+  height: 64px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.badge-icon.earned {
+  background-color: #e8f4fe;
+  color: #e50051;
+}
+
+.badge-icon.locked {
+  background-color: #f5f5f5;
+  opacity: 0.5;
+}
+
+.badge-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.badge-description {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+/* Leaderboard styles */
+.leaderboard-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaderboard-list {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-rank {
+  font-size: 18px;
+  font-weight: 600;
+  color: #666;
+  width: 30px;
+  text-align: center;
+}
+
+.leaderboard-user {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-left: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: #e50051;
+  font-weight: 600;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.user-badges {
+  font-size: 12px;
+  color: #666;
+}
+
+.leaderboard-points {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e50051;
+}
+
+.current-user {
+  background-color: #fff9fb;
+  border: 1px solid #e50051;
+}
+
+.next-milestone {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 0 0 24px;
+  width: 100%;
+}
+
+.next-milestone-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #333;
 } 

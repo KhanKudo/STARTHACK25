@@ -5,6 +5,7 @@ export interface CardData {
   id: string;
   imageUrl: string;
   name: string;
+  matchedInterests?: string[];
   details?: {
     company: string;
     challenge: string;
@@ -189,12 +190,38 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ card, onLike, onDislike, onSkip }
           <div className="swipe-indicator dislike-indicator">NOPE</div>
           <div className="card-name">{card.name}</div>
         </div>
+        
+        {card.matchedInterests && card.matchedInterests.length > 0 && (
+          <div className="matched-interests">
+            <h4>Your Top Initiative Matches</h4>
+            <div className="interest-cards">
+              {card.matchedInterests.map((interest, index) => (
+                <div key={index} className="interest-card">
+                  {interest}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <div className="card-actions">
           <button className="dislike-button" onClick={onDislike}>
-            <span role="img" aria-label="dislike">👎</span>
+            <img 
+              src="/assets/cross_icon.svg" 
+              alt="Dislike" 
+              width="24" 
+              height="24" 
+              style={{ filter: 'brightness(0) invert(1)' }} 
+            />
           </button>
           <button className="like-button" onClick={onLike}>
-            <span role="img" aria-label="like">👍</span>
+            <img 
+              src="/assets/check_icon.svg" 
+              alt="Like" 
+              width="24" 
+              height="24" 
+              style={{ filter: 'brightness(0) invert(1)' }} 
+            />
           </button>
         </div>
       </div>

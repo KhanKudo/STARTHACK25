@@ -1,40 +1,120 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import MobileTopBar from './MobileTopBar';
-import './ChatPage.css';
+import './ProjectDetailsPage.css';
 
-interface ProjectData {
-  id: string;
-  name: string;
-  imageUrl: string;
-  details: {
-    company: string;
-    challenge: string;
-    description: string;
-  };
-}
+// Import SVG for back button
+const BackIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 12H5"></path>
+    <path d="M12 19l-7-7 7-7"></path>
+  </svg>
+);
 
-// Initiative details type
-interface InitiativeDetail {
+interface InitiativeDetails {
   company: string;
   challenge: string;
   description: string;
   imageUrl: string;
 }
 
-// Initiative map type
-type InitiativeDetailsMap = {
-  [initiative: string]: InitiativeDetail;
-};
+interface InitiativeDetailsMap {
+  [key: string]: InitiativeDetails;
+}
 
-const ChatPage: React.FC = () => {
+interface InitiativeTopicsMap {
+  [key: string]: string[];
+}
+
+const ProjectDetailsPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<Array<{sender: string, text: string, timestamp: Date}>>([]);
-  const [project, setProject] = useState<ProjectData | null>(null);
-  
-  // Initiative details (same as in SwipeContainer)
+  const [projectDetails, setProjectDetails] = useState<{ name: string; details: InitiativeDetails; topics: string[] } | null>(null);
+
+  // Initiative topics map
+  const initiativeMap: InitiativeTopicsMap = {
+    'Virgin Atlantic - Youngest, Cleanest Fleet in the Sky': [
+      'Climate Action',
+      'Technological Innovation',
+      'Environmental Protection & Carbon Reduction'
+    ],
+    'Virgin Atlantic & Virgin Unite - Protecting our Planet': [
+      'Ecosystem Conservation',
+      'Biodiversity Preservation',
+      'Climate Action'
+    ],
+    'Virgin Voyages - Epic Sea Change For All': [
+      'Ecosystem Conservation',
+      'Biodiversity Preservation',
+      'Climate Action'
+    ],
+    'Virgin Media O2 - Better Connections Plan (Recycling)': [
+      'Circular Economy',
+      'Waste Reduction',
+      'Environmental Protection & Carbon Reduction'
+    ],
+    'Virgin Media O2 - Better Connections Plan (Digital Divide)': [
+      'Digital Inclusion',
+      'Social Equity',
+      'Community Empowerment'
+    ],
+    'Virgin Media O2 - Better Connections Plan (Eco Rating)': [
+      'Sustainable Consumption',
+      'Environmental Protection & Carbon Reduction',
+      'Transparency & Accountability'
+    ],
+    'Virgin Media O2 - Better Connections Plan (Second-hand Devices)': [
+      'Circular Economy',
+      'Waste Reduction',
+      'Environmental Protection & Carbon Reduction'
+    ],
+    'Virgin Limited Edition & Virgin Unite - Pride \'n Purpose': [
+      'Community Empowerment',
+      'Sustainable Livelihoods',
+      'Social Equity'
+    ],
+    'Virgin Limited Edition & Virgin Unite - Mahali Mzuri: Inua Jamii': [
+      'Ecosystem Conservation',
+      'Community Empowerment',
+      'Sustainable Tourism'
+    ],
+    'Virgin Unite - Planetary Guardians': [
+      'Climate Action',
+      'Environmental Protection & Carbon Reduction',
+      'Global Collaboration'
+    ],
+    'Virgin Unite - The Elders': [
+      'Global Leadership',
+      'Peace and Justice',
+      'Sustainable Development'
+    ],
+    'Virgin Unite - Ocean Unite / ORRAA': [
+      'Ecosystem Conservation',
+      'Climate Action',
+      'Global Collaboration'
+    ],
+    'Virgin Unite - Community Mapathon: Humanitarian OpenStreetMap (HOT)': [
+      'Disaster Relief',
+      'Climate Action',
+      'Community Empowerment'
+    ],
+    'Virgin Unite - Project CETI (Cetacean Translation Initiative)': [
+      'Ecosystem Conservation',
+      'Biodiversity Preservation',
+      'Technological Innovation'
+    ],
+    'Virgin Unite - Eve Branson Foundation': [
+      'Community Empowerment',
+      'Education and Healthcare',
+      'Sustainable Livelihoods'
+    ],
+    'Virgin Unite - Unite BVI': [
+      'Community Empowerment',
+      'Environmental Protection & Carbon Reduction',
+      'Social Equity'
+    ]
+  };
+
+  // Initiative details
   const initiativeDetails: InitiativeDetailsMap = {
     'Virgin Atlantic - Youngest, Cleanest Fleet in the Sky': {
       company: 'Virgin Atlantic',
@@ -134,163 +214,109 @@ const ChatPage: React.FC = () => {
     }
   };
 
-  // List of all initiatives
-  const initiatives = Object.keys(initiativeDetails);
-  
-  // Simulating fetching project data based on projectId parameter
+  // Get the initiatives in the same order as they appear in the SwipeContainer
+  const initiatives = Object.keys(initiativeMap);
+
   useEffect(() => {
     if (projectId) {
-      const projectIdNum = parseInt(projectId);
-      
-      // If projectId is a valid number and within the initiatives array range
-      if (!isNaN(projectIdNum) && projectIdNum >= 0 && projectIdNum < initiatives.length) {
-        const initiativeName = initiatives[projectIdNum];
-        const details = initiativeDetails[initiativeName];
+      try {
+        // Decode the URL-encoded project name
+        const decodedProjectId = decodeURIComponent(projectId);
         
-        setProject({
-          id: projectId,
-          name: initiativeName,
-          imageUrl: details.imageUrl,
-          details: {
-            company: details.company,
-            challenge: details.challenge,
-            description: details.description
-          }
-        });
-      } else {
-        // Fallback to default if projectId is not valid
-        console.error(`Invalid project ID: ${projectId}`);
-        setProject({
-          id: projectId,
-          name: "Initiative Not Found",
-          imageUrl: "https://images.unsplash.com/photo-1557456170-0cf4f4d0d362?q=80&w=500&auto=format&fit=crop",
-          details: {
-            company: "Virgin",
-            challenge: "Initiative not found",
-            description: "Please try another project."
-          }
-        });
+        // Find the initiative by name
+        if (initiativeDetails[decodedProjectId]) {
+          setProjectDetails({
+            name: decodedProjectId,
+            details: initiativeDetails[decodedProjectId],
+            topics: initiativeMap[decodedProjectId] || []
+          });
+        } else {
+          console.error(`Project not found: ${decodedProjectId}`);
+        }
+      } catch (error) {
+        console.error("Error finding project:", error);
       }
     }
-  }, [projectId, initiatives]);
-  
-  useEffect(() => {
-    // Add initial welcome message from the company
-    if (project && messages.length === 0) {
-      setMessages([
-        {
-          sender: 'company',
-          text: `Welcome to the ${project.details.company} chat! How can we help you with our "${project.name}" initiative?`,
-          timestamp: new Date()
-        }
-      ]);
-    }
-    
-    // Scroll to bottom of chat on new messages
-    const chatContainer = document.getElementById('chat-messages');
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  }, [project, messages]);
-  
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!message.trim()) return;
-    
-    // Add user message
-    const userMessage = {
-      sender: 'user',
-      text: message,
-      timestamp: new Date()
-    };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setMessage('');
-    
-    // Simulate company response after a short delay
-    setTimeout(() => {
-      const companyResponse = {
-        sender: 'company',
-        text: `Thank you for your interest in ${project?.name}. A representative will respond to your message shortly.`,
-        timestamp: new Date()
-      };
-      
-      setMessages(prev => [...prev, companyResponse]);
-    }, 1000);
-  };
-  
-  const handleBackClick = () => {
+  }, [projectId]);
+
+  const handleBack = () => {
     navigate(-1);
   };
-  
-  if (!project) {
+
+  const handleChatClick = () => {
+    if (projectDetails) {
+      // Find the index in the initiatives array to keep compatibility with chat routing
+      const projectIndex = initiatives.indexOf(projectDetails.name);
+      navigate(`/chat/${projectIndex >= 0 ? projectIndex : 0}`);
+    }
+  };
+
+  if (!projectDetails) {
     return (
-      <div className="chat-page mobile-chat-page">
-        <MobileTopBar title="Chat" />
-        <div className="chat-content">
-          <button className="back-button" onClick={handleBackClick}>
-            ← Back
-          </button>
-          <div className="error-message">Project not found.</div>
-        </div>
+      <div className="project-details-loading">
+        <p>Loading project details...</p>
       </div>
     );
   }
 
   return (
-    <>
-      <MobileTopBar title={`Chat with ${project.details.company}`} />
-      <div className="chat-page mobile-chat-page">
-        <div className="chat-content">
-          <button className="back-button" onClick={handleBackClick}>
-            ← Back
-          </button>
-          
-          <div className="chat-container">
-            <div className="chat-header">
-              <img 
-                src={project.imageUrl} 
-                alt={project.details.company}
-                className="chat-company-image"
-              />
-              <div className="chat-company-info">
-                <h2 className="chat-company-name">{project.details.company}</h2>
-                <p className="chat-initiative-name">{project.name}</p>
+    <div className="project-details-page">
+      <div className="project-header">
+        <button className="back-button" onClick={handleBack}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5"></path>
+            <path d="M12 19l-7-7 7-7"></path>
+          </svg>
+          Back
+        </button>
+        <h1>Project Details</h1>
+      </div>
+
+      <div className="project-image-container">
+        <img 
+          src={projectDetails.details.imageUrl || 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?q=80&w=500&auto=format&fit=crop'} 
+          alt={projectDetails.name}
+          className="project-image" 
+        />
+        <div className="project-image-overlay"></div>
+      </div>
+
+      <div className="project-content">
+        <div className="project-title-section">
+          <h2 className="project-company">{projectDetails.details.company}</h2>
+          <h1 className="project-title">{projectDetails.name}</h1>
+        </div>
+        
+        <div className="project-section">
+          <h3 className="section-title">The Challenge</h3>
+          <p className="section-content">{projectDetails.details.challenge}</p>
+        </div>
+        
+        <div className="project-section">
+          <h3 className="section-title">About the Initiative</h3>
+          <p className="section-content">{projectDetails.details.description}</p>
+        </div>
+        
+        <div className="project-section">
+          <h3 className="section-title">Sustainability Topics</h3>
+          <div className="sustainability-topics">
+            {projectDetails.topics.map((topic, index) => (
+              <div key={index} className="topic-tag">
+                {topic}
               </div>
-            </div>
-            
-            <div className="chat-messages" id="chat-messages">
-              {messages.map((msg, index) => (
-                <div 
-                  key={index} 
-                  className={`chat-message ${msg.sender === 'user' ? 'user-message' : 'company-message'}`}
-                >
-                  <div className="message-content">
-                    <p>{msg.text}</p>
-                    <span className="message-time">
-                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <form className="chat-input-form" onSubmit={handleSendMessage}>
-              <input
-                type="text"
-                placeholder="Type your message..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="chat-input"
-              />
-              <button type="submit" className="send-button">Send</button>
-            </form>
+            ))}
           </div>
         </div>
+        
+        <button className="chat-button primary-button" onClick={handleChatClick}>
+          <svg className="chat-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+          Chat with {projectDetails.details.company.split(' ')[0]}
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ChatPage; 
+export default ProjectDetailsPage; 

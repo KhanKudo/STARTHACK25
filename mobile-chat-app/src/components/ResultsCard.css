@@ -1,13 +1,20 @@
 .results-card {
   position: relative;
   width: 100%;
-  margin-bottom: 16px;
-  background-color: white;
+  margin-bottom: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.results-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .rank-badge {
@@ -48,7 +55,6 @@
 
 .results-card-title {
   margin: 0 0 12px 0;
-  font-size: 1.2rem;
   color: #333;
 }
 
@@ -57,6 +63,7 @@
   color: #555;
   margin: 0 0 16px 0;
   line-height: 1.4;
+  text-align: left;
 }
 
 .chat-button {
@@ -88,27 +95,192 @@
 
 .matched-topics {
   margin-top: 10px;
-  padding: 8px 12px;
-  background-color: rgba(240, 240, 240, 0.8);
-  border-radius: 8px;
+  margin-bottom: 16px;
   font-size: 0.9rem;
 }
 
-.matched-topics h4 {
-  margin: 0 0 5px 0;
+.interests-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.interest-card {
+  background-color: white;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  font-weight: 500;
+}
+
+.sustainability-value {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  background-color: #f5f9f5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #2e7d32;
+  cursor: pointer;
+  border: 1px solid #e0f2e0;
+}
+
+.sustainability-value-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.points-breakdown {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 300px;
+  z-index: 100;
+  overflow: hidden;
+  display: none;
+}
+
+.points-breakdown.visible {
+  display: block;
+}
+
+.points-breakdown-header {
+  background-color: #2e7d32;
+  color: white;
+  padding: 12px 16px;
+  font-weight: 500;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.points-breakdown-content {
+  padding: 16px;
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.points-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 12px 0;
+}
+
+.points-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
   font-size: 1rem;
-  color: #333;
+  color: #2e7d32;
 }
 
-.matched-topics ul {
-  margin: 0;
-  padding-left: 20px;
+.points-contribution {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  color: #e50051;
 }
 
-.matched-topics li {
-  margin-bottom: 3px;
+.global-points {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.global-points-icon {
+  margin-right: 6px;
+  color: #2e7d32;
+}
+
+.global-points-value {
+  color: #2e7d32;
+  margin-right: 10px;
+}
+
+.global-points-rank {
+  color: #666;
+}
+
+.next-milestone {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  margin: 10px 0 20px;
+}
+
+.next-milestone-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.milestone-progress-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.milestone-progress-fill {
+  height: 100%;
+  background-color: #e50051;
+  border-radius: 4px;
+}
+
+.milestone-remaining {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  display: none;
+}
+
+.overlay.visible {
+  display: block;
 }
 
 .match-result {
   margin-bottom: 20px;
+}
+
+.results-card.loading {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  font-size: 14px;
 } 

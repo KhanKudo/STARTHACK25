@@ -67,7 +67,7 @@
   flex-grow: 1;
 }
 
-.chat-button {
+.matched-chat-button {
   background-color: #cc0033;
   color: white;
   border: none;
@@ -82,7 +82,7 @@
   margin-top: auto;
 }
 
-.chat-button:hover {
+.matched-chat-button:hover {
   background-color: #aa0022;
 }
 
