@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 // @ts-ignore - We're adding a type declaration for ThreeGlobe
 import ThreeGlobe from "three-globe";
@@ -7,6 +7,8 @@ import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "../data/globe.json";
 import GlobeLocationPopup from "./GlobeLocationPopup";
+import { projectData, virginLocations } from "../utils/projectData";
+import { useNavigate } from "react-router-dom";
 
 // Type definition for ThreeGlobe (expanded when needed)
 declare class ThreeGlobeType {
@@ -49,7 +51,7 @@ declare class ThreeGlobeType {
 declare module "@react-three/fiber" {
   interface ThreeElements {
     threeGlobe: ThreeElements["mesh"] & {
-      new (): ThreeGlobeType;
+      new(): ThreeGlobeType;
     };
   }
 }
@@ -95,17 +97,18 @@ export type GlobeConfig = {
   autoRotate?: boolean;
   autoRotateSpeed?: number;
   markers?: Array<{
+    id: string
     location: [number, number];
-    size: number;
+    size?: number;
     company?: string;
     initiative?: string;
-    link?: string;
   }>;
 };
 
-interface WorldProps {
+export interface WorldProps {
   globeConfig: GlobeConfig;
   data: Position[];
+  onPointClick?: (point: any, event: any) => void;
 }
 
 let numbersOfRings = [0];
@@ -136,7 +139,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
   useEffect(() => {
     if (!globeRef.current && groupRef.current) {
       // @ts-ignore - ThreeGlobe exists at runtime
-      globeRef.current = new ThreeGlobe();
+      const globe = new ThreeGlobe()
+      // @ts-ignore
+      window.my_globe = globe
+      // @ts-ignore
+      globeRef.current = globe;
       (groupRef.current as any).add(globeRef.current);
       setIsInitialized(true);
     }
@@ -195,13 +202,13 @@ export function Globe({ globeConfig, data }: WorldProps) {
     if (globeConfig.markers && globeConfig.markers.length > 0) {
       globeConfig.markers.forEach(marker => {
         points.push({
-          size: marker.size * 0.8 || defaultProps.pointSize * 0.8, // Standardize size multiplier
+          size: 1.5 * 0.8 || defaultProps.pointSize * 0.8, // Standardize size multiplier
           color: "rgba(245, 0, 87, 0.8)", // Virgin red color
           lat: marker.location[0],
           lng: marker.location[1],
           company: marker.company,
           initiative: marker.initiative,
-          link: marker.link
+          link: '/project/' + marker.id
         });
       });
     }
@@ -313,11 +320,16 @@ export function WebGLRendererConfig() {
   return null;
 }
 
+(window as any).globeRotation = { x: 0, y: 0 }
+
 export function World(props: WorldProps) {
+  const navigate = useNavigate();
   const { globeConfig } = props;
   const scene = new Scene();
+  // @ts-ignore
+  window.my_scene = scene
   scene.fog = new Fog(0xffffff, 400, 2000);
-  
+
   // State for the popup
   const [selectedLocation, setSelectedLocation] = useState<{
     company?: string;
@@ -325,7 +337,7 @@ export function World(props: WorldProps) {
     link?: string;
     position: { x: number, y: number };
   } | null>(null);
-  
+
   // Add state to track mouse hover
   const [isHovering, setIsHovering] = useState(false);
 
@@ -333,103 +345,177 @@ export function World(props: WorldProps) {
   const handleClosePopup = () => {
     setSelectedLocation(null);
   };
-  
+
   // Mouse event handlers
   const handleMouseEnter = () => {
     setIsHovering(true);
   };
-  
+
   const handleMouseLeave = () => {
     setIsHovering(false);
   };
-  
+
+  // Handle click anywhere on the globe
+  const handleGlobeClick = (event: React.MouseEvent) => {
+    const canvas = document.querySelector('.globe-container canvas') as HTMLCanvasElement & { __r3f?: { controls: any } };
+    if (canvas?.__r3f?.controls) {
+      const controls = canvas.__r3f.controls;
+      console.log('Globe Rotation:', {
+        azimuthal: controls.getAzimuthalAngle().toFixed(3),
+        polar: controls.getPolarAngle().toFixed(3),
+        distance: controls.getDistance().toFixed(3),
+        autoRotate: controls.autoRotate
+      });
+    }
+  };
+
   return (
     <>
-      <div 
-        className="globe-wrapper" 
+      <div
+        className="globe-container"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleGlobeClick}
       >
-        <Canvas 
-          scene={scene} 
-          camera={{ 
-            fov: 50, 
-            near: 180, 
-            far: 1800,
-            position: [0, 0, cameraZ]
-          }}
-        >
-          <WebGLRendererConfig />
-          {/* Increased ambient light for more even base lighting */}
-          <ambientLight color={globeConfig.ambientLight} intensity={0.9} />
-          
-          {/* Directional lights from multiple directions for even coverage */}
-          <directionalLight
-            color={globeConfig.directionalLeftLight}
-            position={new Vector3(-400, 0, 0)}
-            intensity={0.6}
-          />
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(0, 400, 0)}
-            intensity={0.6}
-          />
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(400, 0, 0)}
-            intensity={0.6}
-          />
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(0, -400, 0)}
-            intensity={0.6}
-          />
-          
-          {/* Add a light from behind to ensure back lighting */}
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(0, 0, -400)}
-            intensity={0.5}
-          />
-          
-          {/* Point light positioned closer to the center for more even radial lighting */}
-          <pointLight
-            color={globeConfig.pointLight}
-            position={new Vector3(0, 0, 300)}
-            intensity={0.7}
-            distance={500}
-          />
-          
-          <GlobeWithClickHandler 
-            {...props} 
-            onPointClick={(point, event) => {
-              // When a point is clicked, show the popup with location data
-              if (point && event && point.company) {
-                setSelectedLocation({
-                  company: point.company,
-                  initiative: point.initiative,
-                  link: point.link,
-                  position: { 
-                    x: event.clientX, 
-                    y: event.clientY 
-                  }
-                });
+        <div className="globe-wrapper">
+          <Canvas
+            scene={scene}
+            camera={{
+              fov: 50,
+              near: 180,
+              far: 1800,
+              position: [0, 0, cameraZ]
+            }}
+            onClick={e => {
+              const rotation = (window as any).globeRotation;
+              const rect = e.currentTarget.getBoundingClientRect();
+
+              // Get click coordinates relative to canvas center
+              const x = e.nativeEvent.offsetX - rect.width / 2;
+              const y = e.nativeEvent.offsetY - rect.height / 2;
+
+              // Calculate the radius of the globe (90% of canvas height)
+              // const globeRadius = (window as any).my_globe.getGlobeRadius();
+              const globeRadius = rect.height * 0.40;
+
+              // Calculate the distance from center to click point
+              const distance = Math.sqrt(x * x + y * y);
+
+              // If click is outside the globe, return
+              if (distance > globeRadius) {
+                console.log('Click outside globe');
+                return;
+              }
+
+              // Convert to spherical coordinates
+              // const azimuth = Math.acos(Math.abs(x / globeRadius))*Math.sign(x);
+              // const polar = Math.asin(Math.abs(y / globeRadius))*Math.sign(y);
+
+              const azimuth = Math.atan(Math.abs(x / globeRadius)) * Math.sign(x);
+              const polar = Math.atan(Math.abs(y / globeRadius)) * Math.sign(y);
+
+              // Add the current globe rotation
+              const finalAzimuth = azimuth + rotation.x;
+              const finalPolar = polar + rotation.y;
+
+              // Convert to lat/lon
+              const lat = 90 - (finalPolar * 180 / Math.PI);
+              const lon = (finalAzimuth * 180 / Math.PI);
+
+              const tolerance = (Math.abs(x - y) < 10) ? 20 : 10;
+
+              let locationId = '';
+              let minDist = 1000;
+              for (const l of projectData.filter(pro => 'location' in pro) as { location: [number, number], id: string }[]) {
+                const dist = Math.sqrt(Math.pow(l.location[0] - lat, 2) + Math.pow(l.location[1] - lon, 2))
+                if (dist < minDist) {
+                  locationId = l.id;
+                  minDist = dist;
+                }
+              }
+
+              if (minDist > tolerance)
+                locationId = '';
+
+              if (locationId) {
+                navigate(`/project/${locationId}`);
               }
             }}
-          />
-          <OrbitControls
-            enablePan={false}
-            enableZoom={false}
-            minDistance={cameraZ}
-            maxDistance={cameraZ}
-            autoRotateSpeed={1}
-            autoRotate={!isHovering && globeConfig.autoRotate} // Stop rotation on hover
-            minPolarAngle={Math.PI / 3.5}
-            maxPolarAngle={Math.PI - Math.PI / 3}
-          />
-        </Canvas>
+          >
+            <WebGLRendererConfig />
+            {/* Increased ambient light for more even base lighting */}
+            <ambientLight color={globeConfig.ambientLight} intensity={0.9} />
+
+            {/* Directional lights from multiple directions for even coverage */}
+            <directionalLight
+              color={globeConfig.directionalLeftLight}
+              position={new Vector3(-400, 0, 0)}
+              intensity={0.6}
+            />
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(0, 400, 0)}
+              intensity={0.6}
+            />
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(400, 0, 0)}
+              intensity={0.6}
+            />
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(0, -400, 0)}
+              intensity={0.6}
+            />
+
+            {/* Add a light from behind to ensure back lighting */}
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(0, 0, -400)}
+              intensity={0.5}
+            />
+
+            {/* Point light positioned closer to the center for more even radial lighting */}
+            <pointLight
+              color={globeConfig.pointLight}
+              position={new Vector3(0, 0, 300)}
+              intensity={0.7}
+              distance={500}
+            />
+
+            <GlobeWithClickHandler
+              {...props}
+              onPointClick={(point: any, event: MouseEvent) => {
+                console.log('Point Clicked')
+                // When a point is clicked, show the popup with location data
+                if (point && event && point.company) {
+                  setSelectedLocation({
+                    company: point.company,
+                    initiative: point.initiative,
+                    link: point.link,
+                    position: {
+                      x: event.clientX,
+                      y: event.clientY
+                    }
+                  });
+                }
+              }}
+            />
+            <OrbitControls
+              enablePan={false}
+              enableZoom={false}
+              minDistance={cameraZ}
+              maxDistance={cameraZ}
+              autoRotateSpeed={1}
+              autoRotate={!isHovering && globeConfig.autoRotate}
+              minPolarAngle={Math.PI / 3.5}
+              maxPolarAngle={Math.PI - Math.PI / 3}
+              onChange={(e) => { (window as any).globeRotation.x = (e as any).target.getAzimuthalAngle(); (window as any).globeRotation.y = (e as any).target.getPolarAngle() }}
+            />
+          </Canvas>
+        </div>
       </div>
-      
+
       {/* Render the popup if a location is selected */}
       {selectedLocation && (
         <div onClick={handleClosePopup} className="globe-popup-overlay">
@@ -455,10 +541,10 @@ export function hexToRgb(hex: string) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+    }
     : null;
 }
 
@@ -494,49 +580,49 @@ function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandler
     let mouseDownX: number | null = null;
     let mouseDownY: number | null = null;
     const dragThreshold = 5; // pixels of movement to consider it a drag instead of a click
-    
+
     // Handle mouse down to track potential drag start
     const handleMouseDown = (event: MouseEvent) => {
       mouseDownX = event.clientX;
       mouseDownY = event.clientY;
     };
-    
+
     // Handle click/release on the canvas
     const handleMouseUp = (event: MouseEvent) => {
       // If we don't have a mouseDown position, ignore
       if (mouseDownX === null || mouseDownY === null) return;
-      
+
       // Calculate distance moved during potential drag
       const deltaX = Math.abs(event.clientX - mouseDownX);
       const deltaY = Math.abs(event.clientY - mouseDownY);
       const totalMovement = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      
+
       // Reset tracking
       mouseDownX = null;
       mouseDownY = null;
-      
+
       // If movement exceeds threshold, it was a drag, not a click
       if (totalMovement > dragThreshold) return;
-      
+
       // At this point we have a genuine click, not a drag
-      
+
       // Get click coordinates
       const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      
+
       // Check if we have valid point data
       if (!pointsDataRef.current.length) return;
-      
+
       // Find the closest point to the click location (simplified)
       const pointRadius = 10; // approximate size of point markers in pixels
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       // Find points with company info (markers)
       const companyPoints = pointsDataRef.current.filter(p => p.company);
       if (!companyPoints.length) return;
-      
+
       // Convert lat/lng to rough screen coordinates (very simplified approximation)
       // This is an extremely simplified model assuming the globe is centered and stationary
       // A real implementation would use raycasting or proper 3D to 2D projection
@@ -544,41 +630,41 @@ function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandler
         // Get spherical coordinates
         const lat = point.lat * (Math.PI / 180);
         const lng = point.lng * (Math.PI / 180);
-        
+
         // Simple spherical to screen projection (very approximate)
         // Assumes globe is centered and static - this is a simplified model
         const radius = Math.min(rect.width, rect.height) * 0.45;
         const screenX = centerX + radius * Math.cos(lat) * Math.sin(lng);
         const screenY = centerY - radius * Math.sin(lat);
-        
+
         // Calculate distance from click to this point
         const distance = Math.sqrt(
-          Math.pow(screenX - x, 2) + 
+          Math.pow(screenX - x, 2) +
           Math.pow(screenY - y, 2)
         );
-        
+
         // Store calculated position for potential use
         point._screenX = screenX;
         point._screenY = screenY;
         point._distance = distance;
-        
+
         // Consider this point "visible" if it's close enough to the click
         return distance < pointRadius * point.size * 20; // Adjust multiplier based on testing
       });
-      
+
       // Sort by distance to click
       visiblePoints.sort((a, b) => a._distance - b._distance);
-      
+
       // If we have a close point, use it
       if (visiblePoints.length > 0) {
         onPointClick(visiblePoints[0], event);
       }
     };
-    
+
     // Handle canvas click
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mouseup', handleMouseUp);
-    
+
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mouseup', handleMouseUp);
@@ -588,7 +674,7 @@ function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandler
   // Update pointsDataRef when markers change
   useEffect(() => {
     if (!isInitialized) return;
-    
+
     // Extract points from markers for click detection
     const points: Array<{
       size: number;
@@ -602,21 +688,21 @@ function GlobeWithClickHandler({ onPointClick, ...props }: GlobeWithClickHandler
       _screenY?: number;
       _distance?: number;
     }> = [];
-    
+
     if (props.globeConfig.markers && props.globeConfig.markers.length > 0) {
       props.globeConfig.markers.forEach(marker => {
         points.push({
-          size: marker.size * 0.8 || 0.8, // Match the size in the main Globe component
+          size: 1.5 * 0.8 || 0.8, // Match the size in the main Globe component
           color: "rgba(245, 0, 87, 0.8)", // Virgin red color
           lat: marker.location[0],
           lng: marker.location[1],
           company: marker.company,
           initiative: marker.initiative,
-          link: marker.link
+          link: '/project/' + marker.id
         });
       });
     }
-    
+
     pointsDataRef.current = points;
     setIsInitialized(true);
   }, [props.globeConfig.markers, isInitialized]);

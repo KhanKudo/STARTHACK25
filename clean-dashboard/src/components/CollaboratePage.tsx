@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TopBar from './TopBar';
+import { EXAMPLE_PROPOSALS, Proposal } from '../utils/proposalData';
+import { COMPANY_DATA } from '../utils/companyData';
+import SubmitIdeaForm from './SubmitIdeaForm';
+import SmallChangesForm, { SmallChangesData } from './SmallChangesForm';
+import TransformativeForm, { TransformativeData } from './TransformativeForm';
 import './CollaboratePage.css';
 
 interface IncentiveCard {
@@ -114,16 +119,52 @@ const INCENTIVE_DATA: IncentiveCard[] = [
 ];
 
 const CollaboratePage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'proposals' | 'collaboration'>('proposals');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showIdeaForm, setShowIdeaForm] = useState(false);
+  const [expandedProposal, setExpandedProposal] = useState<string | null>(null);
+  const [isSubmitFormOpen, setIsSubmitFormOpen] = useState(false);
+  const [isSmallChangesFormOpen, setIsSmallChangesFormOpen] = useState(false);
+  const [isTransformativeFormOpen, setIsTransformativeFormOpen] = useState(false);
+  const [proposals, setProposals] = useState<Proposal[]>(EXAMPLE_PROPOSALS);
+  const [votedProposals, setVotedProposals] = useState<string[]>([]);
+
+  // Load voted proposals from localStorage on component mount
+  useEffect(() => {
+    const savedVotes = localStorage.getItem('votedProposals');
+    if (savedVotes) {
+      setVotedProposals(JSON.parse(savedVotes));
+    }
+  }, []);
+
+  const recommendedProposals = proposals
+    .filter(proposal => proposal.isRecommended)
+    .slice(0, 2);
+  const allProposals = proposals.filter(proposal => !proposal.isRecommended);
+
+  const filteredProposals = proposals.filter(proposal => {
+    if (selectedCategory !== 'all' && proposal.category !== selectedCategory) {
+      return false;
+    }
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return (
+        proposal.title.toLowerCase().includes(query) ||
+        proposal.description.toLowerCase().includes(query) ||
+        proposal.company.toLowerCase().includes(query)
+      );
+    }
+    
+    return true;
+  });
 
   const filteredIncentives = INCENTIVE_DATA.filter(incentive => {
-    // Filter by category
     if (selectedCategory !== 'all' && incentive.category !== selectedCategory) {
       return false;
     }
     
-    // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       return (
@@ -136,115 +177,376 @@ const CollaboratePage: React.FC = () => {
     return true;
   });
 
+  const handleVote = (proposalId: string) => {
+    // Check if user has already voted on this proposal
+    if (votedProposals.includes(proposalId)) {
+      return; // Already voted, do nothing
+    }
+
+    // Update proposals with incremented vote count
+    const updatedProposals = proposals.map(proposal => 
+      proposal.id === proposalId 
+        ? { ...proposal, votes: proposal.votes + 1 } 
+        : proposal
+    );
+    
+    // Update voted proposals array
+    const newVotedProposals = [...votedProposals, proposalId];
+    
+    // Save to state and localStorage
+    setProposals(updatedProposals);
+    setVotedProposals(newVotedProposals);
+    localStorage.setItem('votedProposals', JSON.stringify(newVotedProposals));
+  };
+
+  const handleSubmitProposal = (proposal: Omit<Proposal, 'id' | 'votes' | 'status' | 'createdAt'>) => {
+    // TODO: Implement proposal submission
+    console.log('New proposal:', proposal);
+    setShowIdeaForm(false);
+  };
+
+  const toggleProposalExpansion = (proposalId: string) => {
+    setExpandedProposal(expandedProposal === proposalId ? null : proposalId);
+  };
+
+  const handleSubmitIdea = (newIdea: Omit<Proposal, 'id' | 'votes' | 'status' | 'createdAt' | 'source'>) => {
+    const proposal: Proposal = {
+      ...newIdea,
+      id: `proposal-${Date.now()}`,
+      votes: 0,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      source: 'user',
+      isRecommended: false
+    };
+    setProposals(prev => [...prev, proposal]);
+  };
+
+  const handleSmallChangesSubmit = (data: SmallChangesData) => {
+    const proposal: Proposal = {
+      id: `proposal-${Date.now()}`,
+      title: data.title,
+      description: data.description,
+      company: 'Your Company', // Default placeholder
+      category: 'carbon', // Using an allowed category
+      impact: [{
+        metric: 'Efficiency',
+        value: data.estimatedImpact
+      }],
+      tags: [data.targetArea, data.implementationTime],
+      votes: 0,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      source: 'user',
+      isRecommended: false
+    };
+    setProposals(prev => [...prev, proposal]);
+    setIsSmallChangesFormOpen(false);
+  };
+
+  const handleTransformativeSubmit = (data: TransformativeData) => {
+    const proposal: Proposal = {
+      id: `proposal-${Date.now()}`,
+      title: data.title,
+      description: data.description + '\n\nChallenge: ' + data.challenge + '\n\nSolution: ' + data.potentialSolution,
+      company: 'Cross-Industry', // Transformative solutions often span multiple companies
+      category: 'biodiversity', // Using an allowed category
+      impact: [{
+        metric: 'Sustainability Impact',
+        value: data.expectedImpact
+      }],
+      tags: ['transformative', data.timeToImplement, 'collaboration'],
+      votes: 0,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      source: 'user',
+      isRecommended: false
+    };
+    setProposals(prev => [...prev, proposal]);
+    setIsTransformativeFormOpen(false);
+  };
+
   return (
     <div className="collaborate-page">
       <div className="top-bar-container">
         <TopBar title="Collaborate" />
       </div>
       
-      <div className="collaborate-content">
-        <header className="collaborate-header">
-          <h1>Find Collaboration Opportunities</h1>
-          <p>Connect with organizations offering incentives for environmentally beneficial projects</p>
-        </header>
-        
-        <div className="filters-container">
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search opportunities"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+      <div className="collaborate-content-container">
+        <div className="collaborate-content">
+          <a href="/dashboard" className="back-to-dashboard">← Back to Dashboard</a>
           
-          <div className="category-filters">
-            <button 
-              className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('all')}
-            >
-              All
-            </button>
-            <button 
-              className={`category-btn carbon ${selectedCategory === 'carbon' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('carbon')}
-            >
-              Carbon
-            </button>
-            <button 
-              className={`category-btn water ${selectedCategory === 'water' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('water')}
-            >
-              Water
-            </button>
-            <button 
-              className={`category-btn biodiversity ${selectedCategory === 'biodiversity' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('biodiversity')}
-            >
-              Biodiversity
-            </button>
-            <button 
-              className={`category-btn circular ${selectedCategory === 'circular' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('circular')}
-            >
-              Circular Economy
-            </button>
-            <button 
-              className={`category-btn social ${selectedCategory === 'social' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('social')}
-            >
-              Social Impact
-            </button>
-          </div>
-        </div>
-        
-        <div className="incentives-grid">
-          {filteredIncentives.map(incentive => (
-            <div key={incentive.id} className={`incentive-card ${incentive.category}`}>
-              <div className="incentive-image" style={{ backgroundImage: `url(${incentive.imageUrl})` }}></div>
-              <div className="incentive-content">
-                <div className="incentive-category">{incentive.category}</div>
-                <h3 className="incentive-title">{incentive.title}</h3>
-                <div className="incentive-organization">{incentive.organization}</div>
-                <p className="incentive-description">{incentive.description}</p>
-                
-                <div className="incentive-details">
-                  <div className="incentive-funding">
-                    <strong>Funding:</strong> {incentive.fundingAvailable}
-                  </div>
-                  <div className="incentive-deadline">
-                    <strong>Deadline:</strong> {incentive.deadline}
+          <header className="collaborate-header">
+            <h1>Environmental Collaboration Hub</h1>
+            <p>Connect with partners, share ideas, and find funding opportunities for sustainable initiatives</p>
+          </header>
+          
+          <div className="idea-tab">
+            <div className="idea-header">
+              <h2>Got an Idea?</h2>
+            </div>
+            <div className="idea-content">
+              <p className="idea-intro">Every great change starts with an idea</p>
+              <div className="idea-blocks">
+                <div 
+                  className="idea-block clickable"
+                  onClick={() => setIsSmallChangesFormOpen(true)}
+                >
+                  <div className="idea-block-icon">🎯</div>
+                  <div className="idea-block-content">
+                    <h3>Small Changes, Big Impact</h3>
+                    <p>From quick fixes to efficiency improvements, every idea counts</p>
                   </div>
                 </div>
-                
-                <div className="incentive-criteria">
-                  <strong>Key Criteria:</strong>
-                  <ul>
-                    {incentive.criteria.map((criterion, index) => (
-                      <li key={index}>{criterion}</li>
-                    ))}
-                  </ul>
+                <div 
+                  className="idea-block clickable"
+                  onClick={() => setIsTransformativeFormOpen(true)}
+                >
+                  <div className="idea-block-icon">🌱</div>
+                  <div className="idea-block-content">
+                    <h3>Transformative Solutions</h3>
+                    <p>Share your vision for tackling major sustainability challenges</p>
+                  </div>
                 </div>
-                
-                <button className="apply-button">Apply for Collaboration</button>
               </div>
             </div>
-          ))}
-        </div>
-        
-        {filteredIncentives.length === 0 && (
-          <div className="no-results">
-            <h3>No collaboration opportunities found</h3>
-            <p>Try adjusting your filters or search query</p>
           </div>
-        )}
-        
-        <div className="propose-container">
-          <h2>Have an Idea?</h2>
-          <p>Propose your own environmental collaboration initiative and find partners</p>
-          <button className="propose-button">Propose Initiative</button>
+          
+          <div className="tab-navigation">
+            <button 
+              className={`tab-btn ${activeTab === 'proposals' ? 'active' : ''}`}
+              onClick={() => setActiveTab('proposals')}
+            >
+              Proposals
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'collaboration' ? 'active' : ''}`}
+              onClick={() => setActiveTab('collaboration')}
+            >
+              Collaboration
+            </button>
+          </div>
+
+          {activeTab === 'proposals' && (
+            <div className="proposals-section">
+              <div className="recommended-section">
+                <h2 className="section-title">Recommended Proposals</h2>
+                <div className="proposals-grid">
+                  {recommendedProposals.map(proposal => (
+                    <div 
+                      key={proposal.id} 
+                      className={`proposal-card ${proposal.category}`}
+                    >
+                      <div className="proposal-header">
+                        <div className="proposal-category">{proposal.category}</div>
+                        <div className="proposal-source">{proposal.source === 'ai' ? 'AI Generated' : 'User Generated'}</div>
+                      </div>
+                      <h3 className="proposal-title">{proposal.title}</h3>
+                      <div className="proposal-company">Target: {proposal.company}</div>
+                      <p className="proposal-description">{proposal.description}</p>
+                      
+                      <div className="proposal-preview">
+                        <div className="proposal-impact">
+                          <strong>Potential Impact:</strong>
+                          <ul>
+                            {proposal.impact.map((impact, index) => (
+                              <li key={index}>{impact.metric}: {impact.value}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="proposal-footer">
+                          <div className="proposal-votes">
+                            <button 
+                              className={`vote-button ${votedProposals.includes(proposal.id) ? 'voted' : ''}`}
+                              onClick={() => handleVote(proposal.id)}
+                              disabled={votedProposals.includes(proposal.id)}
+                            >
+                              {votedProposals.includes(proposal.id) ? 'Voted' : 'Vote'} ({proposal.votes})
+                            </button>
+                          </div>
+                          <div className="proposal-tags">
+                            {proposal.tags.map(tag => (
+                              <span key={tag} className="tag">{tag}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="all-proposals-section">
+                <h2 className="section-title">All Proposals</h2>
+                <div className="proposals-grid">
+                  {allProposals.map(proposal => (
+                    <div 
+                      key={proposal.id} 
+                      className={`proposal-card ${proposal.category}`}
+                    >
+                      <div className="proposal-header">
+                        <div className="proposal-category">{proposal.category}</div>
+                        <div className="proposal-source">{proposal.source === 'ai' ? 'AI Generated' : 'User Generated'}</div>
+                      </div>
+                      <h3 className="proposal-title">{proposal.title}</h3>
+                      <div className="proposal-company">Target: {proposal.company}</div>
+                      <p className="proposal-description">{proposal.description}</p>
+                      
+                      <div className="proposal-preview">
+                        <div className="proposal-impact">
+                          <strong>Potential Impact:</strong>
+                          <ul>
+                            {proposal.impact.map((impact, index) => (
+                              <li key={index}>{impact.metric}: {impact.value}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="proposal-footer">
+                          <div className="proposal-votes">
+                            <button 
+                              className={`vote-button ${votedProposals.includes(proposal.id) ? 'voted' : ''}`}
+                              onClick={() => handleVote(proposal.id)}
+                              disabled={votedProposals.includes(proposal.id)}
+                            >
+                              {votedProposals.includes(proposal.id) ? 'Voted' : 'Vote'} ({proposal.votes})
+                            </button>
+                          </div>
+                          <div className="proposal-tags">
+                            {proposal.tags.map(tag => (
+                              <span key={tag} className="tag">{tag}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'collaboration' && (
+            <>
+              <div className="filters-container">
+                <div className="search-bar">
+                  <input
+                    type="text"
+                    placeholder="Search opportunities"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="category-filters">
+                  <button 
+                    className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory('all')}
+                  >
+                    All
+                  </button>
+                  <button 
+                    className={`category-btn carbon ${selectedCategory === 'carbon' ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory('carbon')}
+                  >
+                    Carbon
+                  </button>
+                  <button 
+                    className={`category-btn water ${selectedCategory === 'water' ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory('water')}
+                  >
+                    Water
+                  </button>
+                  <button 
+                    className={`category-btn biodiversity ${selectedCategory === 'biodiversity' ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory('biodiversity')}
+                  >
+                    Biodiversity
+                  </button>
+                  <button 
+                    className={`category-btn circular ${selectedCategory === 'circular' ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory('circular')}
+                  >
+                    Circular Economy
+                  </button>
+                  <button 
+                    className={`category-btn social ${selectedCategory === 'social' ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory('social')}
+                  >
+                    Social Impact
+                  </button>
+                </div>
+              </div>
+              
+              <div className="incentives-grid">
+                {filteredIncentives.map(incentive => (
+                  <div key={incentive.id} className={`incentive-card ${incentive.category}`}>
+                    <div className="incentive-image" style={{ backgroundImage: `url(${incentive.imageUrl})` }}></div>
+                    <div className="incentive-content">
+                      <div className="incentive-category">{incentive.category}</div>
+                      <h3 className="incentive-title">{incentive.title}</h3>
+                      <div className="incentive-organization">{incentive.organization}</div>
+                      <p className="incentive-description">{incentive.description}</p>
+                      
+                      <div className="incentive-details">
+                        <div className="incentive-funding">
+                          <strong>Funding:</strong> {incentive.fundingAvailable}
+                        </div>
+                        <div className="incentive-deadline">
+                          <strong>Deadline:</strong> {incentive.deadline}
+                        </div>
+                      </div>
+                      
+                      <div className="incentive-criteria">
+                        <strong>Key Criteria:</strong>
+                        <ul>
+                          {incentive.criteria.map((criterion: string, index: number) => (
+                            <li key={index}>{criterion}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      
+                      <button className="apply-button">Apply for Collaboration</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {filteredIncentives.length === 0 && (
+                <div className="no-results">
+                  <h3>No collaboration opportunities found</h3>
+                  <p>Try adjusting your filters or search query</p>
+                </div>
+              )}
+              
+              <div className="propose-container">
+                <h2>Have an Idea?</h2>
+                <p>Propose your own environmental collaboration initiative and find partners</p>
+                <button className="propose-button">Propose Initiative</button>
+              </div>
+            </>
+          )}
         </div>
       </div>
+
+      <SubmitIdeaForm
+        isOpen={isSubmitFormOpen}
+        onClose={() => setIsSubmitFormOpen(false)}
+        onSubmit={handleSubmitIdea}
+      />
+
+      <SmallChangesForm 
+        isOpen={isSmallChangesFormOpen}
+        onClose={() => setIsSmallChangesFormOpen(false)}
+        onSubmit={handleSmallChangesSubmit}
+      />
+
+      <TransformativeForm
+        isOpen={isTransformativeFormOpen}
+        onClose={() => setIsTransformativeFormOpen(false)}
+        onSubmit={handleTransformativeSubmit}
+      />
     </div>
   );
 };

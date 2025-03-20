@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Project } from '../utils/projectData';
+import { Project } from '../../../models/project';
 import ProjectCard from './ProjectCard';
 import './ProjectsGrid.css';
 
@@ -16,7 +16,10 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
 
   return (
     <div className="projects-section">
-      <h2 className="section-title">Company Projects</h2>
+      <div className="projects-header">
+        <h2 className="section-title">Company Projects</h2>
+      </div>
+      
       <div className="projects-grid">
         {projects.slice(0, visibleProjects).map((project) => (
           <ProjectCard
@@ -33,7 +36,7 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
       {visibleProjects < projects.length && (
         <div className="load-more-container">
           <button className="load-more-button" onClick={handleLoadMore}>
-            Load more projects
+            Load more projects ({projects.length - visibleProjects} remaining)
           </button>
         </div>
       )}

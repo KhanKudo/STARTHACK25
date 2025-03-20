@@ -7,4 +7,12 @@ export interface Project {
   imageUrl: string;
   callToAction?: string;
   links?: string[];
+  status?: 'not-started' | 'in-progress' | 'completed' | 'on-hold';
+  category?: 'research' | 'infrastructure' | 'sustainability' | 'digital' | 'process';
+  priority?: 'low' | 'medium' | 'high' | 'critical';
+  timeline?: 'short-term' | 'medium-term' | 'long-term';
+  impactAreas?: ('carbon' | 'water' | 'waste' | 'energy' | 'biodiversity')[];
+  completionPercentage?: number;
+  estimatedReduction?: number;
+  tags?: string[];
 } 

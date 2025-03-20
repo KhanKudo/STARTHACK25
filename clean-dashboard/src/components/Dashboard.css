@@ -27,6 +27,11 @@
   align-items: center;
   position: relative;
   z-index: 5;
+  pointer-events: none;
+}
+
+.dashboard-content > * {
+  pointer-events: auto;
 }
 
 .hero-section {
@@ -38,6 +43,11 @@
   width: 100%;
   margin-bottom: 0;
   padding-bottom: 20px;
+  pointer-events: none;
+}
+
+.hero-section > * {
+  pointer-events: auto;
 }
 
 .hero-title {
