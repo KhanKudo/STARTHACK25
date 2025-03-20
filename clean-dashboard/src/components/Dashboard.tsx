@@ -35,21 +35,21 @@ const Dashboard: React.FC = () => {
       <div className="dashboard-content">
         <div className="hero-section">
           <div className="search-container">
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Search Projects" 
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-            />
             <img 
               src="/assets/ai.svg" 
               alt="AI" 
               className="ai-icon"
               style={{ 
                 opacity: searchFocused ? 1 : 0.7,
-                stroke: searchFocused ? 'var(--primary-red)' : '#3C3C3C',
+                color: searchFocused ? 'var(--primary-red)' : '#888',
               }}
+            />
+            <input 
+              type="text" 
+              className="search-input" 
+              placeholder="Search Projects" 
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
             />
           </div>
         </div>

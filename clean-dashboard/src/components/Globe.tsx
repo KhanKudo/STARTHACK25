@@ -12,55 +12,45 @@ const Globe: React.FC<GlobeProps> = ({
   className,
   config = GLOBE_CONFIG,
 }) => {
-  let phi = 0;
-  let width = 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointerInteracting = useRef<number | null>(null);
-  const pointerInteractionMovement = useRef(0);
-  const [r, setR] = useState(0);
+  const phi = useRef<number>(0);
+  const theta = useRef<number>(0);
+  const lastX = useRef<number | null>(null);
+  const lastY = useRef<number | null>(null);
+  const width = useRef<number>(0);
+  const isDragging = useRef<boolean>(false);
+  const globeInstance = useRef<any>(null);
 
-  const updatePointerInteraction = (value: number | null) => {
-    pointerInteracting.current = value;
+  const onResize = useCallback(() => {
     if (canvasRef.current) {
-      canvasRef.current.style.cursor = value !== null ? "grabbing" : "grab";
+      width.current = canvasRef.current.offsetWidth;
     }
-  };
-
-  const updateMovement = (clientX: number) => {
-    if (pointerInteracting.current !== null) {
-      const delta = clientX - pointerInteracting.current;
-      pointerInteractionMovement.current = delta;
-      setR(delta / 200);
-    }
-  };
-
-  const onRender = useCallback(
-    (state: Record<string, any>) => {
-      if (pointerInteracting.current === null) phi += 0.005;
-      state.phi = phi + r;
-      state.width = width * 2;
-      state.height = width * 2;
-    },
-    [r],
-  );
-
-  const onResize = () => {
-    if (canvasRef.current) {
-      width = canvasRef.current.offsetWidth;
-    }
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener("resize", onResize);
     onResize();
 
-    const globe = createGlobe(canvasRef.current!, {
+    const onRender = (state: any) => {
+      // Auto rotation if not being dragged
+      if (!isDragging.current) {
+        phi.current += 0.003;
+      }
+      
+      state.phi = phi.current;
+      state.theta = theta.current;
+      state.width = width.current * 2;
+      state.height = width.current * 2;
+    };
+
+    globeInstance.current = createGlobe(canvasRef.current!, {
       ...config,
-      width: width * 2,
-      height: width * 2,
+      width: width.current * 2,
+      height: width.current * 2,
       onRender,
     });
 
+    // Set opacity to 1 once loaded
     setTimeout(() => {
       if (canvasRef.current) {
         canvasRef.current.style.opacity = "1";
@@ -69,33 +59,53 @@ const Globe: React.FC<GlobeProps> = ({
     
     return () => {
       window.removeEventListener("resize", onResize);
-      globe.destroy();
+      if (globeInstance.current) {
+        globeInstance.current.destroy();
+      }
     };
-  }, []);
+  }, [config]);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDragging.current = true;
+    lastX.current = e.clientX;
+    lastY.current = e.clientY;
+    if (canvasRef.current) {
+      canvasRef.current.style.cursor = 'grabbing';
+    }
+  };
+
+  const handlePointerUp = () => {
+    isDragging.current = false;
+    lastX.current = null;
+    lastY.current = null;
+    if (canvasRef.current) {
+      canvasRef.current.style.cursor = 'grab';
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current || lastX.current === null || lastY.current === null) return;
+    
+    const deltaX = e.clientX - lastX.current;
+    const deltaY = e.clientY - lastY.current;
+    
+    // Update rotation based on drag amount
+    phi.current += deltaX * 0.005;
+    theta.current = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, theta.current + deltaY * 0.005));
+    
+    lastX.current = e.clientX;
+    lastY.current = e.clientY;
+  };
 
   return (
-    <div
-      className={cn(
-        "globe-inner-container",
-        className,
-      )}
-    >
-      <canvas
-        className={cn(
-          "globe-canvas-element",
-        )}
+    <div className={cn("globe-inner-container", className)}>
+      <canvas 
         ref={canvasRef}
-        onPointerDown={(e) =>
-          updatePointerInteraction(
-            e.clientX - pointerInteractionMovement.current,
-          )
-        }
-        onPointerUp={() => updatePointerInteraction(null)}
-        onPointerOut={() => updatePointerInteraction(null)}
-        onMouseMove={(e) => updateMovement(e.clientX)}
-        onTouchMove={(e) =>
-          e.touches[0] && updateMovement(e.touches[0].clientX)
-        }
+        className="globe-canvas-element"
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerOut={handlePointerUp}
+        onPointerMove={handlePointerMove}
       />
     </div>
   );
