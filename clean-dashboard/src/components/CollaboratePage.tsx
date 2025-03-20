@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import TopBar from './TopBar';
-import { PROPOSAL_DATA, Proposal } from '../utils/proposalData';
+import { EXAMPLE_PROPOSALS, Proposal } from '../utils/proposalData';
 import { COMPANY_DATA } from '../utils/companyData';
+import SubmitIdeaForm from './SubmitIdeaForm';
 import './CollaboratePage.css';
 
 interface IncentiveCard {
@@ -15,90 +16,6 @@ interface IncentiveCard {
   category: 'carbon' | 'water' | 'biodiversity' | 'social' | 'circular';
   imageUrl: string;
 }
-
-const EXAMPLE_PROPOSALS = [
-  {
-    id: '1',
-    title: 'Smart Energy Management System',
-    category: 'carbon',
-    source: 'ai',
-    targetCompany: 'Virgin Atlantic',
-    description: 'Implement AI-powered energy management system to optimize fuel consumption and reduce carbon emissions across the fleet.',
-    potentialImpact: [
-      { metric: 'Carbon Reduction', value: '15%' },
-      { metric: 'Cost Savings', value: '$2M/year' },
-      { metric: 'Efficiency Gain', value: '25%' }
-    ],
-    votes: 128,
-    tags: ['AI', 'Energy', 'Aviation'],
-    status: 'active',
-    createdAt: '2024-03-15'
-  },
-  {
-    id: '2',
-    title: 'Water Recycling Initiative',
-    category: 'water',
-    source: 'user',
-    targetCompany: 'Virgin Hotels',
-    description: 'Develop comprehensive water recycling system for hotel operations, including greywater treatment and reuse.',
-    potentialImpact: [
-      { metric: 'Water Savings', value: '40%' },
-      { metric: 'Cost Reduction', value: '$500K/year' }
-    ],
-    votes: 85,
-    tags: ['Water', 'Hotels', 'Recycling'],
-    status: 'active',
-    createdAt: '2024-03-14'
-  },
-  {
-    id: '3',
-    title: 'Biodiversity Conservation Program',
-    category: 'biodiversity',
-    source: 'ai',
-    targetCompany: 'Virgin Voyages',
-    description: 'Launch marine conservation program focusing on coral reef protection and marine life preservation in cruise destinations.',
-    potentialImpact: [
-      { metric: 'Species Protection', value: '50+' },
-      { metric: 'Reef Coverage', value: '30% increase' }
-    ],
-    votes: 156,
-    tags: ['Marine', 'Conservation', 'Cruise'],
-    status: 'active',
-    createdAt: '2024-03-13'
-  },
-  {
-    id: '4',
-    title: 'Circular Economy Platform',
-    category: 'circular',
-    source: 'user',
-    targetCompany: 'Virgin Mobile',
-    description: 'Create digital platform for device recycling and refurbishment, promoting circular economy in mobile devices.',
-    potentialImpact: [
-      { metric: 'Device Recycling', value: '1M/year' },
-      { metric: 'E-Waste Reduction', value: '60%' }
-    ],
-    votes: 92,
-    tags: ['Recycling', 'Digital', 'Mobile'],
-    status: 'active',
-    createdAt: '2024-03-12'
-  },
-  {
-    id: '5',
-    title: 'Community Solar Initiative',
-    category: 'social',
-    source: 'ai',
-    targetCompany: 'Virgin Money',
-    description: 'Develop community solar program providing renewable energy access to underserved communities.',
-    potentialImpact: [
-      { metric: 'Energy Access', value: '10K households' },
-      { metric: 'Job Creation', value: '200+' }
-    ],
-    votes: 145,
-    tags: ['Solar', 'Community', 'Energy'],
-    status: 'active',
-    createdAt: '2024-03-11'
-  }
-];
 
 const INCENTIVE_DATA: IncentiveCard[] = [
   {
@@ -200,13 +117,18 @@ const INCENTIVE_DATA: IncentiveCard[] = [
 ];
 
 const CollaboratePage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'proposals' | 'collaborate' | 'ideas'>('proposals');
+  const [activeTab, setActiveTab] = useState<'proposals' | 'collaboration'>('proposals');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showIdeaForm, setShowIdeaForm] = useState(false);
   const [expandedProposal, setExpandedProposal] = useState<string | null>(null);
+  const [isSubmitFormOpen, setIsSubmitFormOpen] = useState(false);
+  const [proposals, setProposals] = useState<Proposal[]>(EXAMPLE_PROPOSALS);
 
-  const filteredProposals = EXAMPLE_PROPOSALS.filter(proposal => {
+  const recommendedProposals = proposals.filter(proposal => proposal.isRecommended);
+  const allProposals = proposals.filter(proposal => !proposal.isRecommended);
+
+  const filteredProposals = proposals.filter(proposal => {
     if (selectedCategory !== 'all' && proposal.category !== selectedCategory) {
       return false;
     }
@@ -216,7 +138,7 @@ const CollaboratePage: React.FC = () => {
       return (
         proposal.title.toLowerCase().includes(query) ||
         proposal.description.toLowerCase().includes(query) ||
-        proposal.targetCompany.toLowerCase().includes(query)
+        proposal.company.toLowerCase().includes(query)
       );
     }
     
@@ -255,6 +177,19 @@ const CollaboratePage: React.FC = () => {
     setExpandedProposal(expandedProposal === proposalId ? null : proposalId);
   };
 
+  const handleSubmitIdea = (newIdea: Omit<Proposal, 'id' | 'votes' | 'status' | 'createdAt' | 'source'>) => {
+    const proposal: Proposal = {
+      ...newIdea,
+      id: `proposal-${Date.now()}`,
+      votes: 0,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      source: 'user',
+      isRecommended: false
+    };
+    setProposals(prev => [...prev, proposal]);
+  };
+
   return (
     <div className="collaborate-page">
       <div className="top-bar-container">
@@ -275,20 +210,156 @@ const CollaboratePage: React.FC = () => {
             Proposals
           </button>
           <button 
-            className={`tab-btn ${activeTab === 'collaborate' ? 'active' : ''}`}
-            onClick={() => setActiveTab('collaborate')}
+            className={`tab-btn ${activeTab === 'collaboration' ? 'active' : ''}`}
+            onClick={() => setActiveTab('collaboration')}
           >
-            Collaborate
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'ideas' ? 'active' : ''}`}
-            onClick={() => setActiveTab('ideas')}
-          >
-            Ideas
+            Collaboration
           </button>
         </div>
 
-        {activeTab === 'collaborate' && (
+        {activeTab === 'proposals' && (
+          <div className="proposals-section">
+            <div className="recommended-container">
+              <div className="recommended-section">
+                <h2 className="section-title">Recommended Proposals</h2>
+                <div className="proposals-grid">
+                  {recommendedProposals.map(proposal => (
+                    <div 
+                      key={proposal.id} 
+                      className={`proposal-card ${proposal.category} ${expandedProposal === proposal.id ? 'expanded' : ''}`}
+                      onClick={() => toggleProposalExpansion(proposal.id)}
+                    >
+                      <div className="proposal-header">
+                        <div className="proposal-category">{proposal.category}</div>
+                        <div className="proposal-source">{proposal.source === 'ai' ? 'AI Generated' : 'User Generated'}</div>
+                      </div>
+                      <h3 className="proposal-title">{proposal.title}</h3>
+                      <div className="proposal-company">Target: {proposal.company}</div>
+                      <p className="proposal-description">{proposal.description}</p>
+                      
+                      <div className="proposal-preview">
+                        <div className="proposal-impact">
+                          <strong>Potential Impact:</strong>
+                          <ul>
+                            {proposal.impact.slice(0, expandedProposal === proposal.id ? undefined : 2).map((impact, index) => (
+                              <li key={index}>{impact.metric}: {impact.value}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="proposal-footer">
+                          <div className="proposal-votes">
+                            <button 
+                              className="vote-button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleVote(proposal.id);
+                              }}
+                            >
+                              Vote ({proposal.votes})
+                            </button>
+                          </div>
+                          <div className="proposal-tags">
+                            {proposal.tags.slice(0, expandedProposal === proposal.id ? undefined : 2).map(tag => (
+                              <span key={tag} className="tag">{tag}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="idea-tab">
+                <div className="idea-header">
+                  <span className="lightbulb-icon">💡</span>
+                  <h2>Got an Idea?</h2>
+                </div>
+                <div className="idea-content">
+                  <p className="idea-intro">Every great change starts with an idea</p>
+                  <div className="idea-blocks">
+                    <div className="idea-block">
+                      <div className="idea-block-icon">🎯</div>
+                      <div className="idea-block-content">
+                        <h3>Small Changes, Big Impact</h3>
+                        <p>From quick fixes to efficiency improvements, every idea counts</p>
+                      </div>
+                    </div>
+                    <div className="idea-block">
+                      <div className="idea-block-icon">🌱</div>
+                      <div className="idea-block-content">
+                        <h3>Transformative Solutions</h3>
+                        <p>Share your vision for tackling major sustainability challenges</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  className="propose-button"
+                  onClick={() => setIsSubmitFormOpen(true)}
+                >
+                  Submit Your Idea
+                </button>
+              </div>
+            </div>
+
+            <div className="all-proposals-container">
+              <div className="all-proposals-section">
+                <h2 className="section-title">All Proposals</h2>
+                <div className="proposals-grid">
+                  {allProposals.map(proposal => (
+                    <div 
+                      key={proposal.id} 
+                      className={`proposal-card ${proposal.category} ${expandedProposal === proposal.id ? 'expanded' : ''}`}
+                      onClick={() => toggleProposalExpansion(proposal.id)}
+                    >
+                      <div className="proposal-header">
+                        <div className="proposal-category">{proposal.category}</div>
+                        <div className="proposal-source">{proposal.source === 'ai' ? 'AI Generated' : 'User Generated'}</div>
+                      </div>
+                      <h3 className="proposal-title">{proposal.title}</h3>
+                      <div className="proposal-company">Target: {proposal.company}</div>
+                      <p className="proposal-description">{proposal.description}</p>
+                      
+                      <div className="proposal-preview">
+                        <div className="proposal-impact">
+                          <strong>Potential Impact:</strong>
+                          <ul>
+                            {proposal.impact.slice(0, expandedProposal === proposal.id ? undefined : 2).map((impact, index) => (
+                              <li key={index}>{impact.metric}: {impact.value}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="proposal-footer">
+                          <div className="proposal-votes">
+                            <button 
+                              className="vote-button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleVote(proposal.id);
+                              }}
+                            >
+                              Vote ({proposal.votes})
+                            </button>
+                          </div>
+                          <div className="proposal-tags">
+                            {proposal.tags.slice(0, expandedProposal === proposal.id ? undefined : 2).map(tag => (
+                              <span key={tag} className="tag">{tag}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'collaboration' && (
           <>
             <div className="filters-container">
               <div className="search-bar">
@@ -388,161 +459,13 @@ const CollaboratePage: React.FC = () => {
             </div>
           </>
         )}
-
-        {activeTab === 'proposals' && (
-          <div className="proposals-section">
-            <div className="recommended-container">
-              <div className="recommended-section">
-                <h2 className="section-title">Recommended Proposals</h2>
-                <div className="proposals-grid">
-                  {filteredProposals.slice(0, 2).map(proposal => (
-                    <div 
-                      key={proposal.id} 
-                      className={`proposal-card ${proposal.category} ${expandedProposal === proposal.id ? 'expanded' : ''}`}
-                      onClick={() => toggleProposalExpansion(proposal.id)}
-                    >
-                      <div className="proposal-header">
-                        <div className="proposal-category">{proposal.category}</div>
-                        <div className="proposal-source">{proposal.source === 'ai' ? 'AI Generated' : 'User Proposal'}</div>
-                      </div>
-                      <h3 className="proposal-title">{proposal.title}</h3>
-                      <div className="proposal-company">Target: {proposal.targetCompany}</div>
-                      <p className="proposal-description">{proposal.description}</p>
-                      
-                      <div className="proposal-preview">
-                        <div className="proposal-impact">
-                          <strong>Potential Impact:</strong>
-                          <ul>
-                            {proposal.potentialImpact.slice(0, expandedProposal === proposal.id ? undefined : 2).map((impact, index) => (
-                              <li key={index}>{impact.metric}: {impact.value}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        
-                        <div className="proposal-footer">
-                          <div className="proposal-votes">
-                            <button 
-                              className="vote-button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(proposal.id);
-                              }}
-                            >
-                              Vote ({proposal.votes})
-                            </button>
-                          </div>
-                          <div className="proposal-tags">
-                            {proposal.tags.slice(0, expandedProposal === proposal.id ? undefined : 2).map(tag => (
-                              <span key={tag} className="tag">{tag}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="idea-tab">
-                <div className="idea-header">
-                  <span className="lightbulb-icon">💡</span>
-                  <h2>Got an Idea?</h2>
-                </div>
-                <div className="idea-content">
-                  <p className="idea-intro">Every great change starts with an idea</p>
-                  <div className="idea-blocks">
-                    <div className="idea-block">
-                      <div className="idea-block-icon">🎯</div>
-                      <div className="idea-block-content">
-                        <h3>Small Changes, Big Impact</h3>
-                        <p>From quick fixes to efficiency improvements, every idea counts</p>
-                      </div>
-                    </div>
-                    <div className="idea-block">
-                      <div className="idea-block-icon">🌱</div>
-                      <div className="idea-block-content">
-                        <h3>Transformative Solutions</h3>
-                        <p>Share your vision for tackling major sustainability challenges</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <button 
-                  className="propose-button"
-                  onClick={() => setShowIdeaForm(true)}
-                >
-                  Submit Your Idea
-                </button>
-              </div>
-            </div>
-
-            <div className="all-proposals-container">
-              <div className="all-proposals-section">
-                <h2 className="section-title">All Proposals</h2>
-                <div className="proposals-grid">
-                  {filteredProposals.slice(2).map(proposal => (
-                    <div 
-                      key={proposal.id} 
-                      className={`proposal-card ${proposal.category} ${expandedProposal === proposal.id ? 'expanded' : ''}`}
-                      onClick={() => toggleProposalExpansion(proposal.id)}
-                    >
-                      <div className="proposal-header">
-                        <div className="proposal-category">{proposal.category}</div>
-                        <div className="proposal-source">{proposal.source === 'ai' ? 'AI Generated' : 'User Proposal'}</div>
-                      </div>
-                      <h3 className="proposal-title">{proposal.title}</h3>
-                      <div className="proposal-company">Target: {proposal.targetCompany}</div>
-                      <p className="proposal-description">{proposal.description}</p>
-                      
-                      <div className="proposal-preview">
-                        <div className="proposal-impact">
-                          <strong>Potential Impact:</strong>
-                          <ul>
-                            {proposal.potentialImpact.slice(0, expandedProposal === proposal.id ? undefined : 2).map((impact, index) => (
-                              <li key={index}>{impact.metric}: {impact.value}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        
-                        <div className="proposal-footer">
-                          <div className="proposal-votes">
-                            <button 
-                              className="vote-button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(proposal.id);
-                              }}
-                            >
-                              Vote ({proposal.votes})
-                            </button>
-                          </div>
-                          <div className="proposal-tags">
-                            {proposal.tags.slice(0, expandedProposal === proposal.id ? undefined : 2).map(tag => (
-                              <span key={tag} className="tag">{tag}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'ideas' && (
-          <div className="ideas-section">
-            <div className="ideas-grid">
-              {/* TODO: Implement ideas grid */}
-              <div className="placeholder-message">
-                <h3>No ideas found</h3>
-                <p>Be the first to propose an idea</p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
+
+      <SubmitIdeaForm
+        isOpen={isSubmitFormOpen}
+        onClose={() => setIsSubmitFormOpen(false)}
+        onSubmit={handleSubmitIdea}
+      />
     </div>
   );
 };
