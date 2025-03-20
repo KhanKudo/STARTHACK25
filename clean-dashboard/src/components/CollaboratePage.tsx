@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TopBar from './TopBar';
-import { EXAMPLE_PROPOSALS, Proposal } from '../utils/proposalData';
+import { proposalData, Proposal } from '../utils/proposalData';
 import { COMPANY_DATA } from '../utils/companyData';
 import SubmitIdeaForm from './SubmitIdeaForm';
 import SmallChangesForm, { SmallChangesData } from './SmallChangesForm';
@@ -127,7 +127,7 @@ const CollaboratePage: React.FC = () => {
   const [isSubmitFormOpen, setIsSubmitFormOpen] = useState(false);
   const [isSmallChangesFormOpen, setIsSmallChangesFormOpen] = useState(false);
   const [isTransformativeFormOpen, setIsTransformativeFormOpen] = useState(false);
-  const [proposals, setProposals] = useState<Proposal[]>(EXAMPLE_PROPOSALS);
+  const [proposals, setProposals] = useState<Proposal[]>(proposalData);
   const [votedProposals, setVotedProposals] = useState<string[]>([]);
 
   // Load voted proposals from localStorage on component mount
