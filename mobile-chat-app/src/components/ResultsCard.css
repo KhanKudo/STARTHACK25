@@ -1,10 +1,8 @@
 .results-card {
   position: relative;
   width: 100%;
-  margin-bottom: 16px;
-  background-color: white;
+  background-color: transparent;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -48,7 +46,6 @@
 
 .results-card-title {
   margin: 0 0 12px 0;
-  font-size: 1.2rem;
   color: #333;
 }
 
@@ -57,6 +54,7 @@
   color: #555;
   margin: 0 0 16px 0;
   line-height: 1.4;
+  text-align: left;
 }
 
 .chat-button {
@@ -88,25 +86,25 @@
 
 .matched-topics {
   margin-top: 10px;
-  padding: 8px 12px;
-  background-color: rgba(240, 240, 240, 0.8);
-  border-radius: 8px;
+  margin-bottom: 16px;
   font-size: 0.9rem;
 }
 
-.matched-topics h4 {
-  margin: 0 0 5px 0;
-  font-size: 1rem;
-  color: #333;
+.interests-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.matched-topics ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.matched-topics li {
-  margin-bottom: 3px;
+.interest-card {
+  background-color: white;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  font-weight: 500;
 }
 
 .match-result {
