@@ -78,4 +78,128 @@
   text-align: center;
   font-size: 0.9rem;
   color: #666;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  z-index: 5;
+}
+
+.swipe-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1.5rem;
+}
+
+.action-button {
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.action-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.like-button {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.dislike-button {
+  background-color: #F44336;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.skip-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #aaa;
+  color: white;
+  border-radius: 20px;
+  height: 40px;
+  width: 80px;
+  font-size: 0.9rem;
+}
+
+.action-icon {
+  font-size: 1.8rem;
+}
+
+.no-matches {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.match-result {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.match-result:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+}
+
+.search-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  padding: 0 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: white;
+}
+
+.search-input:focus {
+  border-color: #e50051;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-size: 1rem;
+  background: #f7f7f7;
+  border-radius: 8px;
+  margin: 20px 0;
 } 

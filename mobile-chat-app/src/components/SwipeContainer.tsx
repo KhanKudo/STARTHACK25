@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SwipeCard, { CardData } from './SwipeCard';
 import './SwipeContainer.css';
 import ResultsCard from './ResultsCard';
@@ -308,12 +309,14 @@ interface Choice {
 }
 
 const SwipeContainer: React.FC = () => {
+  const navigate = useNavigate();
   const [cards, setCards] = useState<CardData[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [choices, setChoices] = useState<Choice[]>([]);
   const [completed, setCompleted] = useState(false);
   const [topMatches, setTopMatches] = useState<any[]>([]);
   const [likedTopics, setLikedTopics] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Load viewed cards from localStorage
   useEffect(() => {
@@ -347,7 +350,7 @@ const SwipeContainer: React.FC = () => {
       
       if (remainingCards.length === 0) {
         setCompleted(true);
-        // Calculate top matches
+        // Calculate matched projects
         findTopMatches();
       } else {
         setCards(remainingCards);
@@ -508,14 +511,48 @@ const SwipeContainer: React.FC = () => {
     setCards(newRandomTopics);
   };
 
+  const handleChatClick = (projectId: string) => {
+    navigate(`/chat/${projectId}`);
+  };
+
   if (completed) {
+    const displayCards = localStorage.getItem('topic-swipe-skipped') === 'true' 
+      ? Object.keys(initiativeMap).map((initiative, index) => ({
+          initiative,
+          matchScore: 0,
+          details: initiativeDetails[initiative],
+          matchedTopics: []
+        }))
+      : topMatches;
+
+    const filteredCards = displayCards.filter(card => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        card.initiative.toLowerCase().includes(searchLower) ||
+        card.details.company.toLowerCase().includes(searchLower) ||
+        card.details.challenge.toLowerCase().includes(searchLower) ||
+        card.details.description.toLowerCase().includes(searchLower) ||
+        card.matchedTopics.some((topic: string) => topic.toLowerCase().includes(searchLower))
+      );
+    });
+
     return (
       <div className="swipe-container">
         <div className="results-container">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search initiatives..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          
           {likedTopics && likedTopics.length === 0 ? (
             <>
               <h2>Discover Virgin Initiatives</h2>
-              <p>Here are some random initiatives that might interest you:</p>
+              <p>Here are some initiatives that might interest you:</p>
             </>
           ) : (
             <>
@@ -524,8 +561,8 @@ const SwipeContainer: React.FC = () => {
             </>
           )}
           
-          <div className="results-list">
-            {topMatches.map((match, index) => (
+          <div className="results-grid">
+            {filteredCards.map((match, index) => (
               <div key={match.initiative} className="match-result">
                 <ResultsCard 
                   project={{
@@ -539,6 +576,7 @@ const SwipeContainer: React.FC = () => {
                     }
                   }} 
                   rank={index + 1} 
+                  onChatClick={handleChatClick}
                 />
                 {match.matchedTopics.length > 0 && (
                   <div className="matched-topics">
@@ -553,6 +591,12 @@ const SwipeContainer: React.FC = () => {
               </div>
             ))}
           </div>
+          
+          {filteredCards.length === 0 && (
+            <div className="no-results">
+              No initiatives found matching your search.
+            </div>
+          )}
           
           {likedTopics && likedTopics.length === 0 && (
             <div className="discovery-hint">

@@ -3,21 +3,34 @@
   background-color: #f8f8f8;
   border-bottom: 1px solid #e0e0e0;
   z-index: 5;
+  position: relative;
+  padding-top: 8px;
 }
 
 .status-bar {
   display: flex;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 2px 30px;
   font-size: 0.8rem;
   color: #333;
   background-color: transparent;
-  margin-top: 30px; /* Space for the notch */
+  height: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 6;
 }
 
 .status-bar-icons {
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+.status-bar-battery {
+  display: flex;
+  align-items: center;
 }
 
 .mobile-top-bar-content {
@@ -26,10 +39,12 @@
   justify-content: center;
   height: 44px;
   padding: 0 16px;
+  margin-top: 14px;
 }
 
 .mobile-top-bar-title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #333;
+  text-align: center;
 } 
