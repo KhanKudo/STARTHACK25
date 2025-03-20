@@ -697,17 +697,21 @@ const SwipeContainer: React.FC = () => {
               Community
             </button>
         </div>
-        <GlobeContainer />
-        <div className="results-container">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search initiatives..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-          </div>
+        {activeNav === 'projects' && (
+          <GlobeContainer />
+        )}
+        <div className="results-container" style={{marginTop: activeNav === 'projects' ? '165px' : '0px', paddingTop: activeNav === 'projects' ? '4px' : '0px'}}>
+          {activeNav === 'projects' && (
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search initiatives..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+            </div>
+          )}
           
           {activeNav === 'projects' && (
             <>
