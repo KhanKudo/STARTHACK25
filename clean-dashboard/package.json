@@ -17,6 +17,7 @@
     "@types/react-dom": "^19.0.4",
     "@types/react-router-dom": "^5.3.3",
     "@types/three": "^0.174.0",
+    "axios": "^1.8.4",
     "cobe": "^0.6.3",
     "framer-motion": "^12.5.0",
     "node-fetch": "^3.3.2",
