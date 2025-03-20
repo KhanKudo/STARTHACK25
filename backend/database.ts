@@ -28,7 +28,38 @@ function addProject(name: string, description: string): void {
     let candidate = Math.random()%1000000;
     // @ts-ignore
     if (!projects.find((x: Project) => x.projectId === candidate)) {
-        projects.push({projectId: candidate, projectName: name, projectDescription: description})
+        projects.push({
+            id: candidate.toString(),
+            company: "Default Company",
+            initiative: name,
+            challenge: "Default Challenge",
+            description: description,
+            imageUrl: "https://example.com/default.jpg"
+        })
+    }
+}
+
+function addProjectWithDetails(
+    company: string,
+    initiative: string,
+    challenge: string,
+    description: string,
+    imageUrl: string,
+    callToAction?: string,
+    links?: string[]
+): void {
+    let candidate = Math.random()%1000000;
+    if (!projects.find((x: Project) => x.id === candidate.toString())) {
+        projects.push({
+            id: candidate.toString(),
+            company,
+            initiative,
+            challenge,
+            description,
+            imageUrl,
+            callToAction,
+            links
+        });
     }
 }
 

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "..",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "..",
+    "paths": {
+      "*": ["node_modules/*", "backend/src/*", "models/*"]
+    }
+  },
+  "include": ["src/**/*", "../models/**/*"],
+  "exclude": ["node_modules"]
+} 
