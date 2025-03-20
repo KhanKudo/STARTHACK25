@@ -4,6 +4,7 @@ import SwipeCard, { CardData } from './SwipeCard';
 import './SwipeContainer.css';
 import ResultsCard from './ResultsCard';
 import GlobeContainer from './GlobeContainer';
+import SimpleMap, { Location } from './SimpleMap';
 
 // Extend the CardData interface to include matchedTopics
 interface ExtendedCardData extends CardData {
@@ -301,6 +302,90 @@ interface Choice {
   timestamp: number;
 }
 
+// Add St. Gallen sustainability locations data
+const stGallenLocations: Location[] = [
+  {
+    id: 1,
+    name: "Entsorgungspark Hagenbüchli",
+    type: "recycling",
+    position: [47.4284, 9.3693],
+    address: "Hagenbüchlistrasse, 9016 St. Gallen",
+    description: "Main recycling center with facilities for various materials."
+  },
+  {
+    id: 2,
+    name: "Recyhof Altstadt",
+    type: "recycling",
+    position: [47.4230, 9.3756],
+    address: "Gallusstrasse 6, 9000 St. Gallen",
+    description: "City center recycling station for paper, glass, and metal."
+  },
+  {
+    id: 3,
+    name: "EV Charging - Shopping Arena",
+    type: "ev-charging",
+    position: [47.4130, 9.3665],
+    address: "Lerchentalstrasse 40, 9014 St. Gallen",
+    description: "Multiple charging points at Shopping Arena mall parking."
+  },
+  {
+    id: 4, 
+    name: "EV Charging - St. Gallen Train Station",
+    type: "ev-charging",
+    position: [47.4227, 9.3708],
+    address: "Bahnhofplatz, 9000 St. Gallen",
+    description: "Fast charging stations near the main train station."
+  },
+  {
+    id: 5,
+    name: "Unverpackt St. Gallen",
+    type: "zero-waste",
+    position: [47.4247, 9.3742],
+    address: "Spisergasse 9, 9000 St. Gallen",
+    description: "Zero waste store offering package-free grocery shopping."
+  },
+  {
+    id: 6,
+    name: "Familiengärten Dreilinden",
+    type: "garden",
+    position: [47.4312, 9.3802],
+    address: "Dreilindenstrasse, 9000 St. Gallen",
+    description: "Community garden plots available for local residents."
+  },
+  {
+    id: 7,
+    name: "EV Charging - Olma Messen",
+    type: "ev-charging",
+    position: [47.4181, 9.3796],
+    address: "Splügenstrasse 12, 9008 St. Gallen",
+    description: "Charging stations at the exhibition center."
+  },
+  {
+    id: 8,
+    name: "Interkultureller Garten",
+    type: "garden",
+    position: [47.4156, 9.3598],
+    address: "Lindenstrasse 85, 9016 St. Gallen",
+    description: "Intercultural community garden with diverse growing projects."
+  },
+  {
+    id: 9,
+    name: "Bio Laden St. Gallen",
+    type: "zero-waste",
+    position: [47.4259, 9.3730],
+    address: "Multergasse 22, 9000 St. Gallen",
+    description: "Organic store with minimal packaging options."
+  },
+  {
+    id: 10,
+    name: "Entsorgungsstelle Neudorf",
+    type: "recycling",
+    position: [47.4339, 9.3874],
+    address: "Neudorfstrasse, 9008 St. Gallen",
+    description: "Neighborhood recycling collection point."
+  }
+];
+
 const SwipeContainer: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -316,6 +401,7 @@ const SwipeContainer: React.FC = () => {
   const [nextBadge, setNextBadge] = useState({ name: 'Eco Champion', progress: 70, remaining: 250 });
   const [viewedCards, setViewedCards] = useState<ExtendedCardData[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [viewMode, setViewMode] = useState<'matches' | 'location'>('matches'); // Add view mode state
   
   // Add refs for the navbar drag scroll functionality
   const navRef = useRef<HTMLDivElement>(null);
@@ -351,7 +437,7 @@ const SwipeContainer: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    if (tab && ['projects', 'badges', 'leaderboard', 'community'].includes(tab)) {
+    if (tab && ['projects', 'badges', 'leaderboard', 'community', 'news', 's-map'].includes(tab)) {
       setActiveNav(tab);
     }
   }, [location]);
@@ -643,6 +729,26 @@ const SwipeContainer: React.FC = () => {
     navigate(`/discussion/${discussionId}`);
   };
 
+  // Function to sort projects by location (St. Gallen proximity)
+  const sortProjectsByLocation = (projects: any[]) => {
+    // St. Gallen coordinates
+    const stGallenCoords = [47.4244, 9.3767];
+    
+    // For the location view, we'll use a different set of projects
+    // This creates a mix of different projects than what's shown in matches view
+    const locationProjects = Object.keys(initiativeMap)
+      .filter((_, index) => index % 2 === (projects[0]?.matchScore > 0 ? 1 : 0)) // Show different set based on if there are matches
+      .map(initiative => ({
+        initiative,
+        matchScore: 0,
+        details: initiativeDetails[initiative],
+        matchedTopics: []
+      }));
+
+    // Sort them by (simulated) proximity to St. Gallen
+    return locationProjects.sort(() => Math.random() - 0.5);
+  };
+
   if (completed) {
     const displayCards = localStorage.getItem('topic-swipe-skipped') === 'true' 
       ? Object.keys(initiativeMap).map((initiative, index) => ({
@@ -653,7 +759,12 @@ const SwipeContainer: React.FC = () => {
         }))
       : topMatches;
 
-    const filteredCards = displayCards.filter(card => {
+    // Apply view mode sorting
+    const sortedDisplayCards = viewMode === 'location' 
+      ? sortProjectsByLocation(displayCards)
+      : displayCards;
+
+    const filteredCards = sortedDisplayCards.filter(card => {
       const searchLower = searchQuery.toLowerCase();
       return (
         card.initiative.toLowerCase().includes(searchLower) ||
@@ -702,6 +813,12 @@ const SwipeContainer: React.FC = () => {
             >
               News
             </button>
+            <button 
+              className={`nav-button ${activeNav === 's-map' ? 'active' : ''}`}
+              onClick={() => setActiveNav('s-map')}
+            >
+              S-Map
+            </button>
         </div>
         {activeNav === 'projects' && (
           <GlobeContainer />
@@ -722,16 +839,40 @@ const SwipeContainer: React.FC = () => {
           {activeNav === 'projects' && (
             <>
           {likedTopics && likedTopics.length === 0 ? (
-            <>
+            <div className="section-header">
+              <div className="view-mode-selector">
+                <select 
+                  value={viewMode} 
+                  onChange={(e) => setViewMode(e.target.value as 'matches' | 'location')}
+                  className="view-mode-dropdown"
+                >
+                  <option value="matches">Matches</option>
+                  <option value="location">Location</option>
+                </select>
+              </div>
               <h2>Discover Virgin Initiatives</h2>
-              <p>Here are some initiatives that might interest you:</p>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="section-header">
+              <div className="view-mode-selector">
+                <select 
+                  value={viewMode} 
+                  onChange={(e) => setViewMode(e.target.value as 'matches' | 'location')}
+                  className="view-mode-dropdown"
+                >
+                  <option value="matches">Matches</option>
+                  <option value="location">Location</option>
+                </select>
+              </div>
               <h2>Your Top Initiative Matches</h2>
-              <p>Based on your interests, these Virgin initiatives align with your values:</p>
-            </>
+            </div>
           )}
+          
+          <p>
+            {viewMode === 'matches' 
+              ? 'Based on your interests, these Virgin initiatives align with your values:' 
+              : 'Initiatives near St. Gallen, sorted by proximity:'}
+          </p>
           
           <div className="results-grid">
             {filteredCards.map((match, index) => (
@@ -1127,6 +1268,55 @@ const SwipeContainer: React.FC = () => {
               <button className="view-more-button">
                 View More Articles
               </button>
+            </div>
+          )}
+          
+          {activeNav === 's-map' && (
+            <div className="sustainability-map-container">
+              <h2>Sustainability Map - St. Gallen</h2>
+              <p>Find recycling centers, EV charging stations, zero-waste stores, and community gardens near you.</p>
+              
+              <div className="map-filter-container">
+                <div className="map-legend">
+                  <div className="legend-item">
+                    <div className="legend-icon recycling"></div>
+                    <span>Recycling Centers</span>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-icon ev-charging"></div>
+                    <span>EV Charging</span>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-icon zero-waste"></div>
+                    <span>Zero-Waste Stores</span>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-icon garden"></div>
+                    <span>Community Gardens</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="map-wrapper">
+                <SimpleMap 
+                  locations={stGallenLocations}
+                  center={[47.4244, 9.3767]}
+                />
+              </div>
+              
+              <div className="location-list">
+                <h3>All Sustainable Locations</h3>
+                {stGallenLocations.map((location) => (
+                  <div key={location.id} className={`location-item ${location.type}`}>
+                    <div className="location-icon"></div>
+                    <div className="location-details">
+                      <h4 className="location-name">{location.name}</h4>
+                      <p className="location-address">{location.address}</p>
+                      <p className="location-description">{location.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           
