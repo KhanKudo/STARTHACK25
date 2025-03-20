@@ -206,7 +206,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Unite',
     challenge: 'Rural communities often lack access to education, healthcare, and sustainable economic opportunities.',
     description: 'The Eve Branson Foundation supports rural communities by providing education, healthcare, and sustainable livelihood opportunities, empowering local artisans and entrepreneurs while preserving cultural heritage.',
-    imageUrl: 'https://evebransonfoundation.org.uk/assets/ebf-body-bg.svg'
+    imageUrl:'https://images.ctfassets.net/r2st2lg2cc7t/1dusneX7KiolA16b9qLoLZ/095eda3007130eff019e05d366a248b7/eve_crafthouse_balcony.jpg?q=75&w=1500'
   },
   'Virgin Unite - Unite BVI': {
     company: 'Virgin Unite',
