@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import ProjectDetails from './components/ProjectDetails';
 import ChatPage from './components/ChatPage';
+import CollaboratePage from './components/CollaboratePage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/project/:projectId" element={<ProjectDetails />} />
           <Route path="/chat/:projectId" element={<ChatPage />} />
+          <Route path="/collaborate" element={<CollaboratePage />} />
         </Routes>
       </div>
     </Router>

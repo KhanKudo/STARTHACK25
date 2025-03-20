@@ -57,10 +57,12 @@
   cursor: pointer;
   font-weight: 500;
   transition: color 0.2s ease;
+  border-radius: 4px;
 }
 
 .nav-item:hover {
   color: var(--primary-red);
+  background-color: rgba(230, 30, 42, 0.05);
 }
 
 .add-project-btn {
