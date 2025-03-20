@@ -2,6 +2,11 @@
 ## Team fold
 Oliver Birringer, Felix Fidler, Dominik Rzecki, Luka Milenkovic
 
+Aktuellsten Anforderungen/Feedback 19:19 Thu:
+1. Employee-Employee Chatting
+2. Mobile Project Details Pages missing "Get Involved" Button
+3. 'Near Me' on Mobile, ideally with Globe Visual to capture the lively buzz
+
 Möglichkeiten: 
 
 ## Case 2 - UN
