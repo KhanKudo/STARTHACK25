@@ -115,15 +115,15 @@ const GlobeContainer: React.FC = () => {
   };
 
   return (
-    <div className="globe-container" style={{ pointerEvents: 'all' }}>
-      <div className="globe-wrapper" style={{ pointerEvents: 'all' }}>
+    // <div className="globe-container" style={{ pointerEvents: 'all' }}>
+    //   <div className="globe-wrapper" style={{ pointerEvents: 'all' }}>
         <World
           globeConfig={globeConfig}
           data={arcData}
           onPointClick={handlePointClick}
         />
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 };
 

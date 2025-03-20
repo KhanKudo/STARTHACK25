@@ -622,29 +622,28 @@ const SwipeContainer: React.FC = () => {
 
     return (
       <div className="swipe-container">
+        <div className="results-nav">
+          <button 
+            className={`nav-button ${activeNav === 'projects' ? 'active' : ''}`}
+            onClick={() => setActiveNav('projects')}
+          >
+            Projects
+          </button>
+          <button 
+            className={`nav-button ${activeNav === 'badges' ? 'active' : ''}`}
+            onClick={() => setActiveNav('badges')}
+          >
+            My Badges
+          </button>
+          <button 
+            className={`nav-button ${activeNav === 'leaderboard' ? 'active' : ''}`}
+            onClick={() => setActiveNav('leaderboard')}
+          >
+            Leaderboard
+          </button>
+        </div>
         <GlobeContainer />
         <div className="results-container">
-          <div className="results-nav">
-            <button 
-              className={`nav-button ${activeNav === 'projects' ? 'active' : ''}`}
-              onClick={() => setActiveNav('projects')}
-            >
-              Projects
-            </button>
-            <button 
-              className={`nav-button ${activeNav === 'badges' ? 'active' : ''}`}
-              onClick={() => setActiveNav('badges')}
-            >
-              My Badges
-            </button>
-            <button 
-              className={`nav-button ${activeNav === 'leaderboard' ? 'active' : ''}`}
-              onClick={() => setActiveNav('leaderboard')}
-            >
-              Leaderboard
-            </button>
-          </div>
-          
           <div className="search-container">
             <input
               type="text"
