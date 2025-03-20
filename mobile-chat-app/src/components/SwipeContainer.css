@@ -122,7 +122,10 @@
 }
 
 .skip-button {
-  background-color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #aaa;
   color: white;
   border-radius: 20px;
   height: 40px;
