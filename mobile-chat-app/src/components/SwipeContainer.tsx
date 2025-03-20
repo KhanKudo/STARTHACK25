@@ -315,17 +315,45 @@ const SwipeContainer: React.FC = () => {
   const [viewedCards, setViewedCards] = useState<ExtendedCardData[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  // Load viewed cards from localStorage
+  // Load viewed cards and calculated matches from localStorage
   useEffect(() => {
     try {
       const savedChoices = localStorage.getItem('topic-swipe-choices');
       const savedSkipped = localStorage.getItem('topic-swipe-skipped');
       const completedSwipe = localStorage.getItem('swipe-completed');
+      const savedLikedTopics = localStorage.getItem('liked-topics');
+      const savedMatches = localStorage.getItem('calculated-matches');
+      
+      // Restore liked topics if available
+      if (savedLikedTopics) {
+        try {
+          const parsedLikedTopics = JSON.parse(savedLikedTopics);
+          if (Array.isArray(parsedLikedTopics)) {
+            setLikedTopics(parsedLikedTopics);
+          }
+        } catch (e) {
+          console.error('Error parsing saved liked topics:', e);
+        }
+      }
       
       // Check if user has already completed swiping
       if (savedSkipped === 'true' || completedSwipe === 'true') {
         setCompleted(true);
-        // Ensure matches are loaded
+        
+        // Restore saved matches if available
+        if (savedMatches) {
+          try {
+            const parsedMatches = JSON.parse(savedMatches);
+            if (Array.isArray(parsedMatches)) {
+              setTopMatches(parsedMatches);
+              return;
+            }
+          } catch (e) {
+            console.error('Error parsing saved matches:', e);
+          }
+        }
+        
+        // If no valid saved matches, recalculate
         findTopMatches();
         return;
       }
@@ -369,7 +397,9 @@ const SwipeContainer: React.FC = () => {
     // Original functionality
     const extendedCard = currentCard as ExtendedCardData;
     const currentTopics = extendedCard.matchedTopics || [];
-    setLikedTopics([...likedTopics, ...currentTopics]);
+    const updatedLikedTopics = [...likedTopics, extendedCard.name];
+    setLikedTopics(updatedLikedTopics);
+    localStorage.setItem('liked-topics', JSON.stringify(updatedLikedTopics));
     setViewedCards([...viewedCards, { ...extendedCard, liked: true }]);
     
     // If there are more cards, go to the next one
@@ -421,18 +451,22 @@ const SwipeContainer: React.FC = () => {
     
     // Map to topic names using the entire interestTopics array
     // This ensures we can find the names even if the cards have changed
-    const likedTopics = likedChoices.map(choice => {
+    const calculatedLikedTopics = likedChoices.map(choice => {
       // For each liked choice, find the corresponding topic
       const cardId = parseInt(choice.cardId);
       const card = cards.find(c => c.id === choice.cardId);
       return card ? card.name : null;
     }).filter(name => name !== null) as string[];
     
+    // If we have explicitly set likedTopics, use those, otherwise use calculated ones
+    const effectiveLikedTopics = likedTopics.length > 0 ? likedTopics : calculatedLikedTopics;
+    
     // Update the likedTopics state for the results view
-    setLikedTopics(likedTopics);
+    setLikedTopics(effectiveLikedTopics);
+    localStorage.setItem('liked-topics', JSON.stringify(effectiveLikedTopics));
     
     // If no interests were selected, show a default set
-    if (likedTopics.length === 0) {
+    if (effectiveLikedTopics.length === 0) {
       // Get all initiative keys
       const allInitiatives = Object.keys(initiativeMap);
       
@@ -450,6 +484,7 @@ const SwipeContainer: React.FC = () => {
       }));
       
       setTopMatches(defaultMatches);
+      localStorage.setItem('calculated-matches', JSON.stringify(defaultMatches));
       return;
     }
     
@@ -458,7 +493,7 @@ const SwipeContainer: React.FC = () => {
       const initiativeTopics = initiativeMap[initiative];
       
       // Count how many of the user's liked topics match this initiative
-      const matchedTopics = initiativeTopics.filter(topic => likedTopics.includes(topic));
+      const matchedTopics = initiativeTopics.filter(topic => effectiveLikedTopics.includes(topic));
       const matchScore = matchedTopics.length / initiativeTopics.length; // Score based on % match
       
       return {
@@ -501,12 +536,17 @@ const SwipeContainer: React.FC = () => {
     }
     
     setTopMatches(finalMatches);
+    localStorage.setItem('calculated-matches', JSON.stringify(finalMatches));
   };
 
   const resetChoices = () => {
     localStorage.removeItem('topic-swipe-choices');
     localStorage.removeItem('topic-swipe-skipped');
+    localStorage.removeItem('swipe-completed');
+    localStorage.removeItem('liked-topics');
+    localStorage.removeItem('calculated-matches');
     setChoices([]);
+    setLikedTopics([]);
     setCurrentCardIndex(0);
     setCompleted(false);
     
@@ -523,7 +563,20 @@ const SwipeContainer: React.FC = () => {
     setUserPoints(prevPoints => prevPoints + 15);
     updateNextBadgeProgress();
     
-    // Navigate to the chat page
+    // Find the project in the displayed cards
+    const projectIndex = parseInt(projectId);
+    if (!isNaN(projectIndex) && projectIndex >= 0 && projectIndex < topMatches.length) {
+      const initiativeName = topMatches[projectIndex].initiative;
+      
+      // Find the index in the original initiatives array for the chat routing
+      const initiativeIndex = Object.keys(initiativeMap).indexOf(initiativeName);
+      if (initiativeIndex >= 0) {
+        navigate(`/chat/${initiativeIndex}`);
+        return;
+      }
+    }
+    
+    // Fallback to original behavior
     navigate(`/chat/${projectId}`);
   };
 
@@ -602,55 +655,56 @@ const SwipeContainer: React.FC = () => {
           
           {activeNav === 'projects' && (
             <>
-              {likedTopics && likedTopics.length === 0 ? (
-                <>
-                  <h2>Discover Virgin Initiatives</h2>
-                  <p>Here are some initiatives that might interest you:</p>
-                </>
-              ) : (
-                <>
-                  <h2>Your Top Initiative Matches</h2>
-                  <p>Based on your interests, these Virgin initiatives align with your values:</p>
-                </>
-              )}
-              
-              <div className="results-grid">
-                {filteredCards.map((match, index) => (
+          {likedTopics && likedTopics.length === 0 ? (
+            <>
+              <h2>Discover Virgin Initiatives</h2>
+              <p>Here are some initiatives that might interest you:</p>
+            </>
+          ) : (
+            <>
+              <h2>Your Top Initiative Matches</h2>
+              <p>Based on your interests, these Virgin initiatives align with your values:</p>
+            </>
+          )}
+          
+          <div className="results-grid">
+            {filteredCards.map((match, index) => (
                   <div key={match.initiative} className="swipe-match-result">
-                    <ResultsCard 
-                      project={{
-                        id: index.toString(),
-                        name: match.initiative,
-                        imageUrl: match.details.imageUrl,
-                        details: {
-                          company: match.details.company,
-                          challenge: match.details.challenge,
-                          description: match.details.description
-                        }
-                      }} 
-                      rank={index + 1} 
-                      onChatClick={handleChatClick}
+                <ResultsCard 
+                  project={{
+                    id: index.toString(),
+                    name: match.initiative,
+                    imageUrl: match.details.imageUrl,
+                    details: {
+                      company: match.details.company,
+                      challenge: match.details.challenge,
+                      description: match.details.description
+                    }
+                  }} 
+                  rank={index + 1} 
+                  onChatClick={handleChatClick}
                       matchedInterests={match.matchedTopics}
+                      index={index}
                     />
-                  </div>
-                ))}
               </div>
-              
-              {filteredCards.length === 0 && (
-                <div className="no-results">
-                  No initiatives found matching your search.
-                </div>
-              )}
-              
-              {likedTopics && likedTopics.length === 0 && (
-                <div className="discovery-hint">
-                  Try again to find initiatives that match your specific interests!
-                </div>
-              )}
-              
-              <button className="reset-button" onClick={resetChoices}>
-                Start Over
-              </button>
+            ))}
+          </div>
+          
+          {filteredCards.length === 0 && (
+            <div className="no-results">
+              No initiatives found matching your search.
+            </div>
+          )}
+          
+          {likedTopics && likedTopics.length === 0 && (
+            <div className="discovery-hint">
+              Try again to find initiatives that match your specific interests!
+            </div>
+          )}
+          
+          <button className="reset-button" onClick={resetChoices}>
+            Start Over
+          </button>
             </>
           )}
           
