@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 // @ts-ignore - We're adding a type declaration for ThreeGlobe
 import ThreeGlobe from "three-globe";
@@ -103,9 +103,10 @@ export type GlobeConfig = {
   }>;
 };
 
-interface WorldProps {
+export interface WorldProps {
   globeConfig: GlobeConfig;
   data: Position[];
+  onPointClick?: (point: any, event: any) => void;
 }
 
 let numbersOfRings = [0];
@@ -136,7 +137,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
   useEffect(() => {
     if (!globeRef.current && groupRef.current) {
       // @ts-ignore - ThreeGlobe exists at runtime
-      globeRef.current = new ThreeGlobe();
+      const globe = new ThreeGlobe()
+      // @ts-ignore
+      window.my_globe = globe
+      // @ts-ignore
+      globeRef.current = globe;
       (groupRef.current as any).add(globeRef.current);
       setIsInitialized(true);
     }
@@ -313,9 +318,13 @@ export function WebGLRendererConfig() {
   return null;
 }
 
+(window as any).globeRotation = {x:0,y:0}
+
 export function World(props: WorldProps) {
   const { globeConfig } = props;
   const scene = new Scene();
+  // @ts-ignore
+  window.my_scene = scene
   scene.fog = new Fog(0xffffff, 400, 2000);
   
   // State for the popup
@@ -342,92 +351,112 @@ export function World(props: WorldProps) {
   const handleMouseLeave = () => {
     setIsHovering(false);
   };
+
+  // Handle click anywhere on the globe
+  const handleGlobeClick = (event: React.MouseEvent) => {
+    const canvas = document.querySelector('.globe-container canvas') as HTMLCanvasElement & { __r3f?: { controls: any } };
+    if (canvas?.__r3f?.controls) {
+      const controls = canvas.__r3f.controls;
+      console.log('Globe Rotation:', {
+        azimuthal: controls.getAzimuthalAngle().toFixed(3),
+        polar: controls.getPolarAngle().toFixed(3),
+        distance: controls.getDistance().toFixed(3),
+        autoRotate: controls.autoRotate
+      });
+    }
+  };
   
   return (
     <>
       <div 
-        className="globe-wrapper" 
+        className="globe-container" 
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleGlobeClick}
       >
-        <Canvas 
-          scene={scene} 
-          camera={{ 
-            fov: 50, 
-            near: 180, 
-            far: 1800,
-            position: [0, 0, cameraZ]
-          }}
-        >
-          <WebGLRendererConfig />
-          {/* Increased ambient light for more even base lighting */}
-          <ambientLight color={globeConfig.ambientLight} intensity={0.9} />
-          
-          {/* Directional lights from multiple directions for even coverage */}
-          <directionalLight
-            color={globeConfig.directionalLeftLight}
-            position={new Vector3(-400, 0, 0)}
-            intensity={0.6}
-          />
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(0, 400, 0)}
-            intensity={0.6}
-          />
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(400, 0, 0)}
-            intensity={0.6}
-          />
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(0, -400, 0)}
-            intensity={0.6}
-          />
-          
-          {/* Add a light from behind to ensure back lighting */}
-          <directionalLight
-            color={globeConfig.directionalTopLight}
-            position={new Vector3(0, 0, -400)}
-            intensity={0.5}
-          />
-          
-          {/* Point light positioned closer to the center for more even radial lighting */}
-          <pointLight
-            color={globeConfig.pointLight}
-            position={new Vector3(0, 0, 300)}
-            intensity={0.7}
-            distance={500}
-          />
-          
-          <GlobeWithClickHandler 
-            {...props} 
-            onPointClick={(point, event) => {
-              // When a point is clicked, show the popup with location data
-              if (point && event && point.company) {
-                setSelectedLocation({
-                  company: point.company,
-                  initiative: point.initiative,
-                  link: point.link,
-                  position: { 
-                    x: event.clientX, 
-                    y: event.clientY 
-                  }
-                });
-              }
+        <div className="globe-wrapper">
+          <Canvas 
+            scene={scene} 
+            camera={{ 
+              fov: 50, 
+              near: 180, 
+              far: 1800,
+              position: [0, 0, cameraZ]
             }}
-          />
-          <OrbitControls
-            enablePan={false}
-            enableZoom={false}
-            minDistance={cameraZ}
-            maxDistance={cameraZ}
-            autoRotateSpeed={1}
-            autoRotate={!isHovering && globeConfig.autoRotate} // Stop rotation on hover
-            minPolarAngle={Math.PI / 3.5}
-            maxPolarAngle={Math.PI - Math.PI / 3}
-          />
-        </Canvas>
+            onClick={e=>console.log((window as any).globeRotation)}
+          >
+            <WebGLRendererConfig />
+            {/* Increased ambient light for more even base lighting */}
+            <ambientLight color={globeConfig.ambientLight} intensity={0.9} />
+            
+            {/* Directional lights from multiple directions for even coverage */}
+            <directionalLight
+              color={globeConfig.directionalLeftLight}
+              position={new Vector3(-400, 0, 0)}
+              intensity={0.6}
+            />
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(0, 400, 0)}
+              intensity={0.6}
+            />
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(400, 0, 0)}
+              intensity={0.6}
+            />
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(0, -400, 0)}
+              intensity={0.6}
+            />
+            
+            {/* Add a light from behind to ensure back lighting */}
+            <directionalLight
+              color={globeConfig.directionalTopLight}
+              position={new Vector3(0, 0, -400)}
+              intensity={0.5}
+            />
+            
+            {/* Point light positioned closer to the center for more even radial lighting */}
+            <pointLight
+              color={globeConfig.pointLight}
+              position={new Vector3(0, 0, 300)}
+              intensity={0.7}
+              distance={500}
+            />
+            
+            <GlobeWithClickHandler 
+              {...props} 
+              onPointClick={(point: any, event: MouseEvent) => {
+                console.log('Point Clicked')
+                // When a point is clicked, show the popup with location data
+                if (point && event && point.company) {
+                  setSelectedLocation({
+                    company: point.company,
+                    initiative: point.initiative,
+                    link: point.link,
+                    position: { 
+                      x: event.clientX, 
+                      y: event.clientY 
+                    }
+                  });
+                }
+              }}
+            />
+            <OrbitControls
+              enablePan={false}
+              enableZoom={false}
+              minDistance={cameraZ}
+              maxDistance={cameraZ}
+              autoRotateSpeed={1}
+              autoRotate={!isHovering && globeConfig.autoRotate}
+              minPolarAngle={Math.PI / 3.5}
+              maxPolarAngle={Math.PI - Math.PI / 3}
+              onChange={(e)=>{(window as any).globeRotation.x = (e as any).target.getAzimuthalAngle(); (window as any).globeRotation.y = (e as any).target.getPolarAngle()}}
+            />
+          </Canvas>
+        </div>
       </div>
       
       {/* Render the popup if a location is selected */}
