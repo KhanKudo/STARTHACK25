@@ -394,7 +394,7 @@ export function World(props: WorldProps) {
               
               // Calculate the radius of the globe (90% of canvas height)
               // const globeRadius = (window as any).my_globe.getGlobeRadius();
-              const globeRadius = rect.height * 0.45;
+              const globeRadius = rect.height * 0.40;
               
               // Calculate the distance from center to click point
               const distance = Math.sqrt(x * x + y * y);
@@ -405,22 +405,24 @@ export function World(props: WorldProps) {
                 return;
               }
               
-              // Calculate the z-coordinate on the sphere surface
-              const z = Math.sqrt(globeRadius * globeRadius - distance * distance);
-              
               // Convert to spherical coordinates
-              const azimuth = Math.atan2(x, z);
-              const polar = Math.atan2(y, Math.sqrt(x * x + z * z));
+              // const azimuth = Math.acos(Math.abs(x / globeRadius))*Math.sign(x);
+              // const polar = Math.asin(Math.abs(y / globeRadius))*Math.sign(y);
+
+              const azimuth = Math.atan(Math.abs(x / globeRadius))*Math.sign(x);
+              const polar = Math.atan(Math.abs(y / globeRadius))*Math.sign(y);
               
               // Add the current globe rotation
               const finalAzimuth = azimuth + rotation.x;
               const finalPolar = polar + rotation.y;
               
               // Convert to lat/lon
-              const lat = (finalPolar * 180 / Math.PI) - 90;
+              const lat = 90 - (finalPolar * 180 / Math.PI);
               const lon = (finalAzimuth * 180 / Math.PI);
 
-              const location = virginLocations.find(l=>Math.abs(l.location[0] - lat) < 1 && Math.abs(l.location[1] - lon) < 1)
+              const tolerance = 5;
+
+              const location = virginLocations.find(l=>Math.abs(l.location[0] - lat) < tolerance && Math.abs(l.location[1] - lon) < tolerance)
               
               console.log('Globe Click Position:', {
                 lat: lat.toFixed(3),
