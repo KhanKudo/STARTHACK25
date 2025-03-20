@@ -1,5 +1,7 @@
 :root {
   --primary-red: #E10A0A;
+  --primary-red-rgb: 225, 10, 10;
+  --primary-red-dark: #c00909;
 }
 
 body {
