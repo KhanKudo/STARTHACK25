@@ -52,15 +52,14 @@
 
 .hero-subtitle {
   font-size: 1.2rem;
-  max-width: 600px;
+  max-width: auto;
   margin-bottom: 2.5rem;
   color: #555;
   line-height: 1.5;
 }
 
 .search-container {
-  width: 100%;
-  max-width: 500px;
+  width: 500px;
   margin: 0 auto;
   position: relative;
   z-index: 10;

@@ -1,6 +1,6 @@
 .globe-container {
   position: absolute;
-  top: 0;
+  top: 180px;
   left: 0;
   width: 100%;
   height: 55vh;
@@ -22,13 +22,28 @@
   z-index: 2;
 }
 
+/* Ensure the canvas maintains proper aspect ratio */
+.globe-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+  aspect-ratio: 1/1; /* Force square aspect ratio for the globe */
+  object-fit: contain;
+  margin: auto;
+  cursor: pointer;
+}
+
+.globe-container canvas:hover {
+  cursor: pointer !important;
+}
+
 .globe-inner-container {
   position: relative;
-  width: 900px;
-  height: 900px;
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   margin: 0 auto;
-  margin-top: 400px;
 }
 
 .globe-canvas-element {
@@ -41,4 +56,136 @@
 
 .globe-canvas-element:active {
   cursor: grabbing;
+}
+
+/* Animation for globe rings */
+@keyframes ripple {
+  0% {
+    opacity: 1;
+    transform: scale(0.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Animation for arc paths */
+@keyframes arcPulse {
+  0% { opacity: 0.6; filter: blur(0px); }
+  50% { opacity: 1; filter: blur(2px); }
+  100% { opacity: 0.6; filter: blur(0px); }
+}
+
+.arc-path {
+  animation: arcPulse 3s infinite ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(255, 30, 30, 0.7));
+}
+
+.globe-wrapper {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 1/1;
+  margin: 0 auto;
+  position: relative;
+}
+
+.globe-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  pointer-events: auto;
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent background */
+  backdrop-filter: blur(2px); /* Slight blur effect */
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* Pulsating glow animation */
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 
+      0 0 100px 50px rgba(255, 255, 255, 1),
+      0 0 150px 100px rgba(255, 255, 255, 0.7),
+      0 0 200px 150px rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 
+      0 0 120px 60px rgba(255, 255, 255, 1),
+      0 0 180px 120px rgba(255, 255, 255, 0.8),
+      0 0 240px 180px rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Pulsating glow animation for the red markers */
+@keyframes marker-pulse {
+  0% {
+    box-shadow: 0 0 5px 2px rgba(245, 0, 87, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 10px 3px rgba(245, 0, 87, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px 2px rgba(245, 0, 87, 0.3);
+  }
+}
+
+/* Adjust marker dot style to match reference image */
+.marker-dot {
+  width: 6px;
+  height: 6px;
+  background-color: rgba(245, 0, 87, 0.7); /* Slightly faded red */
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(245, 0, 87, 0.4);
+  opacity: 0.85; /* Slightly more transparent to match image */
+  animation: marker-pulse 3s infinite ease-in-out;
+}
+
+/* Glow effect */
+.globe-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.9) 10%,
+    rgba(255, 255, 255, 0.6) 30%,
+    rgba(255, 255, 255, 0.2) 60%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  filter: blur(20px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Additional glow for enhanced effect */
+.globe-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 100px 50px rgba(255, 255, 255, 1),
+    0 0 150px 100px rgba(255, 255, 255, 0.8),
+    0 0 200px 150px rgba(255, 255, 255, 0.5);
+  z-index: -1;
+  pointer-events: none;
+  animation: glow-pulse 4s infinite alternate ease-in-out;
 } 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TopBar from './TopBar';
 import ProjectsGrid from './ProjectsGrid';
 import GlobeContainer from './GlobeContainer';
+import Loader from './Loader';
 import { api } from '../utils/projectData';
 import { Project } from '../utils/projectData';
 import './Dashboard.css';
@@ -51,7 +52,7 @@ const Dashboard: React.FC = () => {
         <div className="top-bar-container">
           <TopBar title="Dashboard" />
         </div>
-        <div className="loading">Loading projects...</div>
+        <Loader fullScreen message="Loading projects..." />
       </div>
     );
   }

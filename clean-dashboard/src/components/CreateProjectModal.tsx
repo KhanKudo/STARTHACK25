@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Project } from '../utils/projectData';
+import Loader from './Loader';
 import './CreateProjectModal.css';
 
 interface CreateProjectModalProps {
@@ -214,6 +215,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               type="button" 
               className="cancel-button" 
               onClick={onClose}
+              disabled={isSubmitting}
             >
               Cancel
             </button>
@@ -221,6 +223,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               type="button" 
               className="sample-button" 
               onClick={generateSampleProject}
+              disabled={isSubmitting}
             >
               Generate Sample
             </button>
@@ -229,11 +232,17 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
               className="save-button"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Saving...' : 'Save Project'}
+              {isSubmitting ? (
+                <span className="loading-button-text">
+                  <Loader size="small" inline />
+                  Saving...
+                </span>
+              ) : 'Save Project'}
             </button>
           </div>
         </form>
       </div>
+      {isSubmitting && <Loader fullScreen message="Creating your project..." />}
     </div>
   );
 };
