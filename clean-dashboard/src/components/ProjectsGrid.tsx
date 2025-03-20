@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Project } from '../models/project';
 import ProjectCard from './ProjectCard';
 import './ProjectsGrid.css';

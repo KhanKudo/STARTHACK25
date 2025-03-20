@@ -7,7 +7,6 @@ import { Project } from '../utils/projectData';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const [searchFocused, setSearchFocused] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,18 +80,7 @@ const Dashboard: React.FC = () => {
             <input 
               type="text" 
               className="search-input" 
-              placeholder="Search Projects" 
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-            />
-            <img 
-              src="/assets/ai.svg" 
-              alt="AI" 
-              className="ai-icon"
-              style={{ 
-                opacity: searchFocused ? 1 : 0.7,
-                stroke: searchFocused ? 'var(--primary-red)' : '#3C3C3C',
-              }}
+              placeholder="Search projects..." 
             />
           </div>
         </div>
