@@ -348,7 +348,7 @@ const SwipeContainer: React.FC = () => {
       if (remainingCards.length === 0) {
         setCompleted(true);
         // Calculate matched projects
-        findMatchedProjects();
+        findTopMatches();
       } else {
         setCards(remainingCards);
       }
@@ -404,7 +404,7 @@ const SwipeContainer: React.FC = () => {
     
     if (nextIndex >= cards.length) {
       setCompleted(true);
-      findMatchedProjects();
+      findTopMatches();
     }
   };
 
