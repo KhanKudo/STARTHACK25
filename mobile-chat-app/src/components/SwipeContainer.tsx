@@ -152,7 +152,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Media O2',
     challenge: 'Consumers often lack transparent information about the environmental impact of their technology choices.',
     description: 'The Eco Rating initiative provides clear information about the environmental impact of mobile devices, helping consumers make more sustainable choices and encouraging manufacturers to improve their practices.',
-    imageUrl: ''
+    imageUrl: 'https://news.virginmediao2.co.uk/wp-content/uploads/2021/06/Eco-rating.jpg'
   },
   'Virgin Media O2 - Better Connections Plan (Second-hand Devices)': {
     company: 'Virgin Media O2',
