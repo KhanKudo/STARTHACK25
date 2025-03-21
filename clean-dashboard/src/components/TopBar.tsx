@@ -107,6 +107,7 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
               src="/assets/Virgin_logo.svg" 
               alt="Virgin Logo" 
               className="virgin-logo"
+              onClick={()=>navigate('/')}
             />
           </div>
           

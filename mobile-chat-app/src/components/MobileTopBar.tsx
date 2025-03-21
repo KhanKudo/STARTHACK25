@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './MobileTopBar.css';
+import { useNavigate } from 'react-router-dom';
 
 interface MobileTopBarProps {
   title?: string;
 }
 
 const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Chat' }) => {
+  const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title = 'Chat' }) => {
             src="/assets/Virgin_logo.svg" 
             alt="Virgin Logo" 
             className="virgin-logo"
+            onClick={()=>{(window as any)?.setActiveNav('projects');document.querySelector('.results-nav')?.scrollTo({'left':0})}}
           />
         </div>
       </div>

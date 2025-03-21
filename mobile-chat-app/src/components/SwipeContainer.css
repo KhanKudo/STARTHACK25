@@ -994,4 +994,8 @@
 
 .view-mode-dropdown:focus {
   outline: none;
-} 
+}
+
+.virgin-logo {
+  cursor: pointer;
+}
