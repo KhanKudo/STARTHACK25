@@ -57,6 +57,10 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
     navigate('/collaborate');
   };
 
+  const handleKnowledgeCenterClick = () => {
+    navigate('/knowledge');
+  };
+
   const openProjectModal = () => {
     setShowProjectModal(true);
   };
@@ -111,6 +115,12 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
           </div>
           
           <div className="top-bar-nav">
+            <div 
+              className="nav-item" 
+              onClick={handleKnowledgeCenterClick}
+            >
+              Knowledge Center
+            </div>
             <div 
               className="nav-item" 
               onClick={handleCollaborationsClick}
