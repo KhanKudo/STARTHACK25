@@ -51,6 +51,7 @@ The desktop dashboard equips Virgin employees with powerful tools to monitor and
 - TypeScript for type-safe code development
 - CSS with adaptive design principles for cross-platform compatibility
 - React Three Fiber for declarative 3D scene management
+- **AI/ML algorithms** for advanced search capabilities, personalized recommendations, and data-driven insights
 
 ## 🏆 Value Proposition
 
