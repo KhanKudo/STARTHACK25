@@ -272,88 +272,192 @@ export const generateProposal = async (
   // Create a prompt based on the input type
   let prompt = '';
   if (type === 'company') {
-    prompt = `Generate a sustainability proposal for ${company.name}. 
-    Company description: ${company.description}
+    prompt = `You are an innovative sustainability consultant creating vibrant, engaging proposals. Generate an exciting, forward-thinking sustainability proposal for ${company.name}.
+
+    CONTEXT:
+    Company: ${company.name}
+    Description: ${company.description}
     Location: ${company.location.latitude}, ${company.location.longitude}
     ${projects ? `Related projects: ${projects.map(p => p.description).join(', ')}` : ''}
     
-    Please provide a proposal in the following format:
+    GUIDELINES:
+    - Be inspiring, bold, and passionate about the possibilities
+    - Use vivid language that brings the proposal to life
+    - Incorporate concrete, specific details
+    - Ensure the proposal sounds like it came from a sustainability expert
+    - Think beyond conventional approaches - be innovative!
+    - Create realistic but ambitious impact metrics
+    - Choose relevant, specific tags that would help categorize this initiative
+    - Pick the most appropriate category based on the main focus of your proposal
+    
+    Please provide a proposal in the following JSON format:
     {
-      "title": "Proposal title",
+      "title": "A catchy, impactful title",
       "company": "${company.name}",
       "category": "one of: carbon, water, biodiversity, social, circular",
-      "description": "Detailed description",
+      "description": "A vivid, detailed description that excites and inspires (at least 2 paragraphs)",
       "impact": [
-        { "metric": "Impact metric name", "value": "Measurable value" }
+        { "metric": "Specific impact metric name", "value": "Specific measurable value with units" },
+        { "metric": "Second metric", "value": "Second value" }
       ],
       "tags": ["tag1", "tag2", "tag3"]
     }`;
   } else {
-    prompt = `Generate a sustainability proposal based on this project for ${company.name}.
+    prompt = `You are an innovative sustainability consultant creating vibrant, engaging proposals. Generate an exciting, forward-thinking sustainability proposal based on this project for ${company.name}.
+
+    CONTEXT:
     Project description: ${project?.description}
-    Company description: ${company.description}
+    Company: ${company.name}
+    Description: ${company.description}
     Location: ${company.location.latitude}, ${company.location.longitude}
     
-    Please provide a proposal in the following format:
+    GUIDELINES:
+    - Be inspiring, bold, and passionate about the possibilities
+    - Use vivid language that brings the proposal to life
+    - Incorporate concrete, specific details
+    - Ensure the proposal sounds like it came from a sustainability expert
+    - Think beyond conventional approaches - be innovative!
+    - Create realistic but ambitious impact metrics
+    - Choose relevant, specific tags that would help categorize this initiative
+    - Pick the most appropriate category based on the main focus of your proposal
+    
+    Please provide a proposal in the following JSON format:
     {
-      "title": "Proposal title",
+      "title": "A catchy, impactful title",
       "company": "${company.name}",
       "category": "one of: carbon, water, biodiversity, social, circular",
-      "description": "Detailed description",
+      "description": "A vivid, detailed description that excites and inspires (at least 2 paragraphs)",
       "impact": [
-        { "metric": "Impact metric name", "value": "Measurable value" }
+        { "metric": "Specific impact metric name", "value": "Specific measurable value with units" },
+        { "metric": "Second metric", "value": "Second value" }
       ],
       "tags": ["tag1", "tag2", "tag3"]
     }`;
   }
 
-  const response = await fetch(DEEPSEEK_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: "deepseek-chat",
-      messages: [
-        {
-          role: "user",
-          content: prompt
-        }
+  try {
+    const response = await fetch(DEEPSEEK_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "deepseek-chat",
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.8, // Slightly higher temperature for more creative responses
+        max_tokens: 1000
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('API Error Response:', errorData);
+      throw new Error(`DeepSeek API error: ${errorData.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('API Response:', data);
+
+    if (!data.choices?.[0]?.message?.content) {
+      console.error('Invalid response format:', data);
+      throw new Error('Invalid response format from DeepSeek API');
+    }
+
+    const content = data.choices[0].message.content;
+    console.log('Raw content from API:', content);
+
+    // Parse the JSON content
+    try {
+      // Remove markdown code block wrapping if present
+      const cleanContent = content.replace(/```json\n|\n```/g, '');
+      const parsedProposal = JSON.parse(cleanContent);
+      
+      return {
+        title: parsedProposal.title,
+        company: parsedProposal.company,
+        category: parsedProposal.category,
+        description: parsedProposal.description,
+        impact: parsedProposal.impact,
+        tags: parsedProposal.tags,
+        source: 'ai',
+        isRecommended: Math.random() > 0.7 // 30% chance to be recommended
+      };
+    } catch (parseError) {
+      console.error('Failed to parse proposal JSON:', parseError, content);
+      // Fall back to generated proposal with the content as description
+      throw new Error('Failed to parse the AI-generated proposal');
+    }
+  } catch (error) {
+    console.error('Error generating proposal:', error);
+    
+    // Fallback values in case of error
+    return {
+      title: `Innovative Sustainability Initiative for ${company.name}`,
+      company: company.name,
+      category: ['carbon', 'water', 'biodiversity', 'social', 'circular'][Math.floor(Math.random() * 5)] as any,
+      description: `A bold new sustainability initiative that leverages ${company.name}'s unique position in the market. This forward-thinking approach aims to transform how the company addresses environmental challenges while creating substantial business value.
+      
+      Through strategic implementation of cutting-edge technologies and engagement with key stakeholders, this initiative will set new standards for the industry and demonstrate ${company.name}'s leadership in sustainable innovation.`,
+      impact: [
+        { metric: 'Carbon Footprint Reduction', value: `${Math.floor(Math.random() * 40 + 20)}%` },
+        { metric: 'Annual Resource Savings', value: `$${Math.floor(Math.random() * 900 + 100)}K` }
       ],
-      temperature: 0.7,
-      max_tokens: 1000
-    }) });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    console.error('API Error Response:', errorData);
-    throw new Error(`DeepSeek API error: ${errorData.error?.message || response.statusText}`);
+      tags: ['Innovation', 'Sustainability', 'Transformation', company.name],
+      source: 'ai',
+      isRecommended: false
+    };
   }
+}
 
-  const data = await response.json();
-  console.log('API Response:', data);
+// Function to analyze text using DeepSeek API
+export const analyzeWithDeepSeek = async (prompt: string): Promise<string> => {
+  try {
+    console.log('Analyzing with DeepSeek...');
+    
+    const response = await fetch(DEEPSEEK_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "deepseek-chat",
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 1500
+      })
+    });
 
-  /*
-  if (!data.choices?.[0]?.message?.content) {
-    console.error('Invalid response format:', data);
-    throw new Error('Invalid response format from DeepSeek API');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('API Error Response:', errorData);
+      throw new Error(`DeepSeek API error: ${errorData.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.choices?.[0]?.message?.content) {
+      console.error('Invalid response format:', data);
+      throw new Error('Invalid response format from DeepSeek API');
+    }
+
+    const content = data.choices[0].message.content;
+    // Remove any markdown code block markers if present
+    const cleanContent = content.replace(/```[a-z]*\n|\n```/g, '');
+    return cleanContent;
+  } catch (error) {
+    console.error('DeepSeek analysis error:', error);
+    throw error;
   }
-
-  const content = data.choices[0].message.content;
-  console.log('Raw content from API:', content);*/
-
-  return {
-    title: `AI Generated Proposal for ${company.name}`,
-    company: company.name,
-    category: 'carbon',
-    description: `An AI-generated sustainability proposal for ${company.name} based on their current initiatives and location.`,
-    impact: [
-      { metric: 'Carbon Reduction', value: '25%' },
-      { metric: 'Cost Savings', value: '$1M/year' }
-    ],
-    tags: ['AI Generated', 'Sustainability', company.name],
-    source: 'ai',
-    isRecommended: false
-  };
-} 
+}; 

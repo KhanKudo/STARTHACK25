@@ -56,7 +56,7 @@ export const proposalData: Proposal[] = [
     tags: ['AI', 'Energy', 'Fleet Operations'],
     votes: 45,
     isRecommended: true,
-    source: 'ai',
+    source: 'user',
     createdAt: '2024-02-15',
     status: 'active'
   },
@@ -73,7 +73,7 @@ export const proposalData: Proposal[] = [
     tags: ['Recycling', 'Hotels', 'Water Management'],
     votes: 38,
     isRecommended: true,
-    source: 'ai',
+    source: 'user',
     createdAt: '2024-02-14',
     status: 'active'
   },
@@ -107,7 +107,7 @@ export const proposalData: Proposal[] = [
     tags: ['Supply Chain', 'Packaging', 'Wine'],
     votes: 28,
     isRecommended: false,
-    source: 'ai',
+    source: 'user',
     createdAt: '2024-02-12',
     status: 'active'
   },
@@ -141,7 +141,7 @@ export const proposalData: Proposal[] = [
     tags: ['Aviation', 'Fuel', 'Innovation'],
     votes: 35,
     isRecommended: false,
-    source: 'ai',
+    source: 'user',
     createdAt: '2024-02-10',
     status: 'active'
   }
