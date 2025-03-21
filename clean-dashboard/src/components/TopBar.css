@@ -36,6 +36,7 @@
 .virgin-logo {
   height: 40px;
   width: auto;
+  cursor: pointer;
 }
 
 .top-bar-title {

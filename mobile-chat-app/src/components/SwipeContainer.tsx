@@ -403,6 +403,8 @@ const SwipeContainer: React.FC = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [viewMode, setViewMode] = useState<'matches' | 'location'>('matches'); // Add view mode state
   
+  (window as any).setActiveNav = setActiveNav;
+
   // Add refs for the navbar drag scroll functionality
   const navRef = useRef<HTMLDivElement>(null);
   const isMouseDown = useRef(false);
