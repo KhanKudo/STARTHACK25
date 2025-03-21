@@ -1213,7 +1213,7 @@ const SwipeContainer: React.FC = () => {
               
               <div className="news-featured">
                 <div className="featured-news-card">
-                  <div className="featured-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1664575198308-3959904fa430?q=80&w=2070&auto=format&fit=crop')"}}></div>
+                  <div className="featured-image" style={{backgroundImage: "url('https://images.ctfassets.net/rxqefefl3t5b/1bDWwJ7q6ZcDKtJlmpVzfn/dae60ae0aa42cc644dccc6e593ac6de5/787_dreamliner_red_engines.jpg?fl=progressive&q=80')"}}></div>
                   <div className="featured-content">
                     <div className="news-tag">Featured</div>
                     <h3 className="featured-title">Virgin Atlantic Completes World's First 100% SAF Transatlantic Flight</h3>
