@@ -504,6 +504,11 @@
   color: #444;
   margin-bottom: 16px;
   flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .proposal-preview {
@@ -749,6 +754,51 @@
 
 .proposal-card.expanded .proposal-tags span {
   display: inline-block;
+}
+
+/* Modal overlay for expanded proposal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.expanded-proposal {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.expanded-proposal .close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.expanded-proposal .proposal-description {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  margin-bottom: 20px;
+  font-size: 15px;
 }
 
 @media (max-width: 1200px) {

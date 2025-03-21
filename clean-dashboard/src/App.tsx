@@ -17,6 +17,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/project/:projectId" element={<ProjectDetails />} />
           <Route path="/chat/:projectId" element={<ChatPage />} />
+          <Route path="/chat/:employeeId/:employeeName/:employeeCompany" element={<ChatPage />} />
           <Route path="/collaborate" element={<CollaboratePage />} />
         </Routes>
       </div>
