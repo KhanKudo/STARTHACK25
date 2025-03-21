@@ -69,6 +69,9 @@ const SimpleMap: React.FC<SimpleMapProps> = ({ locations, center }) => {
   
   const initializeMap = () => {
     if (!mapContainerRef.current || !window.L) return;
+
+    if(mapRef.current)
+      return
     
     // Initialize the map
     const map = window.L.map(mapContainerRef.current).setView(center, 14);
