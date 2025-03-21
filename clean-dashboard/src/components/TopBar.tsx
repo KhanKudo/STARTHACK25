@@ -43,22 +43,26 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
     const nameSlug = name.toLowerCase().replace(/\s+/g, '-');
     const companySlug = company.toLowerCase().replace(/\s+/g, '-');
     
-    // Navigate to a more descriptive chat URL that includes the employee name and company
-    navigate(`/chat/${employeeId}/${nameSlug}/${companySlug}`);
+    // Navigate using direct browser navigation for more reliability
+    window.location.href = `/chat/${employeeId}/${nameSlug}/${companySlug}`;
     setShowEmployeePopup(false);
   };
 
   const handleAccountClick = () => {
-    navigate('/profile');
+    window.location.href = '/profile';
     setShowProfileDropdown(false);
   };
 
   const handleCollaborationsClick = () => {
-    navigate('/collaborate');
+    window.location.href = '/collaborate';
   };
 
   const handleKnowledgeCenterClick = () => {
-    navigate('/knowledge');
+    window.location.href = '/knowledge';
+  };
+
+  const handleLogoClick = () => {
+    window.location.href = '/';
   };
 
   const openProjectModal = () => {
@@ -91,7 +95,7 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
       window.dispatchEvent(new CustomEvent('project-added', { detail: newProject }));
       
       // Optionally navigate to the new project
-      // navigate(`/project/${newProject.id}`);
+      // window.location.href = `/project/${newProject.id}`;
     } catch (error) {
       console.error('Failed to create project:', error);
       // You might want to show an error message to the user here
@@ -111,7 +115,8 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
               src="/assets/Virgin_logo.svg" 
               alt="Virgin Logo" 
               className="virgin-logo"
-              onClick={()=>navigate('/')}
+              onClick={handleLogoClick}
+              style={{ cursor: 'pointer' }}
             />
           </div>
           
@@ -119,12 +124,14 @@ const TopBar: React.FC<TopBarProps> = ({ title = 'Dashboard' }) => {
             <div 
               className="nav-item" 
               onClick={handleKnowledgeCenterClick}
+              style={{ cursor: 'pointer' }}
             >
               Knowledge Center
             </div>
             <div 
               className="nav-item" 
               onClick={handleCollaborationsClick}
+              style={{ cursor: 'pointer' }}
             >
               Collaborations
             </div>

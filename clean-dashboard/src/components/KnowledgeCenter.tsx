@@ -101,7 +101,7 @@ const KnowledgeCenter: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const graphRef = useRef<any>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [topicDensityMap, setTopicDensityMap] = useState<Record<string, any[]>>({});
   const [viewportSummary, setViewportSummary] = useState<string>('');
   const [showSummary, setShowSummary] = useState<boolean>(false);
@@ -761,7 +761,8 @@ const KnowledgeCenter: React.FC = () => {
 
   // Improve the generateViewportSummary function
   const generateViewportSummary = useCallback(async (visibleNodes: GraphNode[]) => {
-    if (visibleNodes.length < 3 || visibleNodes.length > 20) {
+    // Always show summary if we have at least 1 node, not just between 3-20 nodes
+    if (visibleNodes.length < 1) {
       setShowSummary(false);
       return;
     }
@@ -822,19 +823,20 @@ const KnowledgeCenter: React.FC = () => {
       
       // Set the summary text
       setViewportSummary(summary);
-      setShowSummary(true);
+      setShowSummary(true); // Always show summary
+      console.log("Viewport summary updated:", summary); // Add logging for debugging
     } catch (error) {
       console.error("Error generating summary:", error);
       setShowSummary(false);
     }
   }, [TOPICS, customTopics]);
   
-  // Fix the handleViewportChange function to improve pan and zoom
+  // Update the handleViewportChange function to set showSummary based on a lower zoom threshold
   const handleViewportChange = useCallback((transform: any) => {
     if (!transform || !graphRef.current || !graphData.nodes.length) return;
     
-    // Only show summary if sufficiently zoomed in (higher threshold)
-    if (transform.k < 1.7) {
+    // Only show summary if sufficiently zoomed in (lower threshold to make it appear more easily)
+    if (transform.k < 1.2) {
       setShowSummary(false);
       return;
     }
@@ -864,7 +866,7 @@ const KnowledgeCenter: React.FC = () => {
       );
     });
     
-    // Generate summary for visible nodes - with debounce
+    // Generate summary for visible nodes with shorter debounce
     if (visibleNodes.length > 0) {
       // Debounce to avoid constant updates while panning
       if (window.summaryDebounceTimeout) {
@@ -873,62 +875,14 @@ const KnowledgeCenter: React.FC = () => {
       
       window.summaryDebounceTimeout = setTimeout(() => {
         generateViewportSummary(visibleNodes);
-      }, 300);
+      }, 200); // Reduced from 300ms to 200ms for faster feedback
     } else {
       setShowSummary(false);
     }
   }, [graphData.nodes, generateViewportSummary]);
-
-  // Draw background glow
-  const drawBackgroundGlow = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // For each topic group, create a gaussian-like glow
-    Object.entries(topicDensityMap).forEach(([topic, nodes]) => {
-      if (nodes.length < 3) return; // Only draw for topics with sufficient nodes
-      
-      // Find the centroid of the nodes for this topic
-      const centroidX = nodes.reduce((sum, node) => sum + node.x, 0) / nodes.length;
-      const centroidY = nodes.reduce((sum, node) => sum + node.y, 0) / nodes.length;
-      
-      // Calculate the average distance from centroid to determine glow radius
-      const distances = nodes.map(node => 
-        Math.sqrt(Math.pow(node.x - centroidX, 2) + Math.pow(node.y - centroidY, 2))
-      );
-      const avgDistance = distances.reduce((sum, dist) => sum + dist, 0) / distances.length;
-      const glowRadius = Math.max(avgDistance * 1.5, 150); // Ensure minimum size
-      
-      // Draw the glow
-      const color = nodes[0].color || getTopicColor(topic);
-      const gradient = ctx.createRadialGradient(
-        centroidX, centroidY, 0,
-        centroidX, centroidY, glowRadius
-      );
-      
-      gradient.addColorStop(0, `${color}20`); // Very light at center (12.5% opacity)
-      gradient.addColorStop(0.6, `${color}10`); // Even lighter as it spreads (6.25% opacity)
-      gradient.addColorStop(1, `${color}00`); // Transparent at the edges
-      
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(centroidX, centroidY, glowRadius, 0, 2 * Math.PI);
-      ctx.fill();
-    });
-  }, [topicDensityMap, getTopicColor]);
-
-  useEffect(() => {
-    drawBackgroundGlow();
-  }, [topicDensityMap, drawBackgroundGlow]);
-
+  
   // Initialize and resize the background canvas
-  useEffect(() => {
+  /*useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
@@ -953,7 +907,7 @@ const KnowledgeCenter: React.FC = () => {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [drawBackgroundGlow]);
+  }, [drawBackgroundGlow]); */
 
   // Initialize the force graph after graphData is set
   useEffect(() => {
@@ -1036,21 +990,20 @@ const KnowledgeCenter: React.FC = () => {
   
   // Handle clicking on a node
   const handleNodeClick = useCallback((node: any) => {
-    if (isGraphNode(node)) {
-      setSelectedNode(node);
-      
-      // If it's a company node, navigate to the company page
-      if (node.type === 'company') {
-        navigate(`/company/${node.id}`);
+    try {
+      if (isGraphNode(node)) {
+        setSelectedNode(node);
+        
+        // If it's a company node, navigate to the company page
+        if (node.type === 'company') {
+          window.location.href = `/company/${node.id.replace('company-', '')}`;
+        }
       }
+    } catch (error) {
+      console.error("Error in node click handler:", error);
     }
-  }, [navigate]);
+  }, []);
   
-  // Handle back to dashboard
-  const handleBackClick = () => {
-    navigate('/');
-  };
-
   // Add custom topic function
   const addCustomTopic = () => {
     if (!customTopic.trim() || !currentTopic) return;
@@ -1099,7 +1052,10 @@ const KnowledgeCenter: React.FC = () => {
       </div>
       
       <div className="knowledge-content">
-        <button className="back-button" onClick={handleBackClick}>
+        <button 
+          className="back-button" 
+          onClick={() => window.location.href = '/'}
+        >
           ← Back to Dashboard
         </button>
         
@@ -1164,7 +1120,7 @@ const KnowledgeCenter: React.FC = () => {
         ) : (
           <div className="graph-container">
             <canvas 
-              ref={canvasRef} 
+              ref={canvasRef}
               style={{
                 position: 'absolute',
                 width: '100%',
@@ -1192,10 +1148,20 @@ const KnowledgeCenter: React.FC = () => {
               }}
               onNodeClick={handleNodeClick}
               onZoom={transform => {
-                handleZoom(transform);
-                handleViewportChange(transform);
+                if (transform) {
+                  handleZoom(transform);
+                  handleViewportChange(transform);
+                  console.log("Zoom level:", transform.k); // Log zoom level for debugging
+                }
               }}
-              onNodeDragEnd={() => calculateTopicDensity()}
+              onNodeDragEnd={node => {
+                calculateTopicDensity();
+                // Force update viewport summary after node drag
+                if (graphRef.current) {
+                  const transform = graphRef.current.zoom().transform;
+                  if (transform) handleViewportChange(transform);
+                }
+              }}
               enableNodeDrag={true}
               enableZoomInteraction={true}
               minZoom={0.5}
@@ -1215,7 +1181,11 @@ const KnowledgeCenter: React.FC = () => {
         
         {/* Viewport Summary */}
         {showSummary && (
-          <div className="viewport-summary">
+          <div className="viewport-summary" style={{ 
+            pointerEvents: 'none',
+            opacity: 1, // Ensure it's fully visible
+            zIndex: 1000 // Higher z-index to make sure it's above other elements
+          }}>
             <h3>Current View Summary</h3>
             <p>{viewportSummary}</p>
           </div>
@@ -1249,7 +1219,7 @@ const KnowledgeCenter: React.FC = () => {
             {selectedNode.type === 'project' && (
               <button 
                 className="action-button"
-                onClick={() => navigate(`/project/${selectedNode.id.replace('project-', '')}`)}
+                onClick={() => window.location.href = `/project/${selectedNode.id.replace('project-', '')}`}
                 style={{ backgroundColor: 'var(--primary-red)' }}
               >
                 View Project Details
@@ -1259,7 +1229,7 @@ const KnowledgeCenter: React.FC = () => {
             {selectedNode.type === 'collaboration' && (
               <button 
                 className="action-button"
-                onClick={() => navigate('/collaborate')}
+                onClick={() => window.location.href = '/collaborate'}
                 style={{ backgroundColor: 'var(--primary-red)' }}
               >
                 View Collaboration
@@ -1269,7 +1239,7 @@ const KnowledgeCenter: React.FC = () => {
             {selectedNode.type === 'company' && (
               <button 
                 className="action-button"
-                onClick={() => navigate(`/project/va-sustainable`)}
+                onClick={() => window.location.href = `/company/${selectedNode.id.replace('company-', '')}`}
                 style={{ backgroundColor: 'var(--primary-red)' }}
               >
                 View Company Projects
@@ -1279,7 +1249,7 @@ const KnowledgeCenter: React.FC = () => {
             {selectedNode.type === 'proposal' && (
               <button 
                 className="action-button"
-                onClick={() => navigate('/collaborate')}
+                onClick={() => window.location.href = '/collaborate'}
                 style={{ backgroundColor: 'var(--primary-red)' }}
               >
                 View Proposal
@@ -1303,16 +1273,31 @@ const KnowledgeCenter: React.FC = () => {
                     const connectedNodeId = sourceId === selectedNode.id ? targetId : sourceId;
                     const connectedNode = graphData.nodes.find(n => n.id === connectedNodeId);
                     
-                    return connectedNode ? (
+                    if (!connectedNode) return null;
+                    
+                    // Generate URL based on node type
+                    let nodeUrl = '/';
+                    if (connectedNode.type === 'company') {
+                      nodeUrl = `/company/${connectedNode.id.replace('company-', '')}`;
+                    } else if (connectedNode.type === 'project') {
+                      nodeUrl = `/project/${connectedNode.id.replace('project-', '')}`;
+                    } else if (connectedNode.type === 'collaboration' || connectedNode.type === 'proposal') {
+                      nodeUrl = '/collaborate';
+                    }
+                    
+                    return (
                       <li key={`${connectedNodeId}-${index}`}>
-                        <a onClick={() => handleNodeClick(connectedNode)}>
+                        <a 
+                          href={nodeUrl}
+                          style={{ textDecoration: 'none', cursor: 'pointer' }}
+                        >
                           <span className="connected-node-type" style={{ backgroundColor: connectedNode.color }}>
                             {connectedNode.type.charAt(0).toUpperCase()}
                           </span>
                           {connectedNode.name}
                         </a>
                       </li>
-                    ) : null;
+                    );
                   })
                 }
               </ul>
