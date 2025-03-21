@@ -1,132 +1,60 @@
-#  STARTHACK 2025
-## Team fold
-Oliver Birringer, Felix Fidler, Dominik Rzecki, Luka Milenkovic
+# Virgin Initiatives Hub
 
-Aktuellsten Anforderungen/Feedback 19:19 Thu:
-1. Employee-Employee Chatting
-2. Mobile Project Details Pages missing "Get Involved" Button
-3. 'Near Me' on Mobile, ideally with Globe Visual to capture the lively buzz
-4. Collaboration 'common ground' and 'suggestions' based on AI-insight and connections
+![Virgin Initiatives Hub](./virgin.png)
 
-Möglichkeiten: 
+## Hackathon Submission for START Hack 2025
+### Team fold
+**Members**: Oliver Birringer, Felix Fidler, Dominik Rzecki, Luka Milenkovic
 
-## Case 2 - UN
-Land degredation, desertification - huge economic impact
-Earth observation data,
-Develop innovative solutions
-Visualize trends
-Country level prfoiles
-Key trends deforestation
-Actionable recommendations data driven decision making
+This project presents an innovative two-part solution for connecting Virgin's sustainability initiatives with interested stakeholders: a mobile customer application and a desktop dashboard for employees.
 
-We get: Data set, identify desertification trends -> Dashboard can be used for communities, Farmers etc
+![Start Hack 2025](./starthack.png)
 
+## 🌍 Project Overview
 
-## Case 5 - Syngenta
-Nature helping nature
-Help farmers globally
-Most farmers no access to technology, language barriers
-More people want to eat - make farming more efficient
-soil environemnt tech data
-How do we increase yield/efficiency and decrease stress
+Virgin Initiatives Hub seamlessly bridges the gap between Virgin's diverse sustainability efforts and individuals looking to engage with meaningful initiatives. By leveraging interactive visualizations, personalized matching algorithms, and engaging interfaces, we create a platform that makes discovering and participating in sustainability initiatives intuitive and rewarding.
 
+## ✨ Key Features
 
-## Case 7 - Virgin
-Central platform to show sustainability work
-Collaboration
-Involve customers 
-Collaborative plattform - hub 
-Virgon businesses can share
-Customers can engage, create communties, reward customers, engage customers
-Assure transparency, trust
+### 📱 Mobile Customer App
 
-## Case 8 - Zukunftfabrik & HSG
-App for Management model
-Management like google maps
-Go deeper and into details of companies financials
-App provides data and recommendations
-Help students, managers, startups
-Link Wiki like docu
-Tools connected
-Make it practical
+The mobile application focuses on connecting users with Virgin initiatives that align with their personal values and interests:
 
-Nicht zu verfolgen:
+- **Interactive Global Explorer**: Navigate an immersive 3D globe showcasing Virgin's global sustainability initiatives across different business units
+- **Interest-Based Matching**: Swipe through sustainability topics to discover initiatives that align with personal values
+- **Smart Recommendations**: Receive personalized initiative suggestions based on interaction history and preferences
+- **Project Details**: Access comprehensive information about each initiative, including challenges, descriptions, and impact
+- **Gamification Elements**: Earn sustainability points and badges for engagement with initiatives
+- **Community Features**: Connect with like-minded individuals through discussion forums and events
+- **Impact Visualization**: Track personal sustainability contributions through an intuitive dashboard
 
-## Case 1 - Kanton St Gallen
-Revolutionize industry projects
-AI powered innovation coach
+### 💻 Desktop Employee Dashboard
 
-## Case 3 - Belimo
-Optimize Buildings
-They have Small impact devices
-We get access to building data
+The desktop dashboard equips Virgin employees with powerful tools to monitor and manage sustainability initiatives:
 
-## Case 4 - 
-Digital assistant thats truely personalized
-AI and RT data processing
+- **Interactive Data Visualization**: Real-time global view of initiative engagement and impact metrics
+- **Geographical Insights**: Identify geographical patterns in user engagement through the interactive globe interface
+- **Initiative Management**: Add, edit, and monitor sustainability projects across Virgin's business units
+- **User Engagement Analytics**: Track how customers interact with different initiatives over time
+- **Impact Reporting**: Generate comprehensive reports on sustainability outcomes and engagement metrics
+- **Resource Allocation**: Make data-driven decisions on where to focus sustainability efforts based on user interest
 
-## Case 6 - SIX
-Ai that listens and visualizes
-Financial industry vast amount of data
-AI driven interaction revolutionize
-Finacial data insights
-Can you deliver Voice visuals expieriences
-Visualie trends, key insights
-What is Profitability of Company XX
-Create a solution understand complex finacial bla
+## 🚀 Technology Stack
 
-# Virgin Interest Finder
+- React.js for responsive front-end interfaces
+- Three.js for 3D globe visualization and interactive elements
+- TypeScript for type-safe code development
+- CSS with adaptive design principles for cross-platform compatibility
+- React Three Fiber for declarative 3D scene management
 
-This repository contains two versions of the Virgin Interest Finder application:
+## 🏆 Value Proposition
 
-1. **Mobile Version** - A Tinder-like swiping interface for mobile devices
-2. **Desktop Version** - A grid-based, clickable interface optimized for desktop use
+The Virgin Initiatives Hub transforms how sustainability initiatives connect with interested individuals:
 
-Both apps help users discover Virgin initiatives that match their sustainability interests.
+- **For Customers**: Discover meaningful initiatives that align with personal values while tracking your positive impact
+- **For Virgin**: Gain valuable insights into customer interests, optimize resource allocation, and increase engagement with sustainability initiatives
+- **For the Planet**: Accelerate positive environmental and social impact by connecting the right initiatives with the right people
 
-## Mobile Version
+---
 
-Located in the `mobile-chat-app` directory, this version features:
-
-- Mobile-optimized UI with Tinder-like swipe gestures
-- Single interest selection per card (swipe right to like, left to dislike)
-- Responsive design that simulates a mobile device
-- Swipe animations and visual feedback
-
-To run the mobile version:
-
-```bash
-cd mobile-chat-app
-npm install
-npm start
-```
-
-## Desktop Version
-
-Located in the `desktop-interest-finder` directory, this version features:
-
-- Desktop-optimized UI with a grid layout
-- Multi-select functionality (click to select multiple interests)
-- Larger screen space utilization
-- More detailed results display
-
-To run the desktop version:
-
-```bash
-cd desktop-interest-finder
-npm install
-npm start
-```
-
-## How Both Apps Work
-
-Both apps share the same core functionality:
-
-1. Present users with a selection of sustainability topics
-2. Allow users to indicate their interests
-3. Match those interests with relevant Virgin initiatives
-4. Show the top matching initiatives
-5. Provide details about why each initiative matched
-
-The main differences are in the user interface and interaction patterns, optimized for different device types.
-
+*This project was developed for START Hack 2025 as a conceptual demonstration of how technology can bridge the gap between sustainability initiatives and interested stakeholders.*
