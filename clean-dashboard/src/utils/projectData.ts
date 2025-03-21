@@ -135,7 +135,7 @@ export const projectData: Project[] = [
       'https://www.virginlimitededition.com/ulusaba/the-reserve/our-commitment/',
       'https://www.packforapurpose.org/destinations/africa/south-africa/ulusaba-private-game-reserve/'
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1531123414780-f74242c2b052?q=80&w=500&auto=format&fit=crop',
+    imageUrl: 'https://www.virginlimitededition.com/media/mblnt4w0/ann_shane_pnp_aug2022-007.jpg?width=700&height=540&quality=70&v=1da31fdab9904b0',
   },
   {
     id: "vle-inua-jamii",
@@ -231,7 +231,7 @@ export const projectData: Project[] = [
       'https://evebransonfoundation.org.uk/pack-for-a-purpose/',
       'https://www.virgin.com/virgin-red'
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=500&auto=format&fit=crop',
+    imageUrl: 'https://images.ctfassets.net/r2st2lg2cc7t/1dusneX7KiolA16b9qLoLZ/095eda3007130eff019e05d366a248b7/eve_crafthouse_balcony.jpg?',
   },
   {
     id: "vu-bvi",

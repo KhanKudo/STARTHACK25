@@ -14,6 +14,11 @@ This project presents an innovative two-part solution for connecting Virgin's su
 
 Virgin Initiatives Hub seamlessly bridges the gap between Virgin's diverse sustainability efforts and individuals looking to engage with meaningful initiatives. By leveraging interactive visualizations, personalized matching algorithms, and engaging interfaces, we create a platform that makes discovering and participating in sustainability initiatives intuitive and rewarding.
 
+## 📹 Demo Video
+
+[![Watch the Demo Video](https://img.youtube.com/vi/WlFRKDtHkG4/0.jpg)](https://youtu.be/WlFRKDtHkG4)
+*Click to watch our project demonstration*
+
 ## ✨ Key Features
 
 ### 📱 Mobile Customer App
