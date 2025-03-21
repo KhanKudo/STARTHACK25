@@ -124,7 +124,7 @@ const initiativeDetails: InitiativeDetailsMap = {
     company: 'Virgin Atlantic',
     challenge: 'The time for action against climate change is now. Virgin Atlantic are on a mission to achieve net-zero by 2050.',
     description: 'Virgin Atlantic is working to accelerate the development of sustainable fuels. On November 28th, we made history with Flight100 becoming the first commercial airline to fly across the Atlantic on 100% SAF - marking a key milestone on the path to decarbonising aviation.',
-    imageUrl: 'https://images.unsplash.com/photo-1595392029731-a6a252df1fd1?q=80&w=500&auto=format&fit=crop'
+    imageUrl: 'https://imgproc.airliners.net/photos/airliners/1/0/2/6152201.jpg?v=v47e1e282d94'
   },
   'Virgin Atlantic & Virgin Unite - Protecting our Planet': {
     company: 'Virgin Atlantic & Virgin Unite',
