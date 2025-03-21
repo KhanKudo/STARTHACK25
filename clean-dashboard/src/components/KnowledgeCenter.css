@@ -6,12 +6,13 @@
   background-color: white;
   overflow-y: auto;
   position: relative;
+  box-shadow: none !important;
 }
 
 .top-bar-container {
   width: 100%;
   background-color: white;
-  box-shadow: none;
+  box-shadow: none !important;
   position: relative;
   z-index: 10;
 }
@@ -215,7 +216,9 @@
   height: 75vh;
   margin-top: 5px;
   border-radius: 0;
-  box-shadow: none;
+  box-shadow: none !important;
+  position: relative;
+  background-color: transparent !important;
 }
 
 /* Viewport summary panel */

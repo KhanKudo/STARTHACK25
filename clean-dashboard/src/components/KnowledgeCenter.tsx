@@ -312,13 +312,12 @@ const KnowledgeCenter: React.FC = () => {
     
     // Set up regular interval for generating new nodes
     const generateInterval = setInterval(() => {
-      // Only generate if it's been at least 90 seconds (1.5 minutes) since last generation
-      const currentTime = Date.now();
-      if (currentTime - lastGenerationTime.current >= 90000) {
-        const generated = generateRandomNode();
-        addNodeToGraph(generated);
-      }
-    }, 30000); // Check every 30 seconds
+      // Generate a new node every 60 seconds (1 minute)
+      const generated = generateRandomNode();
+      addNodeToGraph(generated);
+      lastGenerationTime.current = Date.now();
+      console.log("Generated new node at", new Date().toLocaleTimeString());
+    }, 60000); // Generate every minute
     
     return () => {
       if (initialNodeTimeout) clearTimeout(initialNodeTimeout);
